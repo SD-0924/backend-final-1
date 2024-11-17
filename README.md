@@ -1,4 +1,4 @@
-إليك هيكلًا تفصيليًا لملف README.md الخاص بمشروعك
+
 # E-Commerce Backend System
 
 Welcome to the **E-Commerce Backend System** repository! This project provides the backend APIs required for a fully functional e-commerce platform. It includes user authentication, product management, simulated payment processing, and robust error handling.
