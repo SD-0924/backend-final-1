@@ -1,17 +1,16 @@
-import { initializeApp } from "firebase/app";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAo3_gDE8fJoE8ceR0N6zZk6ProwcRgrGE",
-  authDomain: "finalproj1-d59b4.firebaseapp.com",
-  projectId: "finalproj1-d59b4",
-  storageBucket: "finalproj1-d59b4.firebasestorage.app",
-  messagingSenderId: "454890257473",
-  appId: "1:454890257473:web:9529b48a296a26cd00dac0",
-  measurementId: "G-Y20E0M05MY"
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.app = void 0;
+var app_1 = require("firebase/app");
+var firebaseConfig = {
+    apiKey: process.env.FIREBASE_API_KEY,
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.FIREBASE_APP_ID,
+    measurementId: process.env.FIREBASE_MEASUREMENT_ID
 };
-
-const app = initializeApp(firebaseConfig);
-
+var app = (0, app_1.initializeApp)(firebaseConfig);
+exports.app = app;
 console.log("Firebase has been initialized successfully!");
-
-export { app };
