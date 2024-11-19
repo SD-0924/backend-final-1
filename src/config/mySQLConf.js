@@ -5,7 +5,7 @@ const sequelize = new Sequelize({
     host:'localhost',
     username: 'root',
     password: '',
-    database: 'BloggingSystem',
+    database: 'finalProj',
     logging: false,
     dialectOptions: {
         charset: 'utf8mb4', 
