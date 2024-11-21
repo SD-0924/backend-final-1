@@ -1,6 +1,7 @@
 import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../config/mySQLConf'; 
 import Product from './Product';
+import User from './User';
 
 interface RatingAttributes {
     id: string;
@@ -38,10 +39,10 @@ Rating.init(
         userId: {
             type: DataTypes.UUID,
             allowNull: false,
-            /*references: {
+            references: {
                 model: User,
                 key: 'id',
-            },*/
+            },
         },
         ratingValue: {
             type: DataTypes.DECIMAL(2, 1),
