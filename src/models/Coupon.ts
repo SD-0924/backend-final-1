@@ -2,7 +2,7 @@ import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../config/mySQLConf';
 
 interface CouponAttributes {
-    id: number;
+    id: string;
     code: string;
     discount_type: string;
     discount_value: number;
@@ -15,7 +15,7 @@ interface CouponAttributes {
 interface CouponCreationAttributes extends Optional<CouponAttributes, 'id' | 'min_order_value' | 'usage_limit' | 'expiry_date'> {}
 
 class Coupon extends Model<CouponAttributes, CouponCreationAttributes> implements CouponAttributes {
-    public id!: number;
+    public id!: string;
     public code!: string;
     public discount_type!: string;
     public discount_value!: number;
@@ -28,17 +28,19 @@ class Coupon extends Model<CouponAttributes, CouponCreationAttributes> implement
 Coupon.init(
     {
         id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
+            type: DataTypes.UUID,
+            defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
         },
         code: {
             type: DataTypes.STRING,
             allowNull: false,
+            unique: true
         },
         discount_type: {
             type: DataTypes.STRING,
             allowNull: false,
+            defaultValue: "amount"
         },
         discount_value: {
             type: DataTypes.FLOAT,
@@ -51,6 +53,7 @@ Coupon.init(
         usage_limit: {
             type: DataTypes.INTEGER,
             allowNull: true,
+            defaultValue:1
         },
         expiry_date: {
             type: DataTypes.DATE,
@@ -65,6 +68,7 @@ Coupon.init(
         sequelize,
         tableName: 'coupons',
         modelName: 'Coupon',
+        timestamps: true
     }
 );
 

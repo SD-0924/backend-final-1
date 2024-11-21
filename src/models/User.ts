@@ -2,7 +2,7 @@ import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../config/mySQLConf';
 
 interface UserAttributes {
-    id: number;
+    id: string;
     email: string;
     first: string | null;
     last: string | null;
@@ -15,7 +15,7 @@ interface UserAttributes {
 interface UserCreationAttributes extends Optional<UserAttributes, 'id' | 'first' | 'last' | 'mobile_num' | 'address' | 'role'> {}
 
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-    public id!: number;
+    public id!: string;
     public email!: string;
     public first!: string | null;
     public last!: string | null;
@@ -28,21 +28,22 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
 User.init(
     {
         id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
+            type: DataTypes.UUID,
+            defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
         },
         email: {
             type: DataTypes.STRING,
             allowNull: false,
+            unique: true
         },
         first: {
             type: DataTypes.STRING,
-            allowNull: true,
+            allowNull: false,
         },
         last: {
             type: DataTypes.STRING,
-            allowNull: true,
+            allowNull: false,
         },
         password_hash: {
             type: DataTypes.STRING,
@@ -58,13 +59,15 @@ User.init(
         },
         role: {
             type: DataTypes.STRING,
-            allowNull: true,
+            allowNull: false,
+            defaultValue: "User"
         },
     },
     {
         sequelize,
         tableName: 'users',
         modelName: 'User',
+        timestamps: true
     }
 );
 
