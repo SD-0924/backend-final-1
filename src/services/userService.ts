@@ -1,11 +1,30 @@
 import bcrypt from 'bcrypt';
-import { createUser } from '../reposetories/userRepository';
+import { createUser, getUserByEmail } from '../reposetories/userRepository';
 
 export const registerUser = async (userData: any) => {
     const hashedPassword = await bcrypt.hash(userData.password, 10);
     const newUser = await createUser({
         ...userData,
-        password_hash: hashedPassword,
+        password_hash: hashedPassword, // Save the hashed password
     });
     return newUser;
+};
+
+// Verify password function
+export const verifyPassword = async (email: string, plainPassword: string) => {
+    // Retrieve user by email
+    const user = await getUserByEmail(email);
+
+    if (!user) {
+        throw new Error("User not found");
+    }
+
+    // Compare provided password with hashed password in DB
+    const isMatch = await bcrypt.compare(plainPassword, user.password_hash);
+
+    if (!isMatch) {
+        throw new Error("Invalid password");
+    }
+
+    return user; // Return user if passwords match
 };
