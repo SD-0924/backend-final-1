@@ -6,15 +6,20 @@ const errorHandlingMiddleware = (
   res: Response,
   next: NextFunction
 ): void => {
+  const status = err.status || 500;
+  const message = err.message || "Internal Server Error";
+
+  // Specific error handling
   if (err.name === "JsonWebTokenError") {
     res.status(401).json({ message: "Invalid token." });
   } else if (err.name === "TokenExpiredError") {
     res.status(401).json({ message: "Token expired." });
   } else {
-    res.status(500).send(err.message);
+    // Default error handling
+    res.status(status).json({ message });
   }
 
-  next(err); // propagate the error further if needed
+  next(); // propagate the error further
 };
 
 export default errorHandlingMiddleware;
