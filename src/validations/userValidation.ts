@@ -10,4 +10,17 @@ export const validateUserRegistration = [
         }
         return true;
     }),
+
+    body('first')
+    .notEmpty()
+    .withMessage('First name is required')
+    .isString()
+    .withMessage('First name must be a valid string'),
+
+// Validate last name
+body('last')
+    .notEmpty()
+    .withMessage('Last name is required')
+    .isString()
+    .withMessage('Last name must be a valid string'),
 ];
