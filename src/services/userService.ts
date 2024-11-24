@@ -2,6 +2,12 @@ import bcrypt from 'bcrypt';
 import { createUser, getUserByEmail } from '../reposetories/userRepository';
 
 export const registerUser = async (userData: any) => {
+     // Check if the email already exists
+     const existingUser = await getUserByEmail(userData.email);
+     if (existingUser) {
+         throw new Error('Email is already registered'); // Or handle it based on your application's logic
+     }
+ 
     const hashedPassword = await bcrypt.hash(userData.password, 10);
     const newUser = await createUser({
         ...userData,
