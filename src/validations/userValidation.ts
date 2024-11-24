@@ -11,3 +11,8 @@ export const validateUserRegistration = [
         return true;
     }),
 ];
+
+export const validateUserLogin = [
+    body('email').isEmail().withMessage('A valid email is required'),
+    body('password').notEmpty()
+]
