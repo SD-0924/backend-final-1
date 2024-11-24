@@ -2,16 +2,16 @@
   "name": "backend-final-1",
   "version": "1.0.0",
   "description": "Welcome to the **E-Commerce Backend System** repository! This project provides the backend APIs required for a fully functional e-commerce platform. It includes user authentication, product management, simulated payment processing, and robust error handling.",
-  "main": "index.js",
+  "main": "src/server.ts",
   "directories": {
     "test": "tests"
   },
   "type": "commonjs",
   "scripts": {
-    "test": "jest",
-    "start": "nodemon --exec ts-node src/index.ts",
+    "test": "set NODE_ENV=test && jest",
+    "start": "set NODE_ENV=production && nodemon --exec ts-node src/server.ts",
     "build": "tsc",
-    "dev": "nodemon --exec ts-node src/index.ts"
+    "dev": "set NODE_ENV=development && nodemon --exec ts-node src/server.ts"
   },
   "keywords": [],
   "author": "",
