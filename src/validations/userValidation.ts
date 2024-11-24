@@ -24,3 +24,8 @@ body('last')
     .isString()
     .withMessage('Last name must be a valid string'),
 ];
+
+export const validateUserLogin = [
+    body('email').isEmail().withMessage('A valid email is required'),
+    body('password').notEmpty()
+]
