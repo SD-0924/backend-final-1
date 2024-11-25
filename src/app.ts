@@ -1,5 +1,6 @@
 import express, { Application } from "express";
 import authRoutes from "./routes/userRoutes";
+import productRouts from "./routes/productRoutes";
 import "./models/Associations";
 import errorHandlingMiddleware from "./errorHandling";
 
@@ -8,6 +9,7 @@ const app: Application = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(authRoutes);
+app.use(productRouts);
 
 app.use(errorHandlingMiddleware);
 
