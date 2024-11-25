@@ -1,6 +1,29 @@
 import { Op } from "sequelize";
 import Product from "../models/Product";
 
+export const addProductRepository = async (productData: any) => {
+  return await Product.create(productData);
+};
+
+export const updateProductRepository = async (
+  productId: string,
+  updatedData: Partial<Product>
+) => {
+  const product = await Product.findByPk(productId);
+  if (!product) {
+    throw new Error("Product not found");
+  }
+  return await product.update(updatedData);
+};
+
+export const deleteProductRepository = async (productId: string) => {
+  const product = await Product.findByPk(productId);
+  if (!product) {
+    throw new Error("Product not found");
+  }
+  return await product.destroy();
+};
+
 export const getNewArrivalsRepository = async (
   //TO-DO: optemize this code
   dateThreshold: Date,
