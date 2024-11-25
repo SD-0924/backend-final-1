@@ -1,9 +1,18 @@
-import express from "express";
-import { getNewArrivals } from "../controllers/productsController";
+import { Router } from "express";
+import {
+  addProduct,
+  updateProduct,
+  deleteProduct,
+  getNewArrivals,
+} from "../controllers/productsController";
 
-const router = express.Router();
+const router = Router();
+
+router.post("/api/products", addProduct);
+router.put("/api/products/:id", updateProduct);
+router.delete("/api/products/:id", deleteProduct);
 
 // Route for fetching new arrivals
-router.get("/new-arrivals", getNewArrivals);
+router.get("/api/products/new-arrivals", getNewArrivals);
 
 export default router;

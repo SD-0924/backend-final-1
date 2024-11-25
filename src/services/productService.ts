@@ -1,7 +1,27 @@
 import {
+  addProductRepository,
+  updateProductRepository,
+  deleteProductRepository,
   getNewArrivalsRepository,
   countNewArrivalsRepository,
 } from "../reposetories/productRepository";
+
+import Product from "../models/Product";
+
+export const addProductService = async (productData: Partial<Product>) => {
+  return await addProductRepository(productData);
+};
+
+export const updateProductService = async (
+  productId: string,
+  updatedData: Partial<Product>
+) => {
+  return await updateProductRepository(productId, updatedData);
+};
+
+export const deleteProductService = async (productId: string) => {
+  return await deleteProductRepository(productId);
+};
 
 export const getNewArrivalsService = async (page: number, limit: number) => {
   const offset = (page - 1) * limit;
