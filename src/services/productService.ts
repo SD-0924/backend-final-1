@@ -3,7 +3,6 @@ import {
   updateProductRepository,
   deleteProductRepository,
   getNewArrivalsRepository,
-  countNewArrivalsRepository,
 } from "../reposetories/productRepository";
 
 import Product from "../models/Product";
@@ -31,12 +30,8 @@ export const getNewArrivalsService = async (page: number, limit: number) => {
   threeMonthsAgo.setMonth(threeMonthsAgo.getMonth() - 3);
 
   // Fetch data from the repository
-  const products = await getNewArrivalsRepository(
-    threeMonthsAgo,
-    limit,
-    offset
-  );
-  const totalProducts = await countNewArrivalsRepository(threeMonthsAgo);
+  const { rows: products, count: totalProducts } =
+    await getNewArrivalsRepository(threeMonthsAgo, limit, offset);
 
   return {
     products,
