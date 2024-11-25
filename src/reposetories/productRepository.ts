@@ -23,14 +23,12 @@ export const deleteProductRepository = async (productId: string) => {
   }
   return await product.destroy();
 };
-
 export const getNewArrivalsRepository = async (
-  //TO-DO: optemize this code
   dateThreshold: Date,
   limit: number,
   offset: number
 ) => {
-  return await Product.findAll({
+  return await Product.findAndCountAll({
     where: {
       stockQuantity: {
         [Op.gt]: 0, // Products with stock > 0
@@ -42,18 +40,5 @@ export const getNewArrivalsRepository = async (
     order: [["created_at", "DESC"]],
     limit,
     offset,
-  });
-};
-
-export const countNewArrivalsRepository = async (dateThreshold: Date) => {
-  return await Product.count({
-    where: {
-      stockQuantity: {
-        [Op.gt]: 0,
-      },
-      created_at: {
-        [Op.gte]: dateThreshold,
-      },
-    },
   });
 };
