@@ -1,6 +1,6 @@
 import express, { Application } from "express";
 import authRoutes from "./routes/userRoutes";
-import productRouts from "./routes/productsRoutes";
+import productRouts from "./routes/productRoutes";
 import "./models/Associations";
 import errorHandlingMiddleware from "./errorHandling";
 
