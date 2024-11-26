@@ -1,6 +1,7 @@
 import express, { Application } from "express";
 import authRoutes from "./routes/userRoutes";
 import productRouts from "./routes/productRoutes";
+import brandRoutes from "./routes/brandRoutes";
 import "./models/Associations";
 import errorHandlingMiddleware from "./errorHandling";
 
@@ -10,6 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(authRoutes);
 app.use(productRouts);
+app.use(brandRoutes);
 
 app.use(errorHandlingMiddleware);
 
