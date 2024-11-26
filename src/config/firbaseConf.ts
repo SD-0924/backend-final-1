@@ -1,4 +1,6 @@
 import { initializeApp } from "firebase/app";
+import { initializeApp as adminInitializeApp } from "firebase-admin/app";
+import * as admin from "firebase-admin";
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -12,6 +14,12 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 
+// admin sdk
+const adminApp = adminInitializeApp(); 
+
+// accessing the firebase storage using bucket const for admin level file management
+const bucket = admin.storage().bucket();
+
 console.log("Firebase has been initialized successfully!");
 
-export { app };
+export { app, adminApp, admin, bucket };
