@@ -5,6 +5,7 @@ import sequelize from "./config/mySQLConf";
 import initializeDatabase from "./initializeDatabase";
 
 const PORT = process.env.PORT || 3000;
+export const JWT_SECRET = process.env.JWT_SECRET!;
 /*const DB_USER = process.env.DB_USER || "root";
 const DB_PASSWORD = process.env.DB_PASSWORD||"";
 const DB_HOST = process.env.DB_HOST || "localhost";
