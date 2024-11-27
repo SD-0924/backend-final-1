@@ -8,7 +8,7 @@
   },
   "type": "commonjs",
   "scripts": {
-    "test": "set NODE_ENV=test && jest",
+    "test": "set NODE_ENV=test && jest --detectOpenHandles",
     "start": "set NODE_ENV=production && nodemon --exec ts-node src/server.ts",
     "build": "tsc",
     "dev": "set NODE_ENV=development && nodemon --exec ts-node src/server.ts"
@@ -28,6 +28,7 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
+    "@types/supertest": "^6.0.2",
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
@@ -35,6 +36,8 @@
     "firebase": "^11.0.2",
     "firebase-mock": "^2.2.4",
     "mysql2": "^3.11.4",
-    "sequelize": "^6.37.5"
+    "sequelize": "^6.37.5",
+    "sequelize-mock": "^0.10.2",
+    "supertest": "^7.0.0"
   }
 }
