@@ -1,5 +1,20 @@
 import { body, param, query } from "express-validator";
 
+export const validateGetAllProducts = [
+  query("limit")
+    .optional()
+    .isInt({ min: 1, max: 100 })
+    .withMessage("Limit must be a number between 1 and 100"),
+  query("offset")
+    .optional()
+    .isInt({ min: 0 })
+    .withMessage("Offset must be a non-negative integer"),
+];
+
+export const validateGetProductById = [
+  param("id").isUUID().withMessage("Product ID must be a valid UUID"),
+];
+
 export const validateAddProduct = [
   body("name")
     .isString()
@@ -39,6 +54,10 @@ export const validateUpdateProduct = [
 
 export const validateDeleteProduct = [
   param("id").isUUID().withMessage("Invalid product ID format"),
+];
+
+export const validateGetProductRatings = [
+  param("id").isUUID().withMessage("Product ID must be a valid UUID"),
 ];
 
 export const validateGetNewArrivals = [
