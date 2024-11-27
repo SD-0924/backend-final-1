@@ -59,7 +59,7 @@ OrderItem.init(
   },
   {
     sequelize,
-    tableName: "order_items",
+    tableName: "orderItems",
     modelName: "OrderItem",
   }
 );
