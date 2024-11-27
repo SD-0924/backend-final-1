@@ -8,17 +8,17 @@ export const validateGetCouponById = [
 
 export const validateCreateCoupon = [
   body("code").isString().withMessage("Code is required and must be a string"),
-  body("discount_type")
+  body("discountType")
     .isIn(["amount", "percentage"])
     .withMessage("Invalid discount type"),
-  body("discount_value")
+  body("discountValue")
     .isFloat({ gt: 0 })
     .withMessage("Discount value must be positive"),
-  body("expiry_date")
+  body("expiryDate")
     .optional()
     .isISO8601()
     .withMessage("Expiry date must be a valid date"),
-  body("usage_limit")
+  body("usageLimit")
     .optional()
     .isInt({ min: 1 })
     .withMessage("Usage limit must be a positive integer"),
@@ -27,19 +27,19 @@ export const validateCreateCoupon = [
 export const validateUpdateCoupon = [
   param("id").isUUID().withMessage("Coupon ID must be a valid UUID"),
   body("code").optional().isString().withMessage("Code must be a string"),
-  body("discount_type")
+  body("discountType")
     .optional()
     .isIn(["amount", "percentage"])
     .withMessage("Invalid discount type"),
-  body("discount_value")
+  body("discountValue")
     .optional()
     .isFloat({ gt: 0 })
     .withMessage("Discount value must be positive"),
-  body("expiry_date")
+  body("expiryDate")
     .optional()
     .isISO8601()
     .withMessage("Expiry date must be a valid date"),
-  body("usage_limit")
+  body("usageLimit")
     .optional()
     .isInt({ min: 1 })
     .withMessage("Usage limit must be a positive integer"),

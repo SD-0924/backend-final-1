@@ -4,7 +4,7 @@ import User from "./User";
 
 interface OrderAttributes {
   id: string;
-  user_id: string;
+  userId: string;
   status: string;
 }
 
@@ -15,7 +15,7 @@ class Order
   implements OrderAttributes
 {
   public id!: string;
-  public user_id!: string;
+  public userId!: string;
   public status!: string;
 }
 
@@ -26,7 +26,7 @@ Order.init(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    user_id: {
+    userId: {
       type: DataTypes.UUID,
       allowNull: false,
       references: {

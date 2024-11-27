@@ -33,11 +33,11 @@ export const getNewArrivalsRepository = async (
       stockQuantity: {
         [Op.gt]: 0, // Products with stock > 0
       },
-      created_at: {
+      createdAt: {
         [Op.gte]: dateThreshold, // Created within the last 3 months
       },
     },
-    order: [["created_at", "DESC"]],
+    order: [["createdAt", "DESC"]],
     limit,
     offset,
   });

@@ -19,7 +19,7 @@ export const handleRegister = async (
       last,
       password,
       confirmPassword,
-      mobile_num,
+      mobileNum,
       address,
     } = req.body;
     const newUser = await registerUser({
@@ -28,7 +28,7 @@ export const handleRegister = async (
       last,
       password,
       confirmPassword,
-      mobile_num,
+      mobileNum,
       address,
     });
     res
@@ -58,10 +58,8 @@ export const testVerifyPassword = async (
     // If successful, send the response
     res.status(200).json({ message: "Login successful", user });
   } catch (error: unknown) {
-    res
-      .status(401)
-      .json({
-        message: error instanceof Error ? error.message : "Unauthorized",
-      });
+    res.status(401).json({
+      message: error instanceof Error ? error.message : "Unauthorized",
+    });
   }
 };
