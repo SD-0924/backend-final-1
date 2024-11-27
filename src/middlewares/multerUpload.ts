@@ -1,16 +1,32 @@
 import multer from 'multer';
 import { FileFilterCallback } from 'multer';
 import { AllowedImageTypes } from '../utils/enums';
+import path from 'path';
+import fs from 'fs';
 
+// Define the temporary upload directory
+const tempDir = './tmp_uploads/';
 
-/* We will store the files temporarly in the memory before beign uploaded to the firebase */
-const storage = multer.memoryStorage();
+// Ensure the directory exists
+if (!fs.existsSync(tempDir)) {
+    fs.mkdirSync(tempDir);
+}
 
-// filter the uploaded files such that only images are accepted
+// Configure Multer to use disk storage
+const storage = multer.diskStorage({
+
+    destination: (req, file, cb) =>{
+        cb(null, tempDir);
+    },
+
+    filename: (req, file, cb) =>{
+        cb(null, file.originalname);
+    }
+});
+
+// File filter to allow only image types
 const fileFilter = (req: any, file: Express.Multer.File, cb: FileFilterCallback) => {
-
-    // only allowed images types
-    const isAllowedType = Object.values(AllowedImageTypes).includes(file.mimetype as AllowedImageTypes );
+    const isAllowedType = Object.values(AllowedImageTypes).includes(file.mimetype as AllowedImageTypes);
 
     if (isAllowedType) {
         cb(null, true); // accept the file
@@ -20,7 +36,7 @@ const fileFilter = (req: any, file: Express.Multer.File, cb: FileFilterCallback)
     }
 };
 
-// creating multer middleware
-const upload = multer({storage: storage, fileFilter: fileFilter});
+// Multer middleware
+const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 export default upload;

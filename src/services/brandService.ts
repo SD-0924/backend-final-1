@@ -1,49 +1,65 @@
 import { createBrand, findBrandByName } from '../reposetories/brandRepository';
 import { bucket } from '../config/firbaseConf';
 import path from 'path';
+import fs from 'fs';
 
-
-
-// function to upload to firebase storage
-const uploadImageToFirebase = async (file: Express.Multer.File, brandName: string): Promise<string> => {
-    // checking the file
-    if (!file) {
-    throw new Error('File is required for uploading.');
-    }
-
-    const remoteFileName = `logos/${brandName}${path.extname(file.originalname)}`;  // using brand name for the file name
+// Function to upload the image to Firebase Storage
+const uploadImageToFirebase = async (filePath: string, brandName: string): Promise<string> => {
+    console.log("inside upload file");
+    const file = fs.readFileSync(filePath); // Read the temporary file
+    const ext = path.extname(filePath);
+    console.log(file);
+    console.log(ext);
+    const remoteFileName = `logos/${brandName}${ext}`;
+    console.log(remoteFileName);
+    console.log("==============");
     const fileUpload = bucket.file(remoteFileName);
-    await fileUpload.save(file.buffer, { contentType: file.mimetype }); // uploading the image to the firbase using buffer
-
-    // getting the public URL of the uploaded file
-    const publicUrl = `https://storage.googleapis.com/${bucket.name}/${fileUpload.name}`;
-    console.log('File uploaded successfully. Public URL:', publicUrl);
-
-    return publicUrl;
-
+    console.log(fileUpload);
+    try {
+        console.log("inside try");
+        await fileUpload.save(file, { contentType: 'image/jpeg' }); // Upload to Firebase
+        const publicUrl = `https://storage.googleapis.com/${bucket.name}/${fileUpload.name}`;
+        return publicUrl;
+    } catch (error) {
+        console.error('Error uploading file to Firebase:', error);
+        throw new Error('Error during file upload');
+    }
 };
 
-// create new brand record
+// Function to create a new brand
 export const createBrandService = async (name: string, file: Express.Multer.File) => {
-
-    // check if there is brand with the same name
+    // Check if there is already a brand with the same name
     const existingBrand = await findBrandByName(name);
-    // throw an error
     if (existingBrand) {
         throw new Error('A brand with the same name already exists.');
     }
 
-    // uploading the logo to Firebase storage and returning the image url
-    const logoUrl = await uploadImageToFirebase(file, name);
+    // Path to the temporary file
+    const tempFilePath = file.path;
 
-    // brand data to be stored in DB
-    const brandData = {
-    name,
-    logo: logoUrl, 
-    };
+    console.log(tempFilePath);
 
-    // creating a new brand in the database
-    const newBrand = await createBrand(brandData);
+    try {
+        // Upload the logo to Firebase and get the URL
+        console.log("trying to upload the file")
+        const logoUrl = await uploadImageToFirebase(tempFilePath, name);
 
-    return newBrand;
-}
+        // Brand data to be stored in the database
+        const brandData = {
+            name,
+            logo: logoUrl,
+        };
+
+        // Create the new brand in the database
+        const newBrand = await createBrand(brandData);
+
+        // Delete the temporary file after upload
+        fs.unlinkSync(tempFilePath);
+
+        return newBrand;
+    } catch (error) {
+        // Clean up in case of an error
+        fs.unlinkSync(tempFilePath);
+        throw error;
+    }
+};
