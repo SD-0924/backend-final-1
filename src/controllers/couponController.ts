@@ -5,10 +5,9 @@ import {
   addCoupon,
   modifyCoupon,
   removeCoupon,
-  //   fetchCouponOrders,
+  fetchCouponOrders,
 } from "../services/couponService";
 
-// Get all coupons
 export const getAllCoupons = async (req: Request, res: Response) => {
   try {
     const coupons = await fetchAllCoupons();
@@ -18,7 +17,6 @@ export const getAllCoupons = async (req: Request, res: Response) => {
   }
 };
 
-// Get coupon by ID
 export const getCouponById = async (req: Request, res: Response) => {
   try {
     const coupon = await fetchCouponById(req.params.id);
@@ -41,7 +39,6 @@ export const createCoupon = async (req: Request, res: Response) => {
   }
 };
 
-// Update a coupon
 export const updateCoupon = async (req: Request, res: Response) => {
   try {
     const coupon = await modifyCoupon(req.params.id, req.body);
@@ -54,7 +51,6 @@ export const updateCoupon = async (req: Request, res: Response) => {
   }
 };
 
-// Delete a coupon
 export const deleteCoupon = async (req: Request, res: Response) => {
   try {
     const success = await removeCoupon(req.params.id);
@@ -67,12 +63,11 @@ export const deleteCoupon = async (req: Request, res: Response) => {
   }
 };
 
-// Get orders associated with a coupon
-// export const getCouponOrders = async (req: Request, res: Response) => {
-//   try {
-//     const orders = await fetchCouponOrders(req.params.id);
-//     res.json(orders);
-//   } catch (error) {
-//     res.status(500).json({ error: "Failed to fetch orders for the coupon" });
-//   }
-// };
+export const getCouponOrders = async (req: Request, res: Response) => {
+  try {
+    const orders = await fetchCouponOrders(req.params.id);
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch orders for the coupon" });
+  }
+};

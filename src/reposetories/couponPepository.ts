@@ -31,9 +31,9 @@ export const deleteCouponRepo = async (couponId: string) => {
   return true;
 };
 
-// Get orders associated with a coupon // TO-DOLL fix the models an assosiations then un-comment it
-// export const getCouponOrdersRepo = async (couponId: string) => {
-//   return await Order.findAll({
-//     where: { couponId },
-//   });
-// };
+//Get orders associated with a coupon
+export const getCouponOrdersRepo = async (couponId: string) => {
+  return await Order.findAll({
+    where: { couponId },
+  });
+};

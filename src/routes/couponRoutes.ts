@@ -5,7 +5,7 @@ import {
   createCoupon,
   updateCoupon,
   deleteCoupon,
-  //   getCouponOrders,
+  getCouponOrders,
 } from "../controllers/couponController";
 import {
   validateGetAllCoupons,
@@ -50,11 +50,11 @@ router.delete(
   validateRequest,
   deleteCoupon
 );
-// router.get(
-//   "/api/coupons/:id/orders",
-//   validateGetCouponOrders,
-//   validateRequest,
-//   getCouponOrders
-// );
+router.get(
+  "/api/coupons/:id/orders",
+  validateGetCouponOrders,
+  validateRequest,
+  getCouponOrders
+);
 
 export default router;

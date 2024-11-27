@@ -1,10 +1,12 @@
 import { Sequelize, DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/mySQLConf";
 import User from "./User";
+import Coupon from "./Coupon";
 
 interface OrderAttributes {
   id: string;
   userId: string;
+  couponId: string;
   status: string;
 }
 
@@ -16,6 +18,7 @@ class Order
 {
   public id!: string;
   public userId!: string;
+  public couponId!: string;
   public status!: string;
 }
 
@@ -31,6 +34,14 @@ Order.init(
       allowNull: false,
       references: {
         model: User,
+        key: "id",
+      },
+    },
+    couponId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: Coupon,
         key: "id",
       },
     },
