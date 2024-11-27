@@ -13,8 +13,8 @@ interface ProductAttributes {
   isFeatured: boolean;
   brandId: string;
   categoryId: string;
-  created_at: Date;
-  updated_at: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 interface ProductCreationAttributes extends Optional<ProductAttributes, "id"> {}
@@ -32,8 +32,8 @@ class Product
   public isFeatured!: boolean;
   public brandId!: string;
   public categoryId!: string;
-  public created_at!: Date;
-  public updated_at!: Date;
+  public createdAt!: Date;
+  public updatedAt!: Date;
 }
 
 Product.init(
@@ -83,11 +83,11 @@ Product.init(
         key: "id",
       },
     },
-    created_at: {
+    createdAt: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
     },
-    updated_at: {
+    updatedAt: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
     },

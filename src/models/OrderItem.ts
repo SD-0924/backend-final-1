@@ -5,8 +5,8 @@ import Order from "./Order";
 
 interface OrderItemAttributes {
   id: string;
-  order_id: string;
-  product_id: string;
+  orderId: string;
+  productId: string;
   price: number;
   quantity: number;
 }
@@ -19,8 +19,8 @@ class OrderItem
   implements OrderItemAttributes
 {
   public id!: string;
-  public order_id!: string;
-  public product_id!: string;
+  public orderId!: string;
+  public productId!: string;
   public price!: number;
   public quantity!: number;
 }
@@ -32,7 +32,7 @@ OrderItem.init(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    order_id: {
+    orderId: {
       type: DataTypes.UUID,
       allowNull: false,
       references: {
@@ -40,7 +40,7 @@ OrderItem.init(
         key: "id",
       },
     },
-    product_id: {
+    productId: {
       type: DataTypes.UUID,
       allowNull: false,
       references: {
@@ -59,7 +59,7 @@ OrderItem.init(
   },
   {
     sequelize,
-    tableName: "order_items",
+    tableName: "orderItems",
     modelName: "OrderItem",
   }
 );
