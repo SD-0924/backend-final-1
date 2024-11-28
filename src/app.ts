@@ -10,6 +10,7 @@ const app: Application = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
 app.use(authRoutes);
 app.use(productRouts);
 app.use(couponRouts);
