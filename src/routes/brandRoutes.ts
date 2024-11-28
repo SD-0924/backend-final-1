@@ -7,6 +7,7 @@ import { validateRequest } from '../middlewares/validateRequest';
 
 const router = express.Router();
 
+// create brand endpoint
 router.post(
     "/api/brands", 
     upload.single('logo'),

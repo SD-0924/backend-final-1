@@ -37,11 +37,12 @@ try {
 // admin sdk
 const adminApp = adminInitializeApp({
   credential: cert(serviceAccount),
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
 });
 
 // accessing the firebase storage using bucket const for admin level file management
 const bucket = admin.storage().bucket();
 
-console.log("Firebase has been initialized successfully!");
+console.log("Firebase has been initialized successfully!!!!!!!");
 
 export { app, adminApp, admin, bucket };

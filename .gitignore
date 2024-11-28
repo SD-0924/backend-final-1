@@ -11,5 +11,8 @@ node_modules/
 # Ignore log files
 *.log
 
-#Ignore dist folder
+# Ignore dist folder
 dist/
+
+# folder that we save the images that will be uploaded to the firebase in it temporarily 
+tmp_uploads
