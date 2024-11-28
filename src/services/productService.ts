@@ -1,11 +1,22 @@
 import {
+  getAllProductsRepository,
+  getProductByIdRepository,
   addProductRepository,
   updateProductRepository,
   deleteProductRepository,
   getNewArrivalsRepository,
+  getProductRatingsRepository,
 } from "../reposetories/productRepository";
 
 import Product from "../models/Product";
+
+export const getAllProductsService = async () => {
+  return await getAllProductsRepository();
+};
+
+export const getProductByIdService = async (productId: string) => {
+  return await getProductByIdRepository(productId);
+};
 
 export const addProductService = async (productData: Partial<Product>) => {
   return await addProductRepository(productData);
@@ -20,6 +31,10 @@ export const updateProductService = async (
 
 export const deleteProductService = async (productId: string) => {
   return await deleteProductRepository(productId);
+};
+
+export const getProductRatingsService = async (productId: string) => {
+  return await getProductRatingsRepository(productId);
 };
 
 export const getNewArrivalsService = async (page: number, limit: number) => {

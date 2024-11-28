@@ -1,10 +1,35 @@
 import { Request, Response } from "express";
 import { getNewArrivalsService } from "../services/productService";
 import {
+  getAllProductsService,
+  getProductByIdService,
   addProductService,
   updateProductService,
   deleteProductService,
+  getProductRatingsService,
 } from "../services/productService";
+
+export const getAllProducts = async (req: Request, res: Response) => {
+  try {
+    const products = await getAllProductsService();
+    res.json(products);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch products" });
+  }
+};
+
+export const getProductById = async (req: Request, res: Response) => {
+  try {
+    const productId = req.params.id;
+    const product = await getProductByIdService(productId);
+    if (!product) {
+      res.status(404).json({ error: "Product not found" });
+    }
+    res.json(product);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch product" });
+  }
+};
 
 export const addProduct = async (req: Request, res: Response) => {
   try {
@@ -63,6 +88,16 @@ export const deleteProduct = async (req: Request, res: Response) => {
       success: false,
       message: "Failed to delete product. Please try again later.",
     });
+  }
+};
+
+export const getProductRatings = async (req: Request, res: Response) => {
+  try {
+    const productId = req.params.id;
+    const ratings = await getProductRatingsService(productId);
+    res.json(ratings);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch ratings" });
   }
 };
 
