@@ -1,4 +1,4 @@
-import { createBrand, findBrandByName, getBrandById } from '../reposetories/brandRepository';
+import { createBrand, findBrandByName, getBrandById, getAllBrandsRepo } from '../reposetories/brandRepository';
 import { bucket } from '../config/firbaseConf'
 import path from 'path';
 import fs from 'fs';
@@ -114,4 +114,42 @@ export const fetchBrandByIdService  = async(id: string) =>{
         throw error;
     }
 
+};
+
+export const getAllBrandsService = async () => {
+    try {
+        const brands = await getAllBrandsRepo();
+
+        // process each brand to include Base64-encoded logo
+        const brandsWithEncodedLogos = await Promise.all(
+            brands.map(async (brand) => {
+                try {
+                    // extracting the file name from the logo URL
+                    const fileName = brand.logo.replace(`https://storage.googleapis.com/${process.env.FIREBASE_STORAGE_BUCKET}/`,'');
+
+                    // fetching and encoding the image
+                    const imageBuffer = await downloadImageFromFirebase(fileName);
+                    const base64Logo = `data:image/jpeg;base64,${imageBuffer.toString('base64')}`;
+
+                    return {
+                        id: brand.id,
+                        name: brand.name,
+                        logo: base64Logo, // include the Base64 logo
+                    };
+                } catch (error) {
+                    console.warn(`Failed to fetch image for brand ID ${brand.id}:`, error);
+                    return {
+                        id: brand.id,
+                        name: brand.name,
+                        logo: null,
+                    };
+                }
+            })
+        );
+        return brandsWithEncodedLogos;
+
+    } catch (error) {
+        console.error('Error in fetching all brands:', error);
+        throw new Error('Service error');
+    }
 };
