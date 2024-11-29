@@ -23,16 +23,17 @@ export const createBrand = async (req: Request, res: Response) =>{
     }
 };
 
-export const getBrandById = async(req: Request, res: Response) =>{
+export const getBrandById = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
         const brand = await fetchBrandByIdService(id); 
 
         if (!brand) {
             res.status(404).json({ message: 'Brand not found.' });
+        }else{
+            res.status(200).json(brand); 
         }
-        res.status(200).json(brand); 
-
+        
     } catch (error) {
         res.status(500).json({ message: 'Internal server error.' });
     }
