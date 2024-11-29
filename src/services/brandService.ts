@@ -69,72 +69,63 @@ export const createBrandService = async (name: string, file: Express.Multer.File
     }
 };
 
-// function to download an image from Firebase Storage
-const downloadImageFromFirebase = async (fileName: string): Promise<Buffer> => {
-    // Create a reference to the file in Firebase Storage using the provided file path
+const getBrandImageUrlFromFirebase = async (imageUrl: string): Promise<string> => {
+    const fileName = imageUrl.split(`${bucket.name}/`)[1];
     const file = bucket.file(fileName);
+
     try {
-        // fetching the file from storage
-        const [fileContents] = await file.download();
-        return fileContents;
-
+        const [fileExists] = await file.exists();
+        if (fileExists) {
+        const [url] = await file.getSignedUrl({
+            action: 'read', 
+            expires: '03-09-2491' 
+        });
+        return url; 
+        }
     } catch (error) {
-
-        console.error('Error downloading file from Firebase:', error);
-        throw new Error('Error during file download');
-        
+        console.error("Error fetching product image:", error);
+        return imageUrl; 
     }
+    return imageUrl;
 };
 
-export const fetchBrandByIdService  = async(id: string) =>{
+export const fetchBrandByIdService = async (id: string) => {
     try {
-        const brand = await getBrandById(id);
-        // if the brand is null, then its not 
-        if (!brand) {
-            return null;
-        }
-        // extracting the file from the logo field
-        const logoUrl = brand.logo; 
-        const fileName = logoUrl.replace(`https://storage.googleapis.com/${process.env.FIREBASE_STORAGE_BUCKET}/`, '');
-
-        // Fetch the logo image from Firebase Storage
-        const imageBuffer = await downloadImageFromFirebase(fileName);
-
-        // Convert the image buffer to Base64 for sending in the response
-        const base64Logo = `data:image/jpeg;base64,${imageBuffer.toString('base64')}`;
-
-        // Return the brand details along with the logo in Base64 format
-        return {
-            id: brand.id,
-            name: brand.name,
-            logo: base64Logo, // Attach the Base64 image to the response
-        };
-    } catch (error) {
-        console.error('Error in fetching brand by ID:', error);
-        throw error;
+    const brand = await getBrandById(id);
+    if (!brand) {
+        return null;
     }
 
+    const logoUrl = brand.logo;
+    const imageUrl = await getBrandImageUrlFromFirebase(logoUrl); 
+
+    return {
+        id: brand.id,
+        name: brand.name,
+        logo: imageUrl,
+    };
+
+    } catch (error) {
+    console.error('Error in fetching brand by ID:', error);
+    throw error; 
+    }
 };
 
 export const getAllBrandsService = async () => {
     try {
         const brands = await getAllBrandsRepo();
 
-        // process each brand to include Base64-encoded logo
-        const brandsWithEncodedLogos = await Promise.all(
+        // process each brand to include signed image URL
+        const brandsWithLogos = await Promise.all(
             brands.map(async (brand) => {
                 try {
-                    // extracting the file name from the logo URL
-                    const fileName = brand.logo.replace(`https://storage.googleapis.com/${process.env.FIREBASE_STORAGE_BUCKET}/`,'');
-
-                    // fetching and encoding the image
-                    const imageBuffer = await downloadImageFromFirebase(fileName);
-                    const base64Logo = `data:image/jpeg;base64,${imageBuffer.toString('base64')}`;
+                    // get the signed URL for the image
+                    const imageUrl = await getBrandImageUrlFromFirebase(brand.logo);
 
                     return {
                         id: brand.id,
                         name: brand.name,
-                        logo: base64Logo, // include the Base64 logo
+                        logo: imageUrl, // using the signed URL for the logo
                     };
                 } catch (error) {
                     console.warn(`Failed to fetch image for brand ID ${brand.id}:`, error);
@@ -148,8 +139,8 @@ export const getAllBrandsService = async () => {
         );
 
         return {
-            count: brandsWithEncodedLogos.length, // Include the total count
-            brands: brandsWithEncodedLogos,      // The processed brand details
+            count: brandsWithLogos.length, // include the total count
+            brands: brandsWithLogos,       // the processed brand details
         };
 
     } catch (error) {
@@ -157,6 +148,7 @@ export const getAllBrandsService = async () => {
         throw new Error('Service error');
     }
 };
+
 
 //  to delete an image from Firebase Storage
 export const deleteImageFromFirebase = async (fileName: string): Promise<void> => {

@@ -57,6 +57,7 @@ export const deleteBrandById = async (req: Request, res: Response) => {
     } catch (error: any) {
         console.error(`Error in deleting brand with ID ${id}:`, error);
         if (error.message === 'Brand not found') {
+            console.log("Brand not found");
             res.status(404).json({ message: 'Brand not found' });
         } else {
             res.status(500).json({ message: 'Internal server error' });
