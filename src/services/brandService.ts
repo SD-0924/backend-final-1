@@ -146,7 +146,11 @@ export const getAllBrandsService = async () => {
                 }
             })
         );
-        return brandsWithEncodedLogos;
+        
+        return {
+            count: brandsWithEncodedLogos.length, // Include the total count
+            brands: brandsWithEncodedLogos,      // The processed brand details
+        };
 
     } catch (error) {
         console.error('Error in fetching all brands:', error);
