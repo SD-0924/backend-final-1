@@ -34,3 +34,11 @@ export const getAllBrandsRepo = async () => {
         throw new Error('Database error');
     }
 };
+
+export const deleteBrandByIdRepo = async (id: string) => {
+    const brand = await Brand.findByPk(id);
+    if (!brand) {
+        throw new Error("Brand not found");
+    }
+    return await brand.destroy();
+};

@@ -1,4 +1,4 @@
-import { createBrand, findBrandByName, getBrandById, getAllBrandsRepo } from '../reposetories/brandRepository';
+import { createBrand, findBrandByName, getBrandById, getAllBrandsRepo, deleteBrandByIdRepo } from '../reposetories/brandRepository';
 import { bucket } from '../config/firbaseConf'
 import path from 'path';
 import fs from 'fs';
@@ -146,7 +146,7 @@ export const getAllBrandsService = async () => {
                 }
             })
         );
-        
+
         return {
             count: brandsWithEncodedLogos.length, // Include the total count
             brands: brandsWithEncodedLogos,      // The processed brand details
@@ -155,5 +155,39 @@ export const getAllBrandsService = async () => {
     } catch (error) {
         console.error('Error in fetching all brands:', error);
         throw new Error('Service error');
+    }
+};
+
+//  to delete an image from Firebase Storage
+export const deleteImageFromFirebase = async (fileName: string): Promise<void> => {
+    try {
+        const file = bucket.file(fileName);
+        await file.delete();
+        console.log(`File ${fileName} deleted successfully from Firebase.`);
+    } catch (error) {
+        console.error(`Error deleting file ${fileName} from Firebase:`, error);
+        throw new Error('Error deleting file from Firebase');
+    }
+};
+
+export const deleteBrandByIdService = async (id: string): Promise<void> => {
+    try {
+        const brand = await getBrandById(id);
+
+        if (!brand) {
+            console.log("Brand is not found to delete")
+            throw new Error('Brand not found');
+        }
+        const fileName = brand.logo.replace(`https://storage.googleapis.com/${process.env.FIREBASE_STORAGE_BUCKET}/`,'');
+
+        // delete the image from Firebase
+        await deleteImageFromFirebase(fileName);
+
+        // Delete the brand record from the database
+        await deleteBrandByIdRepo(id);
+
+    } catch (error) {
+        console.error(`Error deleting brand with ID ${id}:`, error);
+        throw error;
     }
 };
