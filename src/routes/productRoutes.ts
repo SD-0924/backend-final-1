@@ -39,11 +39,8 @@ router.get(
 
 router.post("/api/products", upload.single('image'), validateAddProduct, validateRequest, addProduct);
 
-router.put(
-  "/api/products/:id",
-  validateUpdateProduct,
-  updateProduct
-);
+router.put('/products/:id', upload.single('productImage'), validateUpdateProduct, updateProduct);
+
 
 router.delete(
   "/api/products/:id",
