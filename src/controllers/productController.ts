@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, RequestHandler, Response } from "express";
 import { getNewArrivalsService } from "../services/productService";
 import {
   getAllProductsService,
@@ -8,6 +8,8 @@ import {
   deleteProductService,
   getProductRatingsService,
 } from "../services/productService";
+import { uploadProductImageToFirebase } from "../utils/firebaseUtils";
+import fs from "fs";
 
 export const getAllProducts = async (req: Request, res: Response) => {
   try {
@@ -35,6 +37,11 @@ export const addProduct = async (req: Request, res: Response) => {
   try {
     const productData = req.body;
 
+    if (req.file) {
+      const imageUrl = await uploadProductImageToFirebase(req.file.path, productData.name);
+      productData.imageUrl = imageUrl;
+    }
+
     const newProduct = await addProductService(productData);
 
     res.status(201).json({
@@ -50,6 +57,10 @@ export const addProduct = async (req: Request, res: Response) => {
     });
   }
 };
+
+
+
+
 
 export const updateProduct = async (req: Request, res: Response) => {
   try {

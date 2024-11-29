@@ -1,5 +1,5 @@
 import { Router } from "express";
-
+import upload from "../middlewares/multerUpload";
 import {
   getAllProducts,
   getProductById,
@@ -9,6 +9,7 @@ import {
   getProductRatings,
   getNewArrivals,
 } from "../controllers/productController";
+
 
 import {
   validateGetAllProducts,
@@ -21,28 +22,26 @@ import {
 } from "../validations/productValidation";
 import { validateRequest } from "../middlewares/validateRequest";
 
+
 const router = Router();
 
 router.get(
   "/api/products",
   validateGetAllProducts,
-  validateRequest,
   getAllProducts
 );
 
 router.get(
   "/api/products/:id",
   validateGetProductById,
-  validateRequest,
   getProductById
 );
 
-router.post("/api/products", validateAddProduct, validateRequest, addProduct);
+router.post("/api/products", upload.single('image'), validateAddProduct, validateRequest, addProduct);
 
 router.put(
   "/api/products/:id",
   validateUpdateProduct,
-  validateRequest,
   updateProduct
 );
 
@@ -56,7 +55,6 @@ router.delete(
 router.get(
   "/api/products/:id/ratings",
   validateGetProductRatings,
-  validateRequest,
   getProductRatings
 );
 
@@ -64,7 +62,6 @@ router.get(
 router.get(
   "/api/products/new-arrivals",
   validateGetNewArrivals,
-  validateRequest,
   getNewArrivals
 );
 
