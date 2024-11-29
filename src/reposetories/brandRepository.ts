@@ -22,3 +22,15 @@ export const getBrandById = async(id: string)=>{
         throw new Error('Failed to fetch brand by ID');
     }
 };
+
+export const getAllBrandsRepo = async () => {
+    try {
+        // fetch all brands
+        return await Brand.findAll({
+            attributes: ['id', 'name', 'logo'],
+        });
+    } catch (error) {
+        console.error('Error fetching brands from the repository:', error);
+        throw new Error('Database error');
+    }
+};
