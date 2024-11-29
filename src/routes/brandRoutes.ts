@@ -1,6 +1,6 @@
 import express from 'express';
-import { createBrand } from "../controllers/brandController";
-import { validateAddBrand } from "../validations/brandValidation";
+import { createBrand, getBrandById } from "../controllers/brandController";
+import { validateAddBrand, validateBrandId } from "../validations/brandValidation";
 import upload from '../middlewares/multerUpload';
 import { validateRequest } from '../middlewares/validateRequest';
 
@@ -14,6 +14,14 @@ router.post(
     validateAddBrand,
     validateRequest,
     createBrand
+);
+
+// get brand by ID endpoint
+router.get(
+    "/api/brands/:id",
+    validateBrandId,
+    validateRequest,
+    getBrandById
 );
 
 export default router;

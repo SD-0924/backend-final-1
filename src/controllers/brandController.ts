@@ -24,14 +24,12 @@ export const createBrand = async (req: Request, res: Response) =>{
 };
 
 export const getBrandById = async(req: Request, res: Response) =>{
-
-    const { id } = req.params;
-    
     try {
+        const { id } = req.params;
         const brand = await fetchBrandByIdService(id); 
-        
+
         if (!brand) {
-            return res.status(404).json({ message: 'Brand not found.' });
+            res.status(404).json({ message: 'Brand not found.' });
         }
         res.status(200).json(brand); 
 
