@@ -1,5 +1,5 @@
 import express from 'express';
-import { createBrand, getBrandById, getAllBrands } from "../controllers/brandController";
+import { createBrand, getBrandById, getAllBrands, deleteBrandById } from "../controllers/brandController";
 import { validateAddBrand, validateBrandId } from "../validations/brandValidation";
 import upload from '../middlewares/multerUpload';
 import { validateRequest } from '../middlewares/validateRequest';
@@ -30,5 +30,13 @@ router.get(
     validateRequest,
     getAllBrands
 )
+
+// delete brand by id
+router.delete(
+    "/api/brands/:id",
+    validateBrandId,
+    validateRequest,
+    deleteBrandById
+);
 
 export default router;
