@@ -1,5 +1,5 @@
 import express from 'express';
-import { createBrand, getBrandById } from "../controllers/brandController";
+import { createBrand, getBrandById, getAllBrands } from "../controllers/brandController";
 import { validateAddBrand, validateBrandId } from "../validations/brandValidation";
 import upload from '../middlewares/multerUpload';
 import { validateRequest } from '../middlewares/validateRequest';
@@ -23,5 +23,12 @@ router.get(
     validateRequest,
     getBrandById
 );
+
+// get all brands
+router.get(
+    "/api/brands",
+    validateRequest,
+    getAllBrands
+)
 
 export default router;

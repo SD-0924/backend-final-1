@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { createBrandService, fetchBrandByIdService } from '../services/brandService';
+import { createBrandService, fetchBrandByIdService, getAllBrandsService } from '../services/brandService';
 
 export const createBrand = async (req: Request, res: Response) =>{
     try {
@@ -36,5 +36,15 @@ export const getBrandById = async (req: Request, res: Response) => {
         
     } catch (error) {
         res.status(500).json({ message: 'Internal server error.' });
+    }
+};
+
+export const getAllBrands = async (req: Request, res: Response) => {
+    try {
+        const brands = await getAllBrandsService();
+        res.status(200).json(brands);
+    } catch (error) {
+        console.error('Error in controller fetching all brands:', error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 };
