@@ -9,12 +9,6 @@ export const handleRegister = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    res.status(400).json({ errors: errors.array() });
-    return;
-  }
-
   try {
     const {
       email,
@@ -61,10 +55,8 @@ export const handleLogin = async (
     // If successful, send the response
     res.status(200).json({ message: "Login successful", token });
   } catch (error: unknown) {
-    res
-      .status(401)
-      .json({
-        message: error instanceof Error ? error.message : "Unauthorized",
-      });
+    res.status(401).json({
+      message: error instanceof Error ? error.message : "Unauthorized",
+    });
   }
 };
