@@ -1,4 +1,4 @@
-import { createBrand, findBrandByName } from '../reposetories/brandRepository';
+import { createBrand, findBrandByName, getBrandById } from '../reposetories/brandRepository';
 import { bucket } from '../config/firbaseConf'
 import path from 'path';
 import fs from 'fs';
@@ -67,4 +67,51 @@ export const createBrandService = async (name: string, file: Express.Multer.File
         fs.unlinkSync(tempFilePath);
         throw error;
     }
+};
+
+// function to download an image from Firebase Storage
+const downloadImageFromFirebase = async (fileName: string): Promise<Buffer> => {
+    // Create a reference to the file in Firebase Storage using the provided file path
+    const file = bucket.file(fileName);
+    try {
+        // fetching the file from storage
+        const [fileContents] = await file.download();
+        return fileContents;
+
+    } catch (error) {
+
+        console.error('Error downloading file from Firebase:', error);
+        throw new Error('Error during file download');
+        
+    }
+};
+
+export const fetchBrandByIdService  = async(id: string) =>{
+    try {
+        const brand = await getBrandById(id);
+        // if the brand is null, then its not 
+        if (!brand) {
+            return null;
+        }
+        // extracting the file from the logo field
+        const logoUrl = brand.logo; 
+        const fileName = logoUrl.replace(`https://storage.googleapis.com/${process.env.FIREBASE_STORAGE_BUCKET}/`, '');
+
+        // Fetch the logo image from Firebase Storage
+        const imageBuffer = await downloadImageFromFirebase(fileName);
+
+        // Convert the image buffer to Base64 for sending in the response
+        const base64Logo = `data:image/jpeg;base64,${imageBuffer.toString('base64')}`;
+
+        // Return the brand details along with the logo in Base64 format
+        return {
+            id: brand.id,
+            name: brand.name,
+            logo: base64Logo, // Attach the Base64 image to the response
+        };
+    } catch (error) {
+        console.error('Error in fetching brand by ID:', error);
+        throw error;
+    }
+
 };
