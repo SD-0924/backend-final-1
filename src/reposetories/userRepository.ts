@@ -7,3 +7,25 @@ export const createUser = async (userData: any) => {
 export const getUserByEmail = async (email: string) => {
     return await User.findOne({ where: { email } }); // Retrieve the user by email
 };
+
+export const getUserById = async (id: string) => {
+    return await User.findByPk(id);
+  };
+  
+  
+  export const updateUser = async (id: string, updates: any) => {
+    const user = await User.findByPk(id);
+    if (!user) return null;
+    return await user.update(updates);
+  };
+  
+  export const deleteUser = async (id: string) => {
+    const user = await User.findByPk(id);
+    if (!user) return false;
+    await user.destroy();
+    return true;
+  };
+
+  export const findAllUsers = async () => {
+    return await User.findAll();
+  };

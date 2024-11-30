@@ -16,7 +16,7 @@ const sequelizeInitial = new Sequelize("", DB_USER, DB_PASSWORD, {
   logging: false,
 });*/ //remove this comment if you want to initialize the database in your localhost  
 
-  /*const DB_PORT= process.env.DB_PORT;
+ /* const DB_PORT= process.env.DB_PORT;
 const DB_DATABASE=process.env.DB_DATABASE||"finalProj";
 const DB_USER = process.env.DB_USERNAME || "root";
 const DB_PASSWORD = process.env.DB_PASSWORD||"";
