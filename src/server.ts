@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3000;
 const DB_USER = process.env.DB_USER || "root";
 const DB_PASSWORD = process.env.DB_PASSWORD;
 const DB_HOST = process.env.DB_HOST || "localhost";
-
+export const JWT_SECRET = process.env.JWT_SECRET!;
 const sequelizeInitial = new Sequelize("", DB_USER, DB_PASSWORD, {
   host: DB_HOST,
   dialect: "mysql",
