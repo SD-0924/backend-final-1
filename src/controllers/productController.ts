@@ -12,7 +12,7 @@ import {
 export const getAllProducts = async (req: Request, res: Response) => {
   try {
     const products = await getAllProductsService();
-    res.json(products);
+    res.status(201).json(products);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch products" });
   }
@@ -24,8 +24,9 @@ export const getProductById = async (req: Request, res: Response) => {
     const product = await getProductByIdService(productId);
     if (!product) {
       res.status(404).json({ error: "Product not found" });
+    } else {
+      res.status(201).json(product);
     }
-    res.json(product);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch product" });
   }
@@ -34,7 +35,6 @@ export const getProductById = async (req: Request, res: Response) => {
 export const addProduct = async (req: Request, res: Response) => {
   try {
     const productData = req.body;
-
     const newProduct = await addProductService(productData);
 
     res.status(201).json({
@@ -63,12 +63,16 @@ export const updateProduct = async (req: Request, res: Response) => {
       message: "Product updated successfully!",
       data: updatedProduct,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error updating product:", error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to update product. Please try again later.",
-    });
+    if (error.message === "Product not found") {
+      res.status(404).json({ message: "Product not found" });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: "Failed to update product. Please try again later.",
+      });
+    }
   }
 };
 
@@ -78,7 +82,7 @@ export const deleteProduct = async (req: Request, res: Response) => {
 
     await deleteProductService(productId);
 
-    res.status(200).json({
+    res.status(204).json({
       success: true,
       message: "Product deleted successfully!",
     });
@@ -95,7 +99,7 @@ export const getProductRatings = async (req: Request, res: Response) => {
   try {
     const productId = req.params.id;
     const ratings = await getProductRatingsService(productId);
-    res.json(ratings);
+    res.status(201).json(ratings);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch ratings" });
   }
