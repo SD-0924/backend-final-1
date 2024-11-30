@@ -26,9 +26,6 @@ export const validateAddProduct = [
   body("stockQuantity")
     .isInt({ min: 0 })
     .withMessage("Stock quantity must be a non-negative integer"),
-  body("category")
-    .isIn(["electronics", "fashion", "home"])
-    .withMessage("Invalid category"),
 ];
 
 export const validateUpdateProduct = [

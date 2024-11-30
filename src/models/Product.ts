@@ -13,6 +13,7 @@ interface ProductAttributes {
   isFeatured: boolean;
   brandId: string;
   categoryId: string;
+  imageUrl: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -32,6 +33,7 @@ class Product
   public isFeatured!: boolean;
   public brandId!: string;
   public categoryId!: string;
+  public imageUrl!: string;
   public createdAt!: Date;
   public updatedAt!: Date;
 }
@@ -69,7 +71,7 @@ Product.init(
     },
     brandId: {
       type: DataTypes.UUID,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: Brand,
         key: "id",
@@ -77,11 +79,15 @@ Product.init(
     },
     categoryId: {
       type: DataTypes.UUID,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: Category,
         key: "id",
       },
+    },
+    imageUrl: {  
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     createdAt: {
       type: DataTypes.DATE,
