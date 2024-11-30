@@ -14,6 +14,7 @@ export const getAllProducts = async (req: Request, res: Response) => {
   try {
     const products = await getAllProductsService();
 
+
     const productsWithImages = await Promise.all(products.map(async (product) => {
       if (product.imageUrl) {
         product.imageUrl = await getProductImageUrlFromFirebase(product.imageUrl);
@@ -23,7 +24,7 @@ export const getAllProducts = async (req: Request, res: Response) => {
       return product;
     }));
 
-    res.json(productsWithImages);
+    res.status(201).json(productsWithImages);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch products" });
   }
@@ -51,7 +52,7 @@ export const getProductById = async (req: Request, res: Response): Promise<void>
       product.imageUrl = "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png"
     }
 
-    res.json(product);
+    res.status(201).json(product);
   } catch (error) {
     console.error("Failed to fetch product:", error);
     res.status(500).json({ error: "Failed to fetch product" });
@@ -106,12 +107,16 @@ export const updateProduct = async (req: Request, res: Response) => {
       message: "Product updated successfully!",
       data: updatedProduct,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error updating product:", error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to update product. Please try again later.",
-    });
+    if (error.message === "Product not found") {
+      res.status(404).json({ message: "Product not found" });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: "Failed to update product. Please try again later.",
+      });
+    }
   }
 };
 
@@ -127,7 +132,7 @@ export const deleteProduct = async (req: Request, res: Response) => {
 
     await deleteProductService(productId);
 
-    res.status(200).json({
+    res.status(204).json({
       success: true,
       message: "Product deleted successfully!",
     });
@@ -145,7 +150,7 @@ export const getProductRatings = async (req: Request, res: Response) => {
   try {
     const productId = req.params.id;
     const ratings = await getProductRatingsService(productId);
-    res.json(ratings);
+    res.status(201).json(ratings);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch ratings" });
   }
