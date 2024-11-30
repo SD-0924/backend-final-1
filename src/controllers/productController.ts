@@ -17,6 +17,8 @@ export const getAllProducts = async (req: Request, res: Response) => {
     const productsWithImages = await Promise.all(products.map(async (product) => {
       if (product.imageUrl) {
         product.imageUrl = await getProductImageUrlFromFirebase(product.imageUrl);
+      } else {
+        product.imageUrl = "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png"
       }
       return product;
     }));
@@ -45,6 +47,8 @@ export const getProductById = async (req: Request, res: Response): Promise<void>
       } catch (error) {
         console.error(`Error fetching image for product ${productId}:`, error);
       }
+    }else {
+      product.imageUrl = "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png"
     }
 
     res.json(product);
@@ -63,6 +67,8 @@ export const addProduct = async (req: Request, res: Response) => {
     if (req.file) {
       const imageUrl = await uploadProductImageToFirebase(req.file.path, productData.name);
       productData.imageUrl = imageUrl;
+    }else {
+      productData.imageUrl = "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png"
     }
 
     const newProduct = await addProductService(productData);
@@ -89,6 +95,8 @@ export const updateProduct = async (req: Request, res: Response) => {
     if (req.file) {
       const imageUrl = await uploadProductImageToFirebase(req.file.path, updatedData.name || "product");
       updatedData.imageUrl = imageUrl;
+    }else {
+      updatedData.imageUrl = "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png"
     }
 
     const updatedProduct = await updateProductService(productId, updatedData);
@@ -162,6 +170,8 @@ export const getNewArrivals = async (req: Request, res: Response): Promise<void>
             console.error(`Error fetching image for product ${product.id}:`, error);
             return product; 
           }
+        }else {
+          product.imageUrl = "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png"
         }
         return product; 
       })
