@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 import express, { Application } from "express";
 import authRoutes from "./routes/userRoutes";
 import productRouts from "./routes/productRoutes";
@@ -20,8 +22,12 @@ app.use(brandRoutes);
 
 app.use(errorHandlingMiddleware);
 
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "OK" });
+});
+
 app.all("*", (req, res) => {
   res.status(404).send("Request not supported");
 });
 
-export default app;
+export { app };

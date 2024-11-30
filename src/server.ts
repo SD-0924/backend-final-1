@@ -1,9 +1,9 @@
-require("dotenv").config();
 import { Sequelize } from "sequelize";
-import app from "./app";
+import { app } from "./app";
 import sequelize from "./config/mySQLConf";
 import initializeDatabase from "./initializeDatabase";
 
+const environment = process.env.NODE_ENV || "development";
 const PORT = process.env.PORT || 3000;
 const DB_USER = process.env.DB_USER || "root";
 const DB_PASSWORD = process.env.DB_PASSWORD;
@@ -18,10 +18,11 @@ const sequelizeInitial = new Sequelize("", DB_USER, DB_PASSWORD, {
 const startServer = async () => {
   try {
     await initializeDatabase(sequelizeInitial, sequelize);
-
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
+    if (process.env.NODE_ENV !== "test") {
+      app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+      });
+    }
   } catch (error) {
     console.error("Error starting server:", error);
     process.exit(1);
@@ -35,4 +36,6 @@ const startServer = async () => {
   });
 };
 
-startServer();
+if (environment.toString().trim() !== "test") {
+  startServer();
+}

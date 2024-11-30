@@ -10,7 +10,7 @@ const firebaseConfig = {
   storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.FIREBASE_APP_ID,
-  measurementId: process.env.FIREBASE_MEASUREMENT_ID
+  measurementId: process.env.FIREBASE_MEASUREMENT_ID,
 };
 
 // app for clinet-side
@@ -30,8 +30,10 @@ const serviceAccountPath = path.resolve(process.env.SERVICE_ACCOUNT_PATH!);
 let serviceAccount;
 try {
   serviceAccount = require(serviceAccountPath);
-} catch (error:any) {
-  throw new Error(`Failed to load service account JSON. Path: ${serviceAccountPath}. Error: ${error.message}`);
+} catch (error: any) {
+  throw new Error(
+    `Failed to load service account JSON. Path: ${serviceAccountPath}. Error: ${error.message}`
+  );
 }
 
 // admin sdk
