@@ -1,5 +1,14 @@
 import { Op } from "sequelize";
 import Product from "../models/Product";
+import Rating from "../models/Rating";
+
+export const getAllProductsRepository = async () => {
+  return await Product.findAll();
+};
+
+export const getProductByIdRepository = async (productId: string) => {
+  return await Product.findByPk(productId);
+};
 
 export const addProductRepository = async (productData: any) => {
   return await Product.create(productData);
@@ -23,6 +32,13 @@ export const deleteProductRepository = async (productId: string) => {
   }
   return await product.destroy();
 };
+
+export const getProductRatingsRepository = async (productId: string) => {
+  return await Rating.findAll({
+    where: { productId },
+  });
+};
+
 export const getNewArrivalsRepository = async (
   dateThreshold: Date,
   limit: number,
@@ -33,11 +49,11 @@ export const getNewArrivalsRepository = async (
       stockQuantity: {
         [Op.gt]: 0, // Products with stock > 0
       },
-      created_at: {
+      createdAt: {
         [Op.gte]: dateThreshold, // Created within the last 3 months
       },
     },
-    order: [["created_at", "DESC"]],
+    order: [["createdAt", "DESC"]],
     limit,
     offset,
   });
