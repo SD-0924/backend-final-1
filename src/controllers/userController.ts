@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import { registerUser } from "../services/userService";
-import { verifyPassword } from "../services/userService";
+import { verifyPassword ,updateUserService, deleteUserService, getUserByIdService, getAllUsers} from "../services/userService";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../server";
 
@@ -69,6 +69,64 @@ export const handleLogin = async (
     res.status(401).json({
       message: error instanceof Error ? error.message : "Unauthorized",
     });
+  }
+};
+
+
+// Update User
+export const handleUpdateUser = async (req: Request, res: Response): Promise<void> => {
+  try {
+      const { id } = req.params;
+      const updates = req.body;
+      const updatedUser = await updateUserService(id, updates);
+
+      if (!updatedUser) {
+          res.status(404).json({ message: 'User not found' });
+          return;
+      }
+
+      res.status(200).json({ message: 'User updated successfully', user: updatedUser });
+  } catch (error: unknown) {
+      res.status(500).json({ message: 'Internal server error', error: error instanceof Error ? error.message : error });
+  }
+};
+
+// Delete User
+export const handleDeleteUser = async (req: Request, res: Response): Promise<void> => {
+  try {
+      const { id } = req.params;
+      const deleted = await deleteUserService(id);
+
+      if (!deleted) {
+          res.status(404).json({ message: 'User not found' });
+          return;
+      }
+
+      res.status(200).json({ message: 'User deleted successfully' });
+  } catch (error: unknown) {
+      res.status(500).json({ message: 'Internal server error', error: error instanceof Error ? error.message : error });
+  }
+};
+export const handleGetAllUsers = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const users = await getAllUsers();
+    res.status(200).json(users);
+  } catch (error: unknown) {
+    res.status(500).json({ message: 'Internal server error', error: (error as Error).message });
+  }
+};
+
+// Get user by ID
+export const getUserByIdController = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const user = await getUserByIdService(id);
+    if (!user) {
+       res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to fetch user', error });
   }
 };
 

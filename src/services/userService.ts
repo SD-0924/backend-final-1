@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { createUser, getUserByEmail } from "../reposetories/userRepository";
+import { createUser, getUserByEmail, updateUser, deleteUser,getUserById, findAllUsers } from "../reposetories/userRepository";
 
 export const registerUser = async (userData: any) => {
   // Check if the email already exists
@@ -39,3 +39,30 @@ export const verifyPassword = async (email: string, plainPassword: string) => {
 
   return user; // Return user if passwords match
 };
+
+
+// Update User
+export const updateUserService = async (id: string, updates: any) => {
+    return await updateUser(id, updates);
+};
+
+// Delete User
+export const deleteUserService = async (id: string) => {
+    return await deleteUser(id);
+};
+
+export const getUserByIdService = async (id: string) => {
+    const user = await getUserById(id);
+    if (!user) {
+        throw new Error('User not found');
+    }
+    return user;
+};
+export const getAllUsers = async () => {
+    try {
+      const users = await findAllUsers();
+      return users;
+    } catch (error: unknown) {
+      throw new Error(`Error fetching users: ${(error as Error).message}`);
+    }
+  };
