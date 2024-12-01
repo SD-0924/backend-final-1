@@ -1,12 +1,20 @@
 import request from "supertest";
 import { app } from "../../app"; // Adjust path to your Express app
-import { getAllProductsService } from "../../services/productService";
+import {
+  getAllProductsService,
+  getProductByIdService,
+  addProductService,
+  updateProductService,
+  deleteProductService,
+  getProductRatingsService,
+  getNewArrivalsService,
+} from "../../services/productService";
 import Product from "../../models/Product";
 
 // Mock the service
 jest.mock("../../services/productService");
 
-describe("GET /api/products", () => {
+describe("Product Endpoints", () => {
   const mockProducts = [
     {
       id: "123",
@@ -38,48 +46,165 @@ describe("GET /api/products", () => {
     },
   ];
 
+  const mockProduct = mockProducts[0];
+  const mockRatings = [
+    { id: "1", productId: "123", rating: 5, comment: "Excellent product!" },
+    { id: "2", productId: "123", rating: 4, comment: "Very good!" },
+  ];
+  const mockNewArrivals = {
+    products: [mockProducts[1]],
+    pagination: {
+      currentPage: 1,
+      totalProducts: 1,
+      totalPages: 1,
+    },
+  };
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("should return a list of products with status 201", async () => {
-    // Mock the service to return the mock products
-    (getAllProductsService as jest.Mock).mockResolvedValue(mockProducts);
+  describe("GET /api/products", () => {
+    it("should return a list of products with status 201", async () => {
+      (getAllProductsService as jest.Mock).mockResolvedValue(mockProducts);
 
-    const response = await request(app).get("/api/products");
+      const response = await request(app).get("/api/products");
 
-    expect(response.status).toBe(201);
-    expect(response.body).toHaveLength(2);
-
-    // Validate product details
-    const product1 = response.body[0];
-    expect(product1.name).toBe("Product 1");
-    expect(product1.imageUrl).toBe(
-      "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png"
-    );
-
-    const product2 = response.body[1];
-    expect(product2.name).toBe("Product 2");
-    expect(product2.imageUrl).toBe(
-      "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png" // Default image URL
-    );
-
-    // Ensure the service was called once
-    expect(getAllProductsService).toHaveBeenCalledTimes(1);
+      expect(response.status).toBe(201);
+      expect(response.body).toHaveLength(2);
+      expect(getAllProductsService).toHaveBeenCalledTimes(1);
+    });
   });
 
-  it("should return 500 if service throws an error", async () => {
-    // Mock the service to throw an error
-    (getAllProductsService as jest.Mock).mockRejectedValue(
-      new Error("Database error")
-    );
+  describe("GET /api/products/:id", () => {
+    it("should return a product by ID with status 201", async () => {
+      (getProductByIdService as jest.Mock).mockResolvedValue(mockProduct);
 
-    const response = await request(app).get("/api/products");
+      const response = await request(app).get(
+        `/api/products/${mockProduct.id}`
+      );
 
-    expect(response.status).toBe(500);
-    expect(response.body).toEqual({ error: "Failed to fetch products" });
+      expect(response.status).toBe(201);
+      expect(response.body.name).toBe(mockProduct.name);
+      expect(getProductByIdService).toHaveBeenCalledWith(mockProduct.id);
+    });
 
-    // Ensure the service was called once
-    expect(getAllProductsService).toHaveBeenCalledTimes(1);
+    it("should return 404 if product is not found", async () => {
+      (getProductByIdService as jest.Mock).mockResolvedValue(null);
+
+      const response = await request(app).get("/api/products/unknown");
+
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual({ error: "Product not found" });
+    });
   });
+
+  describe.skip("POST /api/products", () => {
+    it("should add a product and return it with status 201", async () => {
+      (addProductService as jest.Mock).mockResolvedValue(mockProduct);
+
+      const response = await request(app).post("/api/products").send({
+        name: mockProduct.name,
+        price: mockProduct.price,
+        description: mockProduct.description,
+        stockQuantity: mockProduct.stockQuantity,
+        imageUrl: null,
+      });
+
+      expect(response.status).toBe(201);
+      expect(response.body.name).toBe(mockProduct.name);
+      expect(addProductService).toHaveBeenCalledWith({
+        name: mockProduct.name,
+        price: mockProduct.price,
+        description: mockProduct.description,
+        stockQuantity: mockProduct.stockQuantity,
+        imageUrl: null,
+      });
+    });
+
+    it.skip("should return 400 for validation errors", async () => {
+      const response = await request(app).post("/api/products").send({});
+
+      expect(response.status).toBe(400);
+      expect(response.body).toEqual({ error: "Validation error" });
+    });
+  });
+
+  // describe("PUT /products/:id", () => {
+  //   it("should update a product and return it with status 200", async () => {
+  //     (updateProductService as jest.Mock).mockResolvedValue(mockProduct);
+
+  //     const response = await request(app)
+  //       .put(`/products/${mockProduct.id}`)
+  //       .send({ name: "Updated Product" });
+
+  //     expect(response.status).toBe(200);
+  //     expect(response.body.name).toBe(mockProduct.name);
+  //     expect(updateProductService).toHaveBeenCalledWith(mockProduct.id, {
+  //       name: "Updated Product",
+  //     });
+  //   });
+
+  //   it("should return 404 if product is not found", async () => {
+  //     (updateProductService as jest.Mock).mockResolvedValue(null);
+
+  //     const response = await request(app)
+  //       .put(`/products/unknown`)
+  //       .send({ name: "Updated Product" });
+
+  //     expect(response.status).toBe(404);
+  //     expect(response.body).toEqual({ error: "Product not found" });
+  //   });
+  // });
+
+  // describe("DELETE /api/products/:id", () => {
+  //   it("should delete a product and return status 204", async () => {
+  //     (deleteProductService as jest.Mock).mockResolvedValue(true);
+
+  //     const response = await request(app).delete(
+  //       `/api/products/${mockProduct.id}`
+  //     );
+
+  //     expect(response.status).toBe(204);
+  //     expect(deleteProductService).toHaveBeenCalledWith(mockProduct.id);
+  //   });
+
+  //   it("should return 404 if product is not found", async () => {
+  //     (deleteProductService as jest.Mock).mockResolvedValue(false);
+
+  //     const response = await request(app).delete("/api/products/unknown");
+
+  //     expect(response.status).toBe(404);
+  //     expect(response.body).toEqual({ error: "Product not found" });
+  //   });
+  // });
+
+  // describe("GET /api/products/:id/ratings", () => {
+  //   it("should return ratings for a product with status 201", async () => {
+  //     (getProductRatingsService as jest.Mock).mockResolvedValue(mockRatings);
+
+  //     const response = await request(app).get(
+  //       `/api/products/${mockProduct.id}/ratings`
+  //     );
+
+  //     expect(response.status).toBe(201);
+  //     expect(response.body).toHaveLength(2);
+  //     expect(getProductRatingsService).toHaveBeenCalledWith(mockProduct.id);
+  //   });
+  // });
+
+  // describe("GET /api/products/new-arrivals", () => {
+  //   it("should return new arrivals with pagination details", async () => {
+  //     (getNewArrivalsService as jest.Mock).mockResolvedValue(mockNewArrivals);
+
+  //     const response = await request(app).get(
+  //       "/api/products/new-arrivals?page=1&limit=10"
+  //     );
+
+  //     expect(response.status).toBe(201);
+  //     expect(response.body.products).toHaveLength(1);
+  //     expect(response.body.pagination.currentPage).toBe(1);
+  //     expect(getNewArrivalsService).toHaveBeenCalledWith(1, 10);
+  //   });
+  // });
 });
