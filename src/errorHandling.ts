@@ -19,7 +19,7 @@ const errorHandlingMiddleware = (
     res.status(status).json({ message });
   }
 
-  next(); // propagate the error further
+
 };
 
 export default errorHandlingMiddleware;
