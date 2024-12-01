@@ -9,8 +9,9 @@ import {
   getProductRatingsService,
   getNewArrivalsService,
 } from "../../services/productService";
-import Product from "../../models/Product";
 
+const defaultImageURL =
+  "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png";
 // Mock the service
 jest.mock("../../services/productService");
 
@@ -117,8 +118,7 @@ describe("Product Endpoints", () => {
         price: mockProduct.price,
         description: mockProduct.description,
         stockQuantity: mockProduct.stockQuantity,
-        imageUrl:
-          "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png",
+        imageUrl: defaultImageURL,
       });
     });
 
@@ -142,8 +142,7 @@ describe("Product Endpoints", () => {
       expect(response.body.data.name).toBe(mockProduct.name);
       expect(updateProductService).toHaveBeenCalledWith(mockProduct.id, {
         name: "Updated Product",
-        imageUrl:
-          "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png",
+        imageUrl: defaultImageURL,
       });
     });
 
