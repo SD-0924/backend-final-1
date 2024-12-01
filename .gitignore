@@ -18,7 +18,3 @@ dist/
 tmp_uploads
 
 test-1107b-firebase-adminsdk-wp6zx-7b4c0a3b0d.json
-
-
-# Ignore firbase json
-test-1107b-firebase-adminsdk-wp6zx-1bb0fcef02.json
