@@ -48,3 +48,11 @@ export const deleteBrandByIdRepo = async (id: string) => {
     }
     return await brand.destroy();
 };
+
+export const updateBrandRepository = async (brandId: string, updatedData: { name?: string; logo?: string }) => {
+    const brand = await Brand.findByPk(brandId);
+    if (!brand) {
+        throw new Error("Brand not found");
+    }
+    return await brand.update(updatedData);
+};

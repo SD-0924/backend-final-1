@@ -6,7 +6,8 @@ import {
     updateLogoURL,
     getBrandById,
     getAllBrandsRepo,
-    deleteBrandByIdRepo 
+    deleteBrandByIdRepo,
+    updateBrandRepository 
 } from '../reposetories/brandRepository';
 import{
     uploadBrandLogoToFirebase,
@@ -123,4 +124,59 @@ export const deleteBrandByIdService = async (id: string): Promise<void> => {
         console.error(`Error deleting brand with ID ${id}:`, error);
         throw error;
     }
+};
+
+export const updateBrandService = async (id: string, name?: string, file?: Express.Multer.File) => {
+    try {
+        const brand = await getBrandById(id);
+
+        if (!brand) {
+        throw new Error("Brand not found");
+        }
+
+        const updatedData: { name?: string; logo?: string } = {};
+
+        if (name && name !== brand.name) {
+            const existingBrand = await findBrandByName(name);
+            if (existingBrand && existingBrand.id !== id) {
+                throw new Error("A brand with the same name already exists.");
+            }
+            updatedData.name = name;
+        }
+
+        if (file) {    // if we want to update the image logo
+        const tempFilePath = file.path;
+        try {
+            // Step 1: Delete the old logo from Firebase
+            const oldFileName = brand.logo.split(`${process.env.FIREBASE_STORAGE_BUCKET}/`)[1];
+            await deleteBrandImageFromFirebase(oldFileName);
+
+            // Step 2: Upload the new logo to Firebase
+            const newLogoUrl = await uploadBrandLogoToFirebase(tempFilePath, id);
+
+            // Step 3: Clean up the temporary file and update the new logo URL
+            updatedData.logo = newLogoUrl;
+
+
+        } catch (error:any) {
+            throw new Error("Error handling logo file: " + error.message);
+        } finally {
+            if (fs.existsSync(file.path)) {
+            fs.unlinkSync(file.path);
+            }
+        }
+        }
+
+        // Update the brand in the database
+        const updatedBrand = await updateBrandRepository(id, updatedData);
+
+        return {
+            id: updatedBrand.id,
+            name: updatedBrand.name,
+            logo: updatedBrand.logo,
+        };
+    } catch (error:any) {
+        console.error("Error updating brand service:", error);
+        throw new Error("Service Error: " + error.message);
+}
 };

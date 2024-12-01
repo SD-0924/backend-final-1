@@ -3,7 +3,8 @@ import {
     createBrandService,
     fetchBrandByIdService,
     getAllBrandsService,
-    deleteBrandByIdService
+    deleteBrandByIdService,
+    updateBrandService
 } from "../services/brandService";
 
 export const createBrand = async (req: Request, res: Response) => {
@@ -78,5 +79,23 @@ export const deleteBrandById = async (req: Request, res: Response) => {
         } else {
         res.status(500).json({ message: "Internal server error" });
         }
+    }
+};
+
+export const updateBrandController = async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params; 
+        const { name } = req.body; 
+        const file = req.file; 
+
+        const updatedBrand = await updateBrandService(id, name, file);
+
+        res.status(200).json({
+        message: "Brand updated successfully",
+        brand: updatedBrand,
+        });
+    } catch (error: any) {
+        console.error("Error updating brand:", error);
+        res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
 };

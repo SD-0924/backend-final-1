@@ -3,12 +3,14 @@ import {
   createBrand,
   getBrandById,
   getAllBrands,
-  deleteBrandById
+  deleteBrandById,
+  updateBrandController
 } from "../controllers/brandController";
 import {
   validateAddBrand,
   validateBrandId,
   validateGetAllBrands,
+  validateUpdateBrand
 } from "../validations/brandValidation";
 import upload from "../middlewares/multerUpload";
 import { validateRequest } from "../middlewares/validateRequest";
@@ -47,4 +49,12 @@ router.delete(
   deleteBrandById
 );
 
+// update brand
+router.put(
+  "/api/brands/:id",
+  upload.single("logo"),
+  validateUpdateBrand,
+  validateRequest,
+  updateBrandController
+)
 export default router;

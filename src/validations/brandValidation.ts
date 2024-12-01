@@ -6,6 +6,7 @@ export const validateAddBrand = [
     // validate the brand name
     body("name")
     .notEmpty().withMessage('Brand name is required.')
+    .isLength({ min: 3, max: 100 })
     .isString().withMessage('Brand name must be string.'),
 ];
 
@@ -16,7 +17,7 @@ export const validateBrandId = [
         .isUUID().withMessage('Brand ID must be a valid UUID format.'),
 ];
 
-// vaidate 
+// pagination
 export const validateGetAllBrands = [
     query("limit")
         .optional()
@@ -26,4 +27,16 @@ export const validateGetAllBrands = [
         .optional()
         .isInt({ min: 0 }) // nsure offset starts from 0 or higher
         .withMessage("Offset must be a non-negative number"),
+];
+
+export const validateUpdateBrand = [
+    param("id")
+        .notEmpty().withMessage("Brand ID is required.")
+        .isUUID().withMessage("Brand ID must be a valid UUID format."),
+    
+        body("name")
+        .optional()
+        .isLength({ min: 3, max: 100 })
+        .isString().withMessage("Brand name must be a string.")
+        .notEmpty().withMessage("Brand name cannot be empty if provided."),
 ];
