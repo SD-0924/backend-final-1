@@ -3,11 +3,11 @@ import Product from "../models/Product";
 
 export const findAndCountAllCategories = async (
   limit: number,
-  offset: number
+  page: number
 ) => {
   return await Category.findAndCountAll({
     limit,
-    offset,
+    offset: page,
   });
 };
 

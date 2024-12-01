@@ -11,8 +11,8 @@ import {
 export const getAllCategories = async (req: Request, res: Response) => {
   try {
     const limit = parseInt(req.query.limit as string) || 10;
-    const offset = parseInt(req.query.offset as string) || 0;
-    const categories = await getAllCategoriesService(limit, offset);
+    const page = parseInt(req.query.page as string) || 0;
+    const categories = await getAllCategoriesService(limit, page);
     res.status(200).json(categories);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch categories" });

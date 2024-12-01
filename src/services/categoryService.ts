@@ -1,10 +1,7 @@
 import * as categoryRepository from "../reposetories/categoryRepository";
 
-export const getAllCategoriesService = async (
-  limit: number,
-  offset: number
-) => {
-  return await categoryRepository.findAndCountAllCategories(limit, offset);
+export const getAllCategoriesService = async (limit: number, page: number) => {
+  return await categoryRepository.findAndCountAllCategories(limit, page);
 };
 
 export const getCategoryByIdService = async (id: string) => {

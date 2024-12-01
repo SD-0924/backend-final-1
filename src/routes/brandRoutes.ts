@@ -28,7 +28,7 @@ router.get("/api/brands/:id", validateBrandId, validateRequest, getBrandById);
 
 // get all brands
 router.get(
-  "/api/brands", // TO-DO: ValidateGetBrands (offset, limit => pagenation)
+  "/api/brands", // TO-DO: ValidateGetBrands (page, limit => pagenation)
   validateRequest,
   getAllBrands
 );

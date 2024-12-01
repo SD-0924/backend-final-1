@@ -53,9 +53,6 @@ export const getBrandById = async (req: Request, res: Response) => {
 
 export const getAllBrands = async (req: Request, res: Response) => {
   try {
-    //TO-DO: uncommint when you adjest the routs
-    // const limit = parseInt(req.query.limit as string) || 10;
-    // const offset = parseInt(req.query.offset as string) || 0;
     const brands = await getAllBrandsService();
     res.status(200).json(brands);
   } catch (error) {

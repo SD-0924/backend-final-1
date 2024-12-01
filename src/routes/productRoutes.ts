@@ -25,6 +25,13 @@ const router = Router();
 
 router.get("/api/products", validateGetAllProducts, getAllProducts);
 
+// Route for fetching new arrivals
+router.get(
+  "/api/products/new-arrivals",
+  validateGetNewArrivals,
+  getNewArrivals
+);
+
 router.get("/api/products/:id", validateGetProductById, getProductById);
 
 router.post(
@@ -48,13 +55,6 @@ router.get(
   "/api/products/:id/ratings",
   validateGetProductRatings,
   getProductRatings
-);
-
-// Route for fetching new arrivals
-router.get(
-  "/api/products/new-arrivals",
-  validateGetNewArrivals,
-  getNewArrivals
 );
 
 export default router;

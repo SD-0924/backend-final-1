@@ -51,7 +51,7 @@ export const getNewArrivalsService = async (page: number, limit: number) => {
   return {
     products,
     pagination: {
-      currentPage: page,
+      currentPage: offset,
       totalProducts,
       totalPages: Math.ceil(totalProducts / limit),
     },

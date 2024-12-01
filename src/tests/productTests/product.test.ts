@@ -160,6 +160,21 @@ describe("Product Endpoints", () => {
     });
   });
 
+  describe("GET /api/products/new-arrivals", () => {
+    it("should return new arrivals with pagination details", async () => {
+      (getNewArrivalsService as jest.Mock).mockResolvedValue(mockNewArrivals);
+
+      const response = await request(app).get(
+        "/api/products/new-arrivals?page=1&limit=10"
+      );
+
+      expect(response.status).toBe(200);
+      expect(response.body.data).toHaveLength(1);
+      expect(response.body.pagination.currentPage).toBe(1);
+      expect(getNewArrivalsService).toHaveBeenCalledWith(1, 10);
+    });
+  });
+
   describe("DELETE /api/products/:id", () => {
     it("should delete a product and return status 204", async () => {
       (deleteProductService as jest.Mock).mockResolvedValue(true);
@@ -167,8 +182,6 @@ describe("Product Endpoints", () => {
       const response = await request(app).delete(
         `/api/products/${mockProduct.id}`
       );
-
-      console.log(response.body);
 
       expect(response.status).toBe(204);
       expect(deleteProductService).toHaveBeenCalledWith(mockProduct.id);
@@ -197,19 +210,4 @@ describe("Product Endpoints", () => {
       expect(getProductRatingsService).toHaveBeenCalledWith(mockProduct.id);
     });
   });
-
-  // describe("GET /api/products/new-arrivals", () => {
-  //   it("should return new arrivals with pagination details", async () => {
-  //     (getNewArrivalsService as jest.Mock).mockResolvedValue(mockNewArrivals);
-
-  //     const response = await request(app).get(
-  //       "/api/products/new-arrivals?page=1&limit=10"
-  //     );
-
-  //     expect(response.status).toBe(201);
-  //     expect(response.body.products).toHaveLength(1);
-  //     expect(response.body.pagination.currentPage).toBe(1);
-  //     expect(getNewArrivalsService).toHaveBeenCalledWith(1, 10);
-  //   });
-  // });
 });
