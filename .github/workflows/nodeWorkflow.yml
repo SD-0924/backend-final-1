@@ -2,9 +2,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "development", "T0-github-actions-testing-gates"]
   pull_request:
-    branches: ["main"]
+    branches: ["main", "development", "T0-github-actions-testing-gates"]
 
 jobs:
   build:
