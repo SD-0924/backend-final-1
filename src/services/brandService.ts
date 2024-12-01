@@ -116,8 +116,6 @@ export const deleteBrandByIdService = async (id: string): Promise<void> => {
         }
 
         const fileName = brand.logo.replace(`https://storage.googleapis.com/${process.env.FIREBASE_STORAGE_BUCKET}/`,'');
-        console.log("=====");
-        console.log(fileName);
         await deleteBrandImageFromFirebase(fileName);         // delete the image from Firebase
         await deleteBrandByIdRepo(id);               // delete the brand record from the database
 
