@@ -1,15 +1,12 @@
-require("dotenv").config();
-import { Sequelize } from "sequelize";
+import dotenv from "dotenv";
 import app from "./app";
-import sequelize from "./config/mySQLConf";
+import sequelize from "./config/mySQLConf";  
 import initializeDatabase from "./initializeDatabase";
 
+
+dotenv.config();
+
 const PORT = process.env.PORT || 3000;
-
-const DB_USER = process.env.DB_USER || "username";
-const DB_PASSWORD = process.env.DB_PASSWORD;
-const DB_HOST = process.env.DB_HOST || "localhost";
-
 export const JWT_SECRET = process.env.JWT_SECRET!;
 const environment = process.env.NODE_ENV || "development";
 
@@ -55,12 +52,14 @@ const startServer = async () => {
     process.exit(1);
   }
 
+
   process.on("SIGINT", async () => {
     console.log("Gracefully shutting down...");
-    await sequelize.close();
+    await sequelize.close();     
     console.log("Database connection closed.");
     process.exit(0);
   });
 };
+
 
 startServer();
