@@ -8,6 +8,7 @@ import {
 import {
   validateAddBrand,
   validateBrandId,
+  validateGetAllBrands
 } from "../validations/brandValidation";
 import upload from "../middlewares/multerUpload";
 import { validateRequest } from "../middlewares/validateRequest";
@@ -24,11 +25,16 @@ router.post(
 );
 
 // get brand by ID endpoint
-router.get("/api/brands/:id", validateBrandId, validateRequest, getBrandById);
+router.get(
+  "/api/brands/:id", 
+  validateBrandId, 
+  validateRequest, 
+  getBrandById);
 
 // get all brands
 router.get(
-  "/api/brands", // TO-DO: ValidateGetBrands (offset, limit => pagenation)
+  "/api/brands", 
+  validateGetAllBrands,
   validateRequest,
   getAllBrands
 );
