@@ -6,6 +6,11 @@ import categoryRouts from "./routes/categoryRoutes";
 import brandRoutes from "./routes/brandRoutes";
 import "./models/Associations";
 import errorHandlingMiddleware from "./errorHandling";
+import swaggerOptions from "./utils/swagger";
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
+
+const swaggerSpec = swaggerJSDoc(swaggerOptions);
 
 const app: Application = express();
 
@@ -17,6 +22,7 @@ app.use(productRouts);
 app.use(couponRouts);
 app.use(categoryRouts);
 app.use(brandRoutes);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(errorHandlingMiddleware);
 

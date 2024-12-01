@@ -5,7 +5,7 @@ import sequelize from "./config/mySQLConf";
 import initializeDatabase from "./initializeDatabase";
 
 const PORT = process.env.PORT || 3000;
-const DB_USER = process.env.DB_USER || "root";
+const DB_USER = process.env.DB_USER || "username";
 const DB_PASSWORD = process.env.DB_PASSWORD;
 const DB_HOST = process.env.DB_HOST || "localhost";
 export const JWT_SECRET = process.env.JWT_SECRET!;
@@ -21,6 +21,7 @@ const startServer = async () => {
 
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
+      console.log("API Docs available at http://localhost:3000/api-docs");
     });
   } catch (error) {
     console.error("Error starting server:", error);
