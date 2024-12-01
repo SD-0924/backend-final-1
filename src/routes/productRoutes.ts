@@ -10,7 +10,6 @@ import {
   getNewArrivals,
 } from "../controllers/productController";
 
-
 import {
   validateGetAllProducts,
   validateGetProductById,
@@ -22,32 +21,28 @@ import {
 } from "../validations/productValidation";
 import { validateRequest } from "../middlewares/validateRequest";
 
-
 const router = Router();
 
-router.get(
+router.get("/api/products", validateGetAllProducts, getAllProducts);
+
+router.get("/api/products/:id", validateGetProductById, getProductById);
+
+router.post(
   "/api/products",
-  validateGetAllProducts,
-  getAllProducts
-);
-
-router.get(
-  "/api/products/:id",
-  validateGetProductById,
-  getProductById
-);
-
-router.post("/api/products", upload.single('image'), validateAddProduct, validateRequest, addProduct);
-
-router.put('/products/:id', upload.single('productImage'), validateUpdateProduct, updateProduct);
-
-
-router.delete(
-  "/api/products/:id",
-  validateDeleteProduct,
+  upload.single("image"),
+  validateAddProduct,
   validateRequest,
-  deleteProduct
+  addProduct
 );
+
+router.put(
+  "/api/products/:id",
+  upload.single("productImage"),
+  validateUpdateProduct,
+  updateProduct
+);
+
+router.delete("/api/products/:id", validateDeleteProduct, deleteProduct);
 
 router.get(
   "/api/products/:id/ratings",

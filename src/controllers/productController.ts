@@ -20,8 +20,6 @@ export const getAllProducts = async (req: Request, res: Response) => {
 
     const productsWithImages = await Promise.all(
       products.map(async (product) => {
-        console.log(">>>>>>>>>>>>>>>>>>>>>>", product.imageUrl);
-
         if (product.imageUrl) {
           product.imageUrl = await getProductImageUrlFromFirebase(
             product.imageUrl
