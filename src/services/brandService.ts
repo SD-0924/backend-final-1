@@ -5,7 +5,8 @@ import {
     findBrandByName,
     updateLogoURL,
     getBrandById,
-    getAllBrandsRepo 
+    getAllBrandsRepo,
+    deleteBrandByIdRepo 
 } from '../reposetories/brandRepository';
 import{
     uploadBrandLogoToFirebase,
@@ -115,9 +116,11 @@ export const deleteBrandByIdService = async (id: string): Promise<void> => {
         }
 
         const fileName = brand.logo.replace(`https://storage.googleapis.com/${process.env.FIREBASE_STORAGE_BUCKET}/`,'');
+        console.log("=====");
+        console.log(fileName);
         await deleteBrandImageFromFirebase(fileName);         // delete the image from Firebase
-        await deleteBrandImageFromFirebase(id);               // delete the brand record from the database
-        
+        await deleteBrandByIdRepo(id);               // delete the brand record from the database
+
     } catch (error) {
         console.error(`Error deleting brand with ID ${id}:`, error);
         throw error;
