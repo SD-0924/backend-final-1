@@ -9,7 +9,7 @@ router.post('/register', validateUserRegistration, validateRequest, handleRegist
 router.post('/login',validateUserLogin,validateRequest,handleLogin);
 router.get('/users', handleGetAllUsers);
 router.get('/users/:id', getUserByIdController);
-router.put('/:id', handleUpdateUseradress); // Update user by ID
+router.put('users/address/:id', handleUpdateUseradress); // Update user by ID
 router.put("/users/:id", validateUserUpdate, handleUpdateUser);
-router.delete('/:id', handleDeleteUser); // Delete user by ID
+router.delete('/users/:id', handleDeleteUser); // Delete user by ID
 export default router;
