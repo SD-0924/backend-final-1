@@ -78,3 +78,23 @@ export const uploadBrandLogoToFirebase = async (filePath: string, brandId: strin
         throw new Error('Error during file upload');
     }
 };
+
+export const getBrandImageUrlFromFirebase = async (imageUrl: string): Promise<string> => {
+    const fileName = imageUrl.split(`${bucket.name}/`)[1];
+    const file = bucket.file(fileName);
+
+    try {
+        const [fileExists] = await file.exists();
+        if (fileExists) {
+        const [url] = await file.getSignedUrl({
+            action: 'read', 
+            expires: '03-09-2491' 
+        });
+        return url; 
+        }
+    } catch (error) {
+        console.error("Error fetching product image:", error);
+        return imageUrl; 
+    }
+    return imageUrl;
+};

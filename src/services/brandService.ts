@@ -3,10 +3,12 @@ import fs from "fs";
 import { 
     createBrand,
     findBrandByName,
-    updateLogoURL 
+    updateLogoURL,
+    getBrandById 
 } from '../reposetories/brandRepository';
 import{
-    uploadBrandLogoToFirebase
+    uploadBrandLogoToFirebase,
+    getBrandImageUrlFromFirebase
 } from '../utils/firebaseUtils';
 
 export const createBrandService = async (name: string, file: Express.Multer.File) => {
@@ -38,5 +40,27 @@ export const createBrandService = async (name: string, file: Express.Multer.File
         // cleaning up the image file in case of an error
         fs.unlinkSync(tempFilePath);
         throw error;
+    }
+};
+
+export const fetchBrandByIdService = async (id: string) => {
+    try {
+    const brand = await getBrandById(id);
+    if (!brand) {
+        return null;
+    }
+
+    const logoUrl = brand.logo;
+    const imageUrl = await getBrandImageUrlFromFirebase(logoUrl); 
+
+    return {
+        id: brand.id,
+        name: brand.name,
+        logo: imageUrl,
+    };
+
+    } catch (error) {
+    console.error('Error in fetching brand by ID:', error);
+    throw error; 
     }
 };
