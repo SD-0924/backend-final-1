@@ -24,6 +24,10 @@ jobs:
 
       - name: Create service account file
         run: echo "${{ secrets.SERVICE_ACCOUNT_PATH }}" > serviceAccount.json
+      - name: Debug service account file
+        run: |
+          echo "Content of serviceAccount.json:"
+          cat serviceAccount.json
 
       - name: Run tests
         env:
