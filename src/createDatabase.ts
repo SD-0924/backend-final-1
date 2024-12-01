@@ -1,14 +1,9 @@
-import { Sequelize } from "sequelize";
+import { Sequelize } from 'sequelize';
 
-const createDatabase = async (
-  sequelizeInitial: Sequelize,
-  databaseName: string
-): Promise<void> => {
+const createDatabase = async (sequelize: Sequelize, dbName: string) => {
   try {
-    await sequelizeInitial.query(
-      `CREATE DATABASE IF NOT EXISTS ${databaseName};`
-    );
-    console.log(`Database "${databaseName}" created or already exists.`);
+    await sequelize.query(`CREATE DATABASE IF NOT EXISTS \`${dbName}\`;`);
+    console.log(`Database "${dbName}" is ready.`);
   } catch (error) {
     console.error("Error creating database:", error);
     throw error;
