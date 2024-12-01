@@ -23,6 +23,32 @@ import { validateRequest } from "../middlewares/validateRequest";
 
 const router = Router();
 
+/**
+ * @swagger
+ * /products:
+ *   get:
+ *     summary: Get all products
+ *     description: Retrieve a list of all products.
+ *     responses:
+ *       200:
+ *         description: List of products retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                   name:
+ *                     type: string
+ *                   imageUrl:
+ *                     type: string
+ *       500:
+ *         description: Server error.
+ */
+
 router.get("/api/products", validateGetAllProducts, getAllProducts);
 
 // Route for fetching new arrivals
