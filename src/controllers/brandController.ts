@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
 import {
     createBrandService,
-    fetchBrandByIdService
+    fetchBrandByIdService,
+    getAllBrandsService
 } from "../services/brandService";
 
 export const createBrand = async (req: Request, res: Response) => {
@@ -46,5 +47,18 @@ export const getBrandById = async (req: Request, res: Response) => {
         }
     } catch (error) {
         res.status(500).json({ message: "Internal server error." });
+    }
+};
+
+export const getAllBrands = async (req: Request, res: Response) => {
+    try {
+        // TO-DO: uncommint when you adjest the routs
+        // const limit = parseInt(req.query.limit as string) || 10;
+        // const offset = parseInt(req.query.offset as string) || 0;
+        const brands = await getAllBrandsService();
+        res.status(200).json(brands);
+    } catch (error) {
+        console.error("Error in controller fetching all brands:", error);
+        res.status(500).json({ message: "Internal server error" });
     }
 };

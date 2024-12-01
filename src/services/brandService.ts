@@ -4,7 +4,8 @@ import {
     createBrand,
     findBrandByName,
     updateLogoURL,
-    getBrandById 
+    getBrandById,
+    getAllBrandsRepo 
 } from '../reposetories/brandRepository';
 import{
     uploadBrandLogoToFirebase,
@@ -62,5 +63,43 @@ export const fetchBrandByIdService = async (id: string) => {
     } catch (error) {
     console.error('Error in fetching brand by ID:', error);
     throw error; 
+    }
+};
+
+export const getAllBrandsService = async () => {
+    try {
+        const brands = await getAllBrandsRepo();
+
+        // process each brand to include signed image URL
+        const brandsWithLogos = await Promise.all(
+            brands.map(async (brand) => {
+                try {
+                    // get the signed URL for the image
+                    const imageUrl = await getBrandImageUrlFromFirebase(brand.logo);
+
+                    return {
+                        id: brand.id,
+                        name: brand.name,
+                        logo: imageUrl, // using the signed URL for the logo
+                    };
+                } catch (error) {
+                    console.warn(`Failed to fetch image for brand ID ${brand.id}:`, error);
+                    return {
+                        id: brand.id,
+                        name: brand.name,
+                        logo: null,
+                    };
+                }
+            })
+        );
+
+        return {
+            count: brandsWithLogos.length, // include the total count
+            brands: brandsWithLogos,       // the processed brand details
+        };
+
+    } catch (error) {
+        console.error('Error in fetching all brands:', error);
+        throw new Error('Service error');
     }
 };
