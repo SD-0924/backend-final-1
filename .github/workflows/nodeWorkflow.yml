@@ -23,14 +23,10 @@ jobs:
         run: npm install
 
       - name: Create service account file
-        run: echo "${{ secrets.SERVICE_ACCOUNT_PATH }}" > serviceAccount.json
-      - name: Debug service account file
-        run: |
-          echo "Content of serviceAccount.json:"
-          cat serviceAccount.json
+        run: echo "${{ secrets.SERVICE_ACCOUNT_PATH }}"
 
       - name: Run tests
         env:
           NODE_ENV: test
-          SERVICE_ACCOUNT_PATH: ./serviceAccount.json
+          SERVICE_ACCOUNT_PATH: ${{ secrets.SERVICE_ACCOUNT_PATH }}
         run: npm test
