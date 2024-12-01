@@ -8,24 +8,30 @@ export const findBrandByName = async(name: string)=>{
     return Brand.findOne({ where: { name } });
 };
 
+export const updateLogoURL = async(id: string, logoUrl: string)=> {
+    const brand = await Brand.findByPk(id);
+    if (brand) {
+        brand.logo = logoUrl;
+        await brand.save();
+    }
+}
+
 export const getBrandById = async(id: string)=>{
     try{
-        // searching for the brand with id
         const brand = await Brand.findOne({
             where: { id },         // match the UUID
         });
 
         return brand;
 
-    }catch(err){
-        console.error('Error fetching brand by ID:', err);
+    }catch(error){
+        console.error('Error fetching brand by ID:', error);
         throw new Error('Failed to fetch brand by ID');
     }
 };
 
 export const getAllBrandsRepo = async () => {
     try {
-        // fetch all brands
         return await Brand.findAll({
             attributes: ['id', 'name', 'logo'],
         });

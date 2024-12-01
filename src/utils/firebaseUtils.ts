@@ -1,3 +1,4 @@
+import exp from "constants";
 import { bucket } from "../config/firbaseConf";
 import fs from "fs";
 import path from "path";
@@ -53,4 +54,27 @@ export const getProductImageUrlFromFirebase = async (imageUrl: string): Promise<
     return imageUrl; // Return original URL if there's an error
   }
   return imageUrl;
+};
+
+// Brands Functions
+export const uploadBrandLogoToFirebase = async (filePath: string, brandId: string): Promise<string> => {
+
+    const file = fs.readFileSync(filePath);  // reading the image file from the temp folder
+    const ext = path.extname(filePath);      // extracting the file extension (e.g., .jpg, .png) from the file path
+
+    /**
+     * Here,  we are defining the name of the file as it will be stored in Firebase Storage.
+     * The file will be stored in the "logos" folder with the brandId as the name.
+     * Example: If `brandId` is "12345" and the file is a .jpg, the file will be "logos/12345.jpg".
+     */
+    const remoteFileName = `logos/${brandId}${ext}`;
+    const fileUpload = bucket.file(remoteFileName);   // getting a reference to the file in Firebase Storage
+    try {
+        await fileUpload.save(file, { contentType: 'image/jpeg' });   // uploading the image file to Firebase Storage with the specified content type
+        const publicUrl = `https://storage.googleapis.com/${bucket.name}/${fileUpload.name}`;   // generating a public URL for accessing the uploaded image to store in the DB
+        return publicUrl;
+    } catch (error) {
+        console.error("Error uploading file to Firebase:", error);
+        throw new Error('Error during file upload');
+    }
 };

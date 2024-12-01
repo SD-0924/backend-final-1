@@ -1,5 +1,7 @@
 import express from "express";
-import {
+const router = express.Router();
+
+/*import {
   createBrand,
   getBrandById,
   getAllBrands,
@@ -46,5 +48,5 @@ router.delete(
   validateRequest,
   deleteBrandById
 );
-
+*/
 export default router;
