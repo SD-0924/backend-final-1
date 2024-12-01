@@ -1,16 +1,9 @@
 import express from "express";
-const router = express.Router();
-
-/*import {
+import {
   createBrand,
-  getBrandById,
-  getAllBrands,
-  deleteBrandById,
 } from "../controllers/brandController";
 import {
   validateAddBrand,
-  validateBrandId,
-  validateGetAllBrands
 } from "../validations/brandValidation";
 import upload from "../middlewares/multerUpload";
 import { validateRequest } from "../middlewares/validateRequest";
@@ -25,7 +18,7 @@ router.post(
   validateRequest,
   createBrand
 );
-
+/*
 // get brand by ID endpoint
 router.get(
   "/api/brands/:id", 
