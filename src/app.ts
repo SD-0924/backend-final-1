@@ -5,7 +5,7 @@ import authRoutes from "./routes/userRoutes";
 import productRouts from "./routes/productRoutes";
 import couponRouts from "./routes/couponRoutes";
 import categoryRouts from "./routes/categoryRoutes";
-import brandRoutes from "./routes/brandRoutes";
+//import brandRoutes from "./routes/brandRoutes";
 import "./models/Associations";
 import errorHandlingMiddleware from "./errorHandling";
 
@@ -18,7 +18,7 @@ app.use(authRoutes);
 app.use(productRouts);
 app.use(couponRouts);
 app.use(categoryRouts);
-app.use(brandRoutes);
+//app.use(brandRoutes);
 
 app.use(errorHandlingMiddleware);
 
