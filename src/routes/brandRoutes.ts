@@ -1,11 +1,13 @@
 import express from "express";
 import {
   createBrand,
-  getBrandById
+  getBrandById,
+  getAllBrands
 } from "../controllers/brandController";
 import {
   validateAddBrand,
-  validateBrandId
+  validateBrandId,
+  validateGetAllBrands,
 } from "../validations/brandValidation";
 import upload from "../middlewares/multerUpload";
 import { validateRequest } from "../middlewares/validateRequest";
@@ -27,7 +29,7 @@ router.get(
   validateBrandId, 
   validateRequest, 
   getBrandById);
-/*
+
 // get all brands
 router.get(
   "/api/brands", 
@@ -35,7 +37,7 @@ router.get(
   validateRequest,
   getAllBrands
 );
-
+/*
 // delete brand by id
 router.delete(
   "/api/brands/:id",
