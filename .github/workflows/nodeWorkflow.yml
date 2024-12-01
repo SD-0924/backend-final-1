@@ -22,10 +22,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Set environment variables
-        run: echo "SERVICE_ACCOUNT_PATH=${{ secrets.SERVICE_ACCOUNT_PATH }}" >> $GITHUB_ENV
+      - name: Create service account file
+        run: echo "${{ secrets.SERVICE_ACCOUNT_PATH }}" > serviceAccount.json
 
       - name: Run tests
         env:
           NODE_ENV: test
+          SERVICE_ACCOUNT_PATH: ./serviceAccount.json
         run: npm test
