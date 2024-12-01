@@ -3,7 +3,7 @@ import sequelize from "../config/mySQLConf";
 
 import { app } from "../app"; // Ensure app exports the Express instance
 
-describe.skip("GET /health", () => {
+describe("GET /health", () => {
   afterAll(async () => {
     await sequelize.close(); // Close Sequelize connection
   });
