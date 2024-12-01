@@ -169,35 +169,6 @@ export const getNewArrivals = async (
 
     const { products, pagination } = await getNewArrivalsService(page, limit);
 
-    // const updatedProducts = await Promise.all(
-    //   products.map(async (product) => {
-    //     if (product.imageUrl) {
-    //       try {
-    //         const updatedImageUrl = await getProductImageUrlFromFirebase(
-    //           product.imageUrl
-    //         );
-    //         console.log(
-    //           `Updated image URL for product ${product.id}:`,
-    //           updatedImageUrl
-    //         );
-    //         return { ...product, imageUrl: updatedImageUrl };
-    //       } catch (error) {
-    //         console.error(
-    //           `Error fetching image for product ${product.id}:`,
-    //           error
-    //         );
-    //         return product;
-    //       }
-    //     } else {
-    //       product.imageUrl =
-    //         "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png";
-    //     }
-    //     return product;
-    //   })
-    // );
-
-    //console.log("Final updated products:", updatedProducts);
-
     res.status(200).json({
       success: true,
       data: products,

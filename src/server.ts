@@ -12,11 +12,11 @@ const DB_HOST = process.env.DB_HOST || "localhost";
 
 export const JWT_SECRET = process.env.JWT_SECRET!;
 
-const sequelizeInitial = new Sequelize("", DB_USER, DB_PASSWORD, {
+/*const sequelizeInitial = new Sequelize("", DB_USER, DB_PASSWORD, {
   host: DB_HOST,
   dialect: "mysql",
   logging: false,
-}); //remove this comment if you want to initialize the database in your localhost
+});*/ //remove this comment if you want to initialize the database in your localhost
 
 /* const DB_PORT= process.env.DB_PORT;
 const DB_DATABASE=process.env.DB_DATABASE||"finalProj";
@@ -38,10 +38,11 @@ const sequelizeInitial = new Sequelize('defaultdb', DB_USER, DB_PASSWORD, {
 
 const startServer = async () => {
   try {
-    await initializeDatabase(sequelizeInitial, sequelize);
+    // await initializeDatabase(sequelizeInitial, sequelize);
     if (process.env.NODE_ENV !== "test") {
       app.listen(PORT, () => {
         console.log(`Server is running on port ${PORT}`);
+        console.log("API Docs available at http://localhost:3000/api-docs");
       });
     }
   } catch (error) {
