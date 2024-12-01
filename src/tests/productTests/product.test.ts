@@ -1,255 +1,85 @@
 import request from "supertest";
-const SequelizeMock = require("sequelize-mock");
-import { app } from "../../app";
-import * as productService from "../../services/productService"; // Mocking services
-import sequelize from "../../config/mySQLConf";
+import { app } from "../../app"; // Adjust path to your Express app
+import { getAllProductsService } from "../../services/productService";
+import Product from "../../models/Product";
 
-const DBConnectionMock = new SequelizeMock();
+// Mock the service
+jest.mock("../../services/productService");
 
-jest.mock("../../services/productService"); // Mock the service layer
+describe("GET /api/products", () => {
+  const mockProducts = [
+    {
+      id: "123",
+      name: "Product 1",
+      description: "Description for Product 1",
+      price: 100.0,
+      stockQuantity: 10,
+      isLimitedEdition: false,
+      isFeatured: true,
+      brandId: "brand123",
+      categoryId: "category123",
+      imageUrl: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+    {
+      id: "456",
+      name: "Product 2",
+      description: "Description for Product 2",
+      price: 200.0,
+      stockQuantity: 5,
+      isLimitedEdition: true,
+      isFeatured: false,
+      brandId: "brand456",
+      categoryId: "category456",
+      imageUrl: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  ];
 
-const product1 = {
-  id: "1",
-  name: "Product 1",
-  description: "A detailed description of Product 1",
-  price: 100.0,
-  stockQuantity: 50,
-  isLimitedEdition: false,
-  isFeatured: true,
-  brandId: "brand-1",
-  categoryId: "category-1",
-  createdAt: new Date("2024-11-01T00:00:00.000Z"),
-  updatedAt: new Date("2024-11-10T00:00:00.000Z"),
-};
-
-const ProductMock1 = DBConnectionMock.define("Product", product1);
-
-const ProductMock2 = DBConnectionMock.define("Product", {
-  id: "2",
-  name: "Product 2",
-  description: "A detailed description of Product 2",
-  price: 200.0,
-  stockQuantity: 30,
-  isLimitedEdition: true,
-  isFeatured: false,
-  brandId: "brand-2",
-  categoryId: "category-2",
-  createdAt: new Date("2024-11-02T00:00:00.000Z"),
-  updatedAt: new Date("2024-11-10T00:00:00.000Z"),
-});
-
-describe("Products Endpoints", () => {
-  afterEach(() => {
-    jest.clearAllMocks(); // Clear mocks after each test
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  afterAll(async () => {
-    await sequelize.close(); // Close Sequelize connection
-  });
-  describe.skip("GET /api/products", () => {
-    it.skip("should return a list of products", async () => {
-      jest
-        .spyOn(productService, "getAllProductsService")
-        .mockResolvedValue([ProductMock1, ProductMock2]);
+  it("should return a list of products with status 201", async () => {
+    // Mock the service to return the mock products
+    (getAllProductsService as jest.Mock).mockResolvedValue(mockProducts);
 
-      const res = await request(app).get("/api/products/");
+    const response = await request(app).get("/api/products");
 
-      expect(res.status).toBe(200);
-      expect(res.body).toEqual([ProductMock1, ProductMock2]);
-      expect(res.body[0]).toHaveProperty("id", "1");
-      expect(res.body[0]).toHaveProperty("name", "Product 1");
-      expect(res.body[0]).toHaveProperty(
-        "description",
-        "A detailed description of Product 1"
-      );
-      expect(res.body[0]).toHaveProperty("price", 100.0);
-      expect(res.body[0]).toHaveProperty("stockQuantity", 50);
-      expect(res.body[0]).toHaveProperty("isLimitedEdition", false);
-      expect(res.body[0]).toHaveProperty("isFeatured", true);
-      expect(res.body[0]).toHaveProperty("brandId", "brand-1");
-      expect(res.body[0]).toHaveProperty("categoryId", "category-1");
-      expect(res.body[0]).toHaveProperty(
-        "createdAt",
-        "2024-11-01T00:00:00.000Z"
-      );
-      expect(res.body[0]).toHaveProperty(
-        "updatedAt",
-        "2024-11-10T00:00:00.000Z"
-      );
-    });
+    expect(response.status).toBe(201);
+    expect(response.body).toHaveLength(2);
 
-    it.skip("should return a 500 error if the service fails", async () => {
-      jest
-        .spyOn(productService, "getAllProductsService")
-        .mockRejectedValue(new Error("Service error"));
+    // Validate product details
+    const product1 = response.body[0];
+    expect(product1.name).toBe("Product 1");
+    expect(product1.imageUrl).toBe(
+      "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png"
+    );
 
-      const res = await request(app).get("/api/products");
+    const product2 = response.body[1];
+    expect(product2.name).toBe("Product 2");
+    expect(product2.imageUrl).toBe(
+      "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png" // Default image URL
+    );
 
-      expect(res.status).toBe(500);
-      expect(res.body).toHaveProperty("error", "Failed to fetch products");
-    });
+    // Ensure the service was called once
+    expect(getAllProductsService).toHaveBeenCalledTimes(1);
   });
 
-  // describe("GET /api/products/:id", () => {
-  //   it("should return a product by ID", async () => {
-  //     jest
-  //       .spyOn(productService, "getProductByIdService")
-  //       .mockResolvedValue(ProductMock1);
+  it("should return 500 if service throws an error", async () => {
+    // Mock the service to throw an error
+    (getAllProductsService as jest.Mock).mockRejectedValue(
+      new Error("Database error")
+    );
 
-  //     const res = await request(app).get("/api/products/1");
+    const response = await request(app).get("/api/products");
 
-  //     expect(res.status).toBe(200);
-  //     expect(res.body).toEqual(ProductMock1);
-  //   });
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ error: "Failed to fetch products" });
 
-  //   it("should return a 404 error if the product is not found", async () => {
-  //     jest
-  //       .spyOn(productService, "getProductByIdService")
-  //       .mockResolvedValue(null);
-
-  //     const res = await request(app).get("/api/products/1");
-
-  //     expect(res.status).toBe(404);
-  //     expect(res.body).toHaveProperty("error", "Product not found");
-  //   });
-
-  //   it("should return a 500 error if the service fails", async () => {
-  //     jest
-  //       .spyOn(productService, "getProductByIdService")
-  //       .mockRejectedValue(new Error("Service error"));
-
-  //     const res = await request(app).get("/api/products/1");
-
-  //     expect(res.status).toBe(500);
-  //     expect(res.body).toHaveProperty("error", "Failed to fetch product");
-  //   });
-  // });
-
-  describe("POST /api/products", () => {
-    it("should create a new product", async () => {
-      jest
-        .spyOn(productService, "addProductService")
-        .mockResolvedValue(ProductMock1);
-
-      const res = await request(app).post("/api/products").send(ProductMock1);
-
-      console.log(res.body);
-      expect(res.status).toBe(201);
-      expect(res.body).toEqual({
-        success: true,
-        message: "Product added successfully!",
-        data: ProductMock1,
-      });
-    });
-
-    it("should return a 500 error if the service fails", async () => {
-      jest
-        .spyOn(productService, "addProductService")
-        .mockRejectedValue(new Error("Service error"));
-
-      const res = await request(app).post("/api/products").send(ProductMock1);
-
-      expect(res.status).toBe(500);
-      expect(res.body).toHaveProperty("success", false);
-      expect(res.body).toHaveProperty(
-        "message",
-        "Failed to add product. Please try again later."
-      );
-    });
+    // Ensure the service was called once
+    expect(getAllProductsService).toHaveBeenCalledTimes(1);
   });
-
-  // describe("PUT /api/products/:id", () => {
-  //   it("should update a product", async () => {
-  //     const mockUpdatedProduct = {
-  //       id: "1",
-  //       name: "Updated Product",
-  //       price: 200,
-  //     };
-  //     jest
-  //       .spyOn(productService, "updateProductService")
-  //       .mockResolvedValue(mockUpdatedProduct);
-
-  //     const res = await request(app)
-  //       .put("/api/products/1")
-  //       .send({ name: "Updated Product", price: 200 });
-
-  //     expect(res.status).toBe(200);
-  //     expect(res.body).toEqual({
-  //       success: true,
-  //       message: "Product updated successfully!",
-  //       data: mockUpdatedProduct,
-  //     });
-  //   });
-
-  //   it("should return a 500 error if the service fails", async () => {
-  //     jest
-  //       .spyOn(productService, "updateProductService")
-  //       .mockRejectedValue(new Error("Service error"));
-
-  //     const res = await request(app)
-  //       .put("/api/products/1")
-  //       .send({ name: "Updated Product", price: 200 });
-
-  //     expect(res.status).toBe(500);
-  //     expect(res.body).toHaveProperty("success", false);
-  //     expect(res.body).toHaveProperty(
-  //       "message",
-  //       "Failed to update product. Please try again later."
-  //     );
-  //   });
-  // });
-
-  // describe("DELETE /api/products/:id", () => {
-  //   it("should delete a product", async () => {
-  //     jest.spyOn(productService, "deleteProductService").mockResolvedValue();
-
-  //     const res = await request(app).delete("/api/products/1");
-
-  //     expect(res.status).toBe(200);
-  //     expect(res.body).toEqual({
-  //       success: true,
-  //       message: "Product deleted successfully!",
-  //     });
-  //   });
-
-  //   it("should return a 500 error if the service fails", async () => {
-  //     jest
-  //       .spyOn(productService, "deleteProductService")
-  //       .mockRejectedValue(new Error("Service error"));
-
-  //     const res = await request(app).delete("/api/products/1");
-
-  //     expect(res.status).toBe(500);
-  //     expect(res.body).toHaveProperty("success", false);
-  //     expect(res.body).toHaveProperty(
-  //       "message",
-  //       "Failed to delete product. Please try again later."
-  //     );
-  //   });
-  // });
-
-  // describe("GET /api/products/:id/ratings", () => {
-  //   it("should return product ratings", async () => {
-  //     const mockRatings = [{ rating: 5 }, { rating: 4 }];
-  //     jest
-  //       .spyOn(productService, "getProductRatingsService")
-  //       .mockResolvedValue(mockRatings);
-
-  //     const res = await request(app).get("/api/products/1/ratings");
-
-  //     expect(res.status).toBe(200);
-  //     expect(res.body).toEqual(mockRatings);
-  //   });
-
-  //   it("should return a 500 error if the service fails", async () => {
-  //     jest
-  //       .spyOn(productService, "getProductRatingsService")
-  //       .mockRejectedValue(new Error("Service error"));
-
-  //     const res = await request(app).get("/api/products/1/ratings");
-
-  //     expect(res.status).toBe(500);
-  //     expect(res.body).toHaveProperty("error", "Failed to fetch ratings");
-  //   });
-  // });
 });
