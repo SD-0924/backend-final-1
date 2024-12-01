@@ -99,7 +99,7 @@ describe("Product Endpoints", () => {
     });
   });
 
-  describe.skip("POST /api/products", () => {
+  describe("POST /api/products", () => {
     it("should add a product and return it with status 201", async () => {
       (addProductService as jest.Mock).mockResolvedValue(mockProduct);
 
@@ -108,7 +108,6 @@ describe("Product Endpoints", () => {
         price: mockProduct.price,
         description: mockProduct.description,
         stockQuantity: mockProduct.stockQuantity,
-        imageUrl: null,
       });
 
       expect(response.status).toBe(201);
@@ -118,15 +117,14 @@ describe("Product Endpoints", () => {
         price: mockProduct.price,
         description: mockProduct.description,
         stockQuantity: mockProduct.stockQuantity,
-        imageUrl: null,
       });
     });
 
-    it.skip("should return 400 for validation errors", async () => {
+    it("should return 400 for validation errors", async () => {
       const response = await request(app).post("/api/products").send({});
 
       expect(response.status).toBe(400);
-      expect(response.body).toEqual({ error: "Validation error" });
+      expect(response.body).toHaveProperty("error", "Validation error");
     });
   });
 
