@@ -3,7 +3,7 @@ import authRoutes from "./routes/userRoutes";
 import productRouts from "./routes/productRoutes";
 import couponRouts from "./routes/couponRoutes";
 import categoryRouts from "./routes/categoryRoutes";
-import brandRoutes from "./routes/brandRoutes";
+//import brandRoutes from "./routes/brandRoutes";
 import "./models/Associations";
 import errorHandlingMiddleware from "./errorHandling";
 import swaggerOptions from "./utils/swagger";
@@ -23,6 +23,7 @@ app.use(couponRouts);
 app.use(categoryRouts);
 app.use(brandRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 
 app.use(errorHandlingMiddleware);
 

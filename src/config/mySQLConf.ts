@@ -1,15 +1,26 @@
-import {Sequelize} from 'sequelize'
+import { Sequelize } from 'sequelize';
+import dotenv from 'dotenv';
 
-const sequelize = new Sequelize({
-  dialect: process.env.DB_DIALECT as 'mysql',
-  host: process.env.DB_HOST,
-  username: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
-  logging: process.env.DB_LOGGING === 'true',
-  dialectOptions: {
-    charset: process.env.DB_CHARSET,
-  },
-});
 
-export default sequelize
+// Load environment variables from .env file
+dotenv.config();
+
+// Create the Sequelize instance using environment variables
+const sequelize = new Sequelize(
+  process.env.DB_DATABASE || '', // Database name
+  process.env.DB_USERNAME || '', // Username
+  process.env.DB_PASSWORD || '', // Password
+  {
+    host: process.env.DB_HOST || 'localhost', // Host
+    port: parseInt(process.env.DB_PORT || '3306'), // Port
+    dialect: process.env.DB_DIALECT as 'mysql', // Dialect
+    dialectOptions: {
+      ssl: {
+        rejectUnauthorized: false, // For secure Aiven connections
+      },
+    },
+    logging: process.env.DB_LOGGING === 'true' ? console.log : false, // Logging toggle
+  }
+);
+
+export default sequelize;
