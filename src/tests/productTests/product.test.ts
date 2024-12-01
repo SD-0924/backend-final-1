@@ -111,12 +111,14 @@ describe("Product Endpoints", () => {
       });
 
       expect(response.status).toBe(201);
-      expect(response.body.name).toBe(mockProduct.name);
+      expect(response.body.data.name).toBe(mockProduct.name);
       expect(addProductService).toHaveBeenCalledWith({
         name: mockProduct.name,
         price: mockProduct.price,
         description: mockProduct.description,
         stockQuantity: mockProduct.stockQuantity,
+        imageUrl:
+          "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png",
       });
     });
 
