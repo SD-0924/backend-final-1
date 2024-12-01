@@ -9,7 +9,8 @@ import {
 } from '../reposetories/brandRepository';
 import{
     uploadBrandLogoToFirebase,
-    getBrandImageUrlFromFirebase
+    getBrandImageUrlFromFirebase,
+    deleteBrandImageFromFirebase
 } from '../utils/firebaseUtils';
 
 export const createBrandService = async (name: string, file: Express.Multer.File) => {
@@ -101,5 +102,24 @@ export const getAllBrandsService = async () => {
     } catch (error) {
         console.error('Error in fetching all brands:', error);
         throw new Error('Service error');
+    }
+};
+
+export const deleteBrandByIdService = async (id: string): Promise<void> => {
+    try {
+        const brand = await getBrandById(id);
+
+        if (!brand) {
+            console.log("Brand is not found to delete")
+            throw new Error('Brand not found');
+        }
+
+        const fileName = brand.logo.replace(`https://storage.googleapis.com/${process.env.FIREBASE_STORAGE_BUCKET}/`,'');
+        await deleteBrandImageFromFirebase(fileName);         // delete the image from Firebase
+        await deleteBrandImageFromFirebase(id);               // delete the brand record from the database
+        
+    } catch (error) {
+        console.error(`Error deleting brand with ID ${id}:`, error);
+        throw error;
     }
 };

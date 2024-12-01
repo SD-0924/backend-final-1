@@ -2,7 +2,8 @@ import express from "express";
 import {
   createBrand,
   getBrandById,
-  getAllBrands
+  getAllBrands,
+  deleteBrandById
 } from "../controllers/brandController";
 import {
   validateAddBrand,
@@ -37,7 +38,7 @@ router.get(
   validateRequest,
   getAllBrands
 );
-/*
+
 // delete brand by id
 router.delete(
   "/api/brands/:id",
@@ -45,5 +46,5 @@ router.delete(
   validateRequest,
   deleteBrandById
 );
-*/
+
 export default router;

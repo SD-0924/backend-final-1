@@ -98,3 +98,14 @@ export const getBrandImageUrlFromFirebase = async (imageUrl: string): Promise<st
     }
     return imageUrl;
 };
+
+export const deleteBrandImageFromFirebase = async (fileName: string): Promise<void> => {
+    try {
+        const file = bucket.file(fileName);
+        await file.delete();
+        console.log(`File ${fileName} deleted successfully from Firebase.`);
+    } catch (error) {
+        console.error(`Error deleting file ${fileName} from Firebase:`, error);
+        throw new Error('Error deleting file from Firebase');
+    }
+};
