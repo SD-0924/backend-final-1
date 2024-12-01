@@ -20,6 +20,8 @@ export const getAllProducts = async (req: Request, res: Response) => {
 
     const productsWithImages = await Promise.all(
       products.map(async (product) => {
+        console.log(">>>>>>>>>>>>>>>>>>>>>>", product.imageUrl);
+
         if (product.imageUrl) {
           product.imageUrl = await getProductImageUrlFromFirebase(
             product.imageUrl
@@ -49,20 +51,6 @@ export const getProductById = async (
     if (!product) {
       res.status(404).json({ error: "Product not found" });
       return;
-    }
-
-    if (product.imageUrl) {
-      try {
-        const updatedImageUrl = await getProductImageUrlFromFirebase(
-          product.imageUrl
-        );
-        product.imageUrl = updatedImageUrl;
-      } catch (error) {
-        console.error(`Error fetching image for product ${productId}:`, error);
-      }
-    } else {
-      product.imageUrl =
-        "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png";
     }
 
     res.status(201).json(product);
