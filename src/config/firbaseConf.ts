@@ -17,6 +17,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 // service account credentials configuration
+
+console.log(process.env.SERVICE_ACCOUNT_PATH);
 const serviceAccountConfig = process.env.SERVICE_ACCOUNT_PATH;
 
 if (!serviceAccountConfig) {
@@ -24,12 +26,13 @@ if (!serviceAccountConfig) {
 }
 
 // resolving the path for the service account file
-const serviceAccountPath = path.resolve(process.env.SERVICE_ACCOUNT_PATH);
+const serviceAccountPath = path.resolve(process.env.SERVICE_ACCOUNT_PATH!);
 
 // importing the service account JSON
 let serviceAccount;
 try {
   serviceAccount = require(serviceAccountPath);
+  console.log(serviceAccount);
 } catch (error:any) {
   throw new Error(`Failed to load service account JSON. Path: ${serviceAccountPath}. Error: ${error.message}`);
 }
