@@ -129,12 +129,10 @@ export const deleteBrandByIdService = async (id: string): Promise<void> => {
 export const updateBrandService = async (id: string, name?: string, file?: Express.Multer.File) => {
     try {
         const brand = await getBrandById(id);
-
         if (!brand) {
-        throw new Error("Brand not found");
+            throw new Error("Brand not found");
         }
         const updatedData: { name?: string; logo?: string } = {};
-        
         // making sure that the update name is unrepeated
         if (name && name !== brand.name) {
             const existingBrand = await findBrandByName(name);
@@ -166,7 +164,7 @@ export const updateBrandService = async (id: string, name?: string, file?: Expre
             logo: logoUrl,
         };
     } catch (error:any) {
-        console.error("Error updating brand service:", error);
+        console.error("Error updating brand service:", error.message);
         throw new Error("Service Error: " + error.message);
 }
 };
