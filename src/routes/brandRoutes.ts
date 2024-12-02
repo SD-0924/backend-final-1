@@ -4,10 +4,13 @@ import {
   getBrandById,
   getAllBrands,
   deleteBrandById,
+  updateBrandController
 } from "../controllers/brandController";
 import {
   validateAddBrand,
   validateBrandId,
+  validateGetAllBrands,
+  validateUpdateBrand
 } from "../validations/brandValidation";
 import upload from "../middlewares/multerUpload";
 import { validateRequest } from "../middlewares/validateRequest";
@@ -24,11 +27,16 @@ router.post(
 );
 
 // get brand by ID endpoint
-router.get("/api/brands/:id", validateBrandId, validateRequest, getBrandById);
+router.get(
+  "/api/brands/:id", 
+  validateBrandId, 
+  validateRequest, 
+  getBrandById);
 
 // get all brands
 router.get(
-  "/api/brands", // TO-DO: ValidateGetBrands (offset, limit => pagenation)
+  "/api/brands", 
+  validateGetAllBrands,
   validateRequest,
   getAllBrands
 );
@@ -41,4 +49,12 @@ router.delete(
   deleteBrandById
 );
 
+// update brand
+router.put(
+  "/api/brands/:id",
+  upload.single("logo"),
+  validateUpdateBrand,
+  validateRequest,
+  updateBrandController
+)
 export default router;

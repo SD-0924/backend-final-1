@@ -8,6 +8,7 @@ import {
   deleteProduct,
   getProductRatings,
   getNewArrivals,
+  getProductsByBrandController
 } from "../controllers/productController";
 
 
@@ -19,6 +20,7 @@ import {
   validateDeleteProduct,
   validateGetProductRatings,
   validateGetNewArrivals,
+  validateGetBrandProduct
 } from "../validations/productValidation";
 import { validateRequest } from "../middlewares/validateRequest";
 
@@ -87,4 +89,10 @@ router.get(
   getNewArrivals
 );
 
+router.get(
+  "/api/brands/:id/products",
+  validateGetBrandProduct,
+  validateGetAllProducts,
+  getProductsByBrandController
+)
 export default router;
