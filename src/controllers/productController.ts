@@ -7,6 +7,7 @@ import {
   updateProductService,
   deleteProductService,
   getProductRatingsService,
+  getProductsByBrandService
 } from "../services/productService";
 import { uploadProductImageToFirebase, getProductImageUrlFromFirebase,deleteProductImageFromFirebase } from "../utils/firebaseUtils";
 
@@ -198,3 +199,31 @@ export const getNewArrivals = async (req: Request, res: Response): Promise<void>
   }
 };
 
+export const getProductsByBrandController = async (req: Request, res: Response):Promise<void> => {
+  const { brandId } = req.params;
+  try {
+    const products = await getProductsByBrandService(brandId);
+    if (products.length === 0) {
+      res.status(404).json({ message: "No products found for the specified brand." });
+    }else{
+      const updatedProducts = await Promise.all(
+      products.map(async (product) => {
+        const updatedImageUrl = await getProductImageUrlFromFirebase(product.imageUrl);
+          return {
+            ...product.toJSON(),
+            logoUrl: updatedImageUrl,
+          };
+      })
+      );
+      res.status(200).json({ products: updatedProducts });
+    }
+  }catch(error: any){
+    console.error("Error fetching products by brand:", error.message);
+        if (error.message === "Brand not found") {
+            res.status(404).json({ message: "Brand not found" });
+        }
+        else{res.status(500).json({ message: "Server error" });
+      }
+  }
+
+};
