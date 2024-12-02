@@ -25,7 +25,7 @@ jobs:
       - name: Run tests
         env:
           NODE_ENV: test
-          SERVICE_ACCOUNT_JSON: ${{ secrets.SERVICE_ACCOUNT_PATH }}
+          SERVICE_ACCOUNT_JSON: ${{ secrets.SERVICE_ACCOUNT_JSON }}
         run: |
           echo "Running tests with service account JSON from environment variable"
           echo "$SERVICE_ACCOUNT_JSON" | jq '.'  # Optional: Verify the content (remove in production)
