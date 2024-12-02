@@ -25,6 +25,7 @@ jobs:
       - name: Create service account file
         run: |
           echo "${{ secrets.SERVICE_ACCOUNT_JSON }}" | base64 -d > test-1107b-firebase-adminsdk-wp6zx-7b4c0a3b0d.json
+          
           cat test-1107b-firebase-adminsdk-wp6zx-7b4c0a3b0d.json
         shell: bash
 
