@@ -92,6 +92,7 @@ router.get(
 router.get(
   "/api/brands/:id/products",
   validateGetBrandProduct,
+  validateGetAllProducts,
   getProductsByBrandController
 )
 export default router;
