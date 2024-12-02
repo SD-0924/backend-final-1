@@ -71,3 +71,7 @@ export const validateGetNewArrivals = [
     .isISO8601()
     .withMessage("Date threshold must be a valid ISO 8601 date"),
 ];
+
+export const validateGetBrandProduct = [
+  param("id").isUUID().withMessage("Brand ID must be a valid UUID"),
+];

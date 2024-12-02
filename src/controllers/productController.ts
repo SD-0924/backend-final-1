@@ -199,7 +199,7 @@ export const getNewArrivals = async (req: Request, res: Response): Promise<void>
   }
 };
 
-export const getProductsByBrandController = async (req: Request, res: Response) => {
+export const getProductsByBrandController = async (req: Request, res: Response):Promise<void> => {
   const { brandId } = req.params;
   try {
     const products = await getProductsByBrandService(brandId);
@@ -215,14 +215,15 @@ export const getProductsByBrandController = async (req: Request, res: Response) 
           };
       })
       );
-      return res.status(200).json({ products: updatedProducts });
+      res.status(200).json({ products: updatedProducts });
     }
   }catch(error: any){
     console.error("Error fetching products by brand:", error.message);
         if (error.message === "Brand not found") {
-            return res.status(404).json({ message: "Brand not found" });
+            res.status(404).json({ message: "Brand not found" });
         }
-        return res.status(500).json({ message: "Server error" });
+        else{res.status(500).json({ message: "Server error" });
+      }
   }
 
 };
