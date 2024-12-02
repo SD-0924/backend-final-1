@@ -43,10 +43,19 @@ export const handleLogin = async (
   try {
     const { email, password } = req.body;
 
-    // Verify the password
     const user = await verifyPassword(email, password);
+    if (!user) {
+       res.status(401).json({ message: "Invalid email or password" });
+    }
+
     const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: "1h" });
-    // If successful, send the response
+
+    res.cookie("token", token, { httpOnly: true, secure: process.env.NODE_ENV === "production" });
+
+    if (user.role === "Admin") {
+      return res.redirect("/home");
+    }
+
     res.status(200).json({ message: "Login successful", token });
   } catch (error: unknown) {
     res.status(401).json({
@@ -54,6 +63,7 @@ export const handleLogin = async (
     });
   }
 };
+
 
 // Update User
 export const handleUpdateUser = async (req: Request, res: Response): Promise<void> => {
@@ -150,3 +160,4 @@ export const getUserByIdController = async (req: Request, res: Response): Promis
     res.status(500).json({ message: 'Failed to fetch user', error });
   }
 };
+

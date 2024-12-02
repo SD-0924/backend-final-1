@@ -9,12 +9,17 @@ export const registerUser = async (userData: any) => {
   }
 
   const hashedPassword = await bcrypt.hash(userData.password, 10);
+ 
+  const role = userData.role === "Admin" ? "Admin" : "User";
+
   const newUser = await createUser({
     ...userData,
     passwordHash: hashedPassword, // Save the hashed password
+    role
   });
   return newUser;
 };
+
 
 // Verify password function
 export const verifyPassword = async (email: string, plainPassword: string) => {

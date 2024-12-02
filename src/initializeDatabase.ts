@@ -2,8 +2,8 @@ import { Sequelize } from "sequelize";
 import createDatabase from "./createDatabase";
 
 const initializeDatabase = async (
-  sequelizeInitial: Sequelize,
-  sequelizeDB: Sequelize
+  sequelizeInitial: Sequelize,  
+  sequelizeDB: Sequelize  
 ): Promise<void> => {
   try {
     await createDatabase(sequelizeInitial, sequelizeDB.getDatabaseName());

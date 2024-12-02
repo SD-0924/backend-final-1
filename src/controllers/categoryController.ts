@@ -25,8 +25,9 @@ export const getCategoryById = async (req: Request, res: Response) => {
     const category = await getCategoryByIdService(categoryId);
     if (!category) {
       res.status(404).json({ error: "Category not found" });
+    } else {
+      res.status(200).json(category);
     }
-    res.status(200).json(category);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch category" });
   }
@@ -57,16 +58,21 @@ export const updateCategory = async (req: Request, res: Response) => {
       categoryId,
       updatedData
     );
+
     res.status(200).json({
       success: true,
       message: "Category updated successfully!",
       data: updatedCategory,
     });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Failed to update category",
-    });
+  } catch (error: any) {
+    if (error.message === "Category not found") {
+      res.status(404).json({ message: "Category not found" });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: "Failed to update category",
+      });
+    }
   }
 };
 
@@ -78,11 +84,15 @@ export const deleteCategory = async (req: Request, res: Response) => {
       success: true,
       message: "Category deleted successfully!",
     });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Failed to delete category",
-    });
+  } catch (error: any) {
+    if (error.message === "Category not found") {
+      res.status(404).json({ message: "Category not found" });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: "Failed to delete category",
+      });
+    }
   }
 };
 
