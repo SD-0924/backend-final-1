@@ -6,7 +6,12 @@ import {
   deleteProductRepository,
   getNewArrivalsRepository,
   getProductRatingsRepository,
+  getProductsByBrandRepository
 } from "../reposetories/productRepository";
+
+import { 
+  fetchBrandByIdService 
+} from "./brandService";
 
 import Product from "../models/Product";
 
@@ -56,4 +61,13 @@ export const getNewArrivalsService = async (page: number, limit: number) => {
       totalPages: Math.ceil(totalProducts / limit),
     },
   };
+};
+
+export const getProductsByBrandService = async(brandId: string) => {
+  // check if the brand exists or not by brandId
+  const brandExists = await fetchBrandByIdService(brandId);
+    if (!brandExists) {
+        throw new Error("Brand not found");
+    }
+  return await getProductsByBrandRepository(brandId);
 };

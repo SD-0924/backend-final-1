@@ -59,6 +59,6 @@ export const getNewArrivalsRepository = async (
   });
 };
 
-export const getProductsByBrandRepo = async (brandId: string) => {
+export const getProductsByBrandRepository = async (brandId: string) => {
   return await Product.findAll({ where: { brandId } });
 };
