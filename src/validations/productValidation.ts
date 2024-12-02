@@ -23,7 +23,7 @@ export const validateAddProduct = [
   body("price")
     .isFloat({ gt: 0 })
     .withMessage("Price must be a positive number"),
-  body("c")
+  body("stockQuantity")
     .isInt({ min: 0 })
     .withMessage("Stock quantity must be a non-negative integer"),
 ];
