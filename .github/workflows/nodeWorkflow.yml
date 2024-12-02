@@ -24,11 +24,13 @@ jobs:
 
       - name: Create service account file
         run: |
-          echo "${{secrets.SERVICE_ACCOUNT_PATH}}" 
+          echo "${{secrets.SERVICE_ACCOUNT_PATH}}" | sed 's/\\n/\n/g' > test-1107b-firebase-adminsdk-wp6zx-7b4c0a3b0d.json
+          echo "Content of test-1107b-firebase-adminsdk-wp6zx-7b4c0a3b0d.json:"
+          cat test-1107b-firebase-adminsdk-wp6zx-7b4c0a3b0d.json
         shell: bash
 
       - name: Run tests
         env:
           NODE_ENV: test
-          SERVICE_ACCOUNT_PATH: "${{secrets.SERVICE_ACCOUNT_PATH}}"
+          SERVICE_ACCOUNT_PATH: ./test-1107b-firebase-adminsdk-wp6zx-7b4c0a3b0d.json
         run: npm test
