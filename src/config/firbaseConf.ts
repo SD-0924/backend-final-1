@@ -24,7 +24,7 @@ if (!serviceAccountConfig) {
 }
 
 // resolving the path for the service account file
-const serviceAccountPath = path.resolve(process.env.SERVICE_ACCOUNT_PATH!);
+const serviceAccountPath = path.resolve(process.env.SERVICE_ACCOUNT_PATH);
 
 // importing the service account JSON
 let serviceAccount;
