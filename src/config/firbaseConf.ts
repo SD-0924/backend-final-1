@@ -2,6 +2,8 @@ import { initializeApp } from "firebase/app";
 import { initializeApp as adminInitializeApp, cert } from "firebase-admin/app";
 import * as admin from "firebase-admin";
 import * as path from "path";
+const fs = require('fs');
+
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -29,10 +31,15 @@ if (!serviceAccountConfig) {
 const serviceAccountPath = path.resolve(process.env.SERVICE_ACCOUNT_PATH!);
 console.log(serviceAccountPath);
 
+
+const rawData = fs.readFileSync(serviceAccountPath, 'utf8');
+console.log(rawData); // Check the raw content of the file
+
+
 // importing the service account JSON
 let serviceAccount;
 try {
-  serviceAccount = require(serviceAccountPath);
+  serviceAccount = JSON.parse(rawData); // This is where the error occurs
   console.log(serviceAccount);
 } catch (error:any) {
   throw new Error(`Failed to load service account JSON. Path: ${serviceAccountPath}. Error: ${error.message}`);
