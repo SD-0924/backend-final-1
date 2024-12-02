@@ -133,9 +133,9 @@ export const updateBrandService = async (id: string, name?: string, file?: Expre
         if (!brand) {
         throw new Error("Brand not found");
         }
-
         const updatedData: { name?: string; logo?: string } = {};
-
+        
+        // making sure that the update name is unrepeated
         if (name && name !== brand.name) {
             const existingBrand = await findBrandByName(name);
             if (existingBrand && existingBrand.id !== id) {
@@ -143,21 +143,13 @@ export const updateBrandService = async (id: string, name?: string, file?: Expre
             }
             updatedData.name = name;
         }
-
         if (file) {    // if we want to update the image logo
         const tempFilePath = file.path;
         try {
-            // Step 1: Delete the old logo from Firebase
             const oldFileName = brand.logo.split(`${process.env.FIREBASE_STORAGE_BUCKET}/`)[1];
             await deleteBrandImageFromFirebase(oldFileName);
-
-            // Step 2: Upload the new logo to Firebase
             const newLogoUrl = await uploadBrandLogoToFirebase(tempFilePath, id);
-
-            // Step 3: Clean up the temporary file and update the new logo URL
             updatedData.logo = newLogoUrl;
-
-
         } catch (error:any) {
             throw new Error("Error handling logo file: " + error.message);
         } finally {
@@ -166,14 +158,12 @@ export const updateBrandService = async (id: string, name?: string, file?: Expre
             }
         }
         }
-
-        // Update the brand in the database
         const updatedBrand = await updateBrandRepository(id, updatedData);
-
+        let logoUrl = await getBrandImageUrlFromFirebase(updatedBrand.logo);
         return {
             id: updatedBrand.id,
             name: updatedBrand.name,
-            logo: updatedBrand.logo,
+            logo: logoUrl,
         };
     } catch (error:any) {
         console.error("Error updating brand service:", error);
