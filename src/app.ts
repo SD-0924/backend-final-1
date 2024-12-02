@@ -16,7 +16,7 @@ app.use(authRoutes);
 app.use(productRouts);
 app.use(couponRouts);
 app.use(categoryRouts);
-//app.use(brandRoutes);
+app.use(brandRoutes);
 
 app.use(errorHandlingMiddleware);
 
