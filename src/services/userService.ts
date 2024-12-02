@@ -42,9 +42,56 @@ export const verifyPassword = async (email: string, plainPassword: string) => {
 
 
 // Update User
-export const updateUserService = async (id: string, updates: any) => {
+export const updateUserService1 = async (id: string, updates: any) => {
     return await updateUser(id, updates);
 };
+
+interface UserUpdateInput {
+    oldPassword?: string;
+    newPassword?: string;
+    confirmPassword?: string;
+    [key: string]: any;
+  }
+  
+  export const updateUserService = async (id: string, updates: any) => {
+    const { oldPassword, newPassword, confirmPassword, ...restUpdates } = updates;
+  
+    const user = await getUserById(id);
+  
+    if (!user) {
+      throw new Error("User not found");
+    }
+  
+    // Handle password update
+    if (oldPassword || newPassword || confirmPassword) {
+      if (!oldPassword || !newPassword || !confirmPassword) {
+        throw new Error("All password fields are required");
+      }
+  
+      // Verify old password
+      const isPasswordValid = await bcrypt.compare(oldPassword, user.passwordHash);
+      if (!isPasswordValid) {
+        throw new Error("Old password is incorrect");
+      }
+  
+      // Check if new password matches confirm password
+      if (newPassword !== confirmPassword) {
+        throw new Error("New password and confirm password do not match");
+      }
+  
+      // Hash the new password and add to updates
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      restUpdates.password = hashedPassword;
+    }
+  
+    // Update user profile with the remaining fields
+    const updatedUser = await updateUser(id, restUpdates);
+    if (!updatedUser) {
+      throw new Error("Failed to update user");
+    }
+  
+    return updatedUser;
+  };
 
 // Delete User
 export const deleteUserService = async (id: string) => {
