@@ -35,7 +35,6 @@ User.init(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
     },
     first: {
       type: DataTypes.STRING,

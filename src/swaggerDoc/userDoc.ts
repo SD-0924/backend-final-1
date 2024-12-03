@@ -5,6 +5,8 @@
  *     summary: Register a new user or admin
  *     description: This endpoint allows you to register a new user or admin, depending on the role specified.
  *     operationId: registerUserOrAdmin
+ *     tags:
+ *       - user
  *     requestBody:
  *       required: true
  *       content:
@@ -40,6 +42,8 @@
  *     summary: Login a user
  *     description: This endpoint allows users to login and get a JWT token.
  *     operationId: loginUser
+ *     tags:
+ *       - user
  *     requestBody:
  *       required: true
  *       content:
@@ -69,6 +73,8 @@
  *     summary: Get all users
  *     description: Fetch a list of all users. Requires admin privileges.
  *     operationId: getAllUsers
+ *     tags:
+ *       - user
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -103,6 +109,8 @@
  *     summary: Get user by ID
  *     description: Fetch details of a user by their ID. Requires admin privileges.
  *     operationId: getUserById
+ *     tags:
+ *       - user
  *     parameters:
  *       - name: id
  *         in: path
@@ -142,6 +150,8 @@
  *     summary: Update user info by ID
  *     description: Update details of a user by their ID. Requires admin privileges.
  *     operationId: updateUser
+ *     tags:
+ *       - user
  *     parameters:
  *       - name: id
  *         in: path
@@ -234,6 +244,8 @@
  *     summary: Delete user by ID
  *     description: Delete a user by their ID. Requires admin privileges.
  *     operationId: deleteUser
+ *     tags:
+ *       - user
  *     parameters:
  *       - name: id
  *         in: path

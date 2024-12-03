@@ -4,7 +4,6 @@ import { JWT_SECRET } from '../server';
 
 export const authenticateJWT = (req: Request, res: Response, next: NextFunction): void => {
   const token = req.cookies.token || req.header('Authorization')?.replace('Bearer ', '');
-
   if (!token) {
      res.status(403).json({ message: 'Access denied. No token provided.' });
      return
@@ -12,12 +11,24 @@ export const authenticateJWT = (req: Request, res: Response, next: NextFunction)
 
   jwt.verify(token, JWT_SECRET, (err: any, user: any) => {
     if (err) {
-       res.status(403).json({ message: 'Invalid or expired token' });
-       return
+      return res.status(403).json({ message: 'Invalid or expired token' });
     }
 
-    // Use Type Assertion to let TypeScript know that req.user will exist
     (req as any).user = user;
+
+    if (user.role) {
+      (req as any).userRole = user.role;
+    }
+
     next();
   });
 };
+
+export const isAdmin = (req: Request, res: Response, next: NextFunction): void => {
+  if ((req as any).userRole !== 'Admin') {
+     res.status(403).json({ message: 'Access denied. Admins only.' });
+     return
+  }
+  next();
+};
+
