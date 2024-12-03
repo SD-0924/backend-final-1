@@ -40,33 +40,12 @@
  *     responses:
  *       201:
  *         description: User or Admin registered successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "User registered successfully"
- *                 user:
- *                   type: object
- *                   properties:
- *                     id:
- *                       type: string
- *                       example: "12345-abcde-67890"
- *                     email:
- *                       type: string
- *                       example: "user@example.com"
- *                     role:
- *                       type: string
- *                       example: "user"
  *       400:
  *         description: Invalid request data
  *       500:
  *         description: Internal server error
  */
 
-/****************************************** */
 /**
  * @swagger
  * /login:
@@ -90,21 +69,146 @@
  *     responses:
  *       200:
  *         description: Login successful
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Login successful"
- *                 token:
- *                   type: string
- *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyMzQ1NiIsInJvbGUiOiJ1c2VyIn0.VYmIqaWo9NfD4aWoJX5pPbtm_FJxZ1n1T8Cnl26l9g4"
  *       401:
  *         description: Unauthorized, invalid credentials
  *       500:
  *         description: Internal server error
  */
-/*************************************** */
 
+/**
+ * @swagger
+ * /users:
+ *   get:
+ *     summary: Get all users
+ *     description: Fetch a list of all users. Requires admin privileges.
+ *     operationId: getAllUsers
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                     example: "12345-abcde-67890"
+ *                   email:
+ *                     type: string
+ *                     example: "user@example.com"
+ *                   role:
+ *                     type: string
+ *                     example: "user"
+ *       403:
+ *         description: Forbidden, access denied
+ *       500:
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   get:
+ *     summary: Get user by ID
+ *     description: Fetch details of a user by their ID. Requires admin privileges.
+ *     operationId: getUserById
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the user
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                   example: "12345-abcde-67890"
+ *                 email:
+ *                   type: string
+ *                   example: "user@example.com"
+ *                 role:
+ *                   type: string
+ *                   example: "user"
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /{id}:
+ *   put:
+ *     summary: Update user by ID
+ *     description: Update details of a user by their ID. Requires admin privileges.
+ *     operationId: updateUser
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the user to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               first:
+ *                 type: string
+ *               last:
+ *                 type: string
+ *               mobileNum:
+ *                 type: string
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User updated successfully
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /{id}:
+ *   delete:
+ *     summary: Delete user by ID
+ *     description: Delete a user by their ID. Requires admin privileges.
+ *     operationId: deleteUser
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the user to delete
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User deleted successfully
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
