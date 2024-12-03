@@ -14,6 +14,7 @@ router.get("/register", (req, res) => {
   res.render("register");
 });
 
+
 router.post('/register', validateUserRegistration, validateRequest, handleRegister);
 
 router.post('/login', validateUserLogin, validateRequest, handleLogin);
