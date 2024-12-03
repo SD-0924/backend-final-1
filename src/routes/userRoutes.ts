@@ -14,14 +14,6 @@ router.get("/register", (req, res) => {
   res.render("register");
 });
 
-/*router.get('/home', authenticateJWT, (req, res) => {
-  if (req.user && req.user.role === 'Admin') {
-    return res.render('home');
-  } else {
-    return res.redirect('/login');
-  }
-});*/
-
 router.post('/register', validateUserRegistration, validateRequest, handleRegister);
 
 router.post('/login', validateUserLogin, validateRequest, handleLogin);

@@ -166,7 +166,7 @@
 
 /**
  * @swagger
- * /api/brands/{id}/products:
+ * /api/products/by-brand/{brandId}:
  *   get:
  *     summary: Get products by brand
  *     description: Fetch products that belong to a specific brand.

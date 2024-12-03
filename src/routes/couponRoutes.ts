@@ -16,42 +16,49 @@ import {
   validateGetCouponOrders,
 } from "../validations/couponValidation";
 import { validateRequest } from "../middlewares/validateRequest";
+import { authenticateJWT, isAdmin } from '../middlewares/authMiddleware';
 
 const router = express.Router();
 
 // Coupons Routes
 router.get(
   "/api/coupons",
+  authenticateJWT, 
   validateGetAllCoupons,
   validateRequest,
   getAllCoupons
 );
 router.get(
   "/api/coupons/:id",
+  authenticateJWT,
   validateGetCouponById,
   validateRequest,
   getCouponById
 );
 router.post(
   "/api/coupons",
+  authenticateJWT, isAdmin,
   validateCreateCoupon,
   validateRequest,
   createCoupon
 );
 router.put(
   "/api/coupons/:id",
+  authenticateJWT, isAdmin,
   validateUpdateCoupon,
   validateRequest,
   updateCoupon
 );
 router.delete(
   "/api/coupons/:id",
+  authenticateJWT, isAdmin,
   validateDeleteCoupon,
   validateRequest,
   deleteCoupon
 );
 router.get(
   "/api/coupons/:id/orders",
+  authenticateJWT, 
   validateGetCouponOrders,
   validateRequest,
   getCouponOrders
