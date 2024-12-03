@@ -14,10 +14,8 @@ export const authenticateJWT = (req: Request, res: Response, next: NextFunction)
       return res.status(403).json({ message: 'Invalid or expired token' });
     }
 
-    // حفظ البيانات في request
     (req as any).user = user;
 
-    // يمكنك التحقق من الدور هنا
     if (user.role) {
       (req as any).userRole = user.role;
     }
