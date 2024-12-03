@@ -24,19 +24,6 @@
  *               password:
  *                 type: string
  *                 example: "userpassword123"
- *               confirmPassword:
- *                 type: string
- *                 example: "userpassword123"
- *               mobileNum:
- *                 type: string
- *                 example: "1234567890"
- *               address:
- *                 type: string
- *                 example: "123 User Street"
- *               role:
- *                 type: string
- *                 enum: [user, admin]
- *                 example: "user"
  *     responses:
  *       201:
  *         description: User or Admin registered successfully
@@ -150,9 +137,9 @@
 
 /**
  * @swagger
- * /{id}:
+ * /users/{id}:
  *   put:
- *     summary: Update user by ID
+ *     summary: Update user info by ID
  *     description: Update details of a user by their ID. Requires admin privileges.
  *     operationId: updateUser
  *     parameters:
@@ -177,11 +164,63 @@
  *                 type: string
  *               mobileNum:
  *                 type: string
+ *               oldPassword:
+ *                 type: string
+ *               newPassword:
+ *                 type: string
+ *               confirmPassword:
+ *                 type: string
+ * 
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: User updated successfully
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /users/address/{id}:
+ *   put:
+ *     summary: Update user address by user ID
+ *     description: Update address of a user by their ID. Requires admin privileges.
+ *     operationId: updateUseradress
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the user to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               street:
+ *                 type: string
+ *               state:
+ *                 type: string
+ *               city:
+ *                 type: string
+ *               mobileNum:
+ *                 type: string
+ *               pincode:
+ *                 type: string
+ * 
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User updated successfully
+ *       400:
+ *         description: Old password is incorrect
  *       404:
  *         description: User not found
  *       500:
