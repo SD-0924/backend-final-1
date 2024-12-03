@@ -1,4 +1,5 @@
 import express from 'express';
+
 import { handleLogin, handleRegister, handleUpdateUser, handleDeleteUser, handleGetAllUsers, getUserByIdController, handleUpdateUseradress } from '../controllers/userController';
 import { validateUserLogin, validateUserRegistration, validateUserUpdate } from '../validations/userValidation';
 import { authenticateJWT } from '../middlewares/authMiddleware';
