@@ -129,4 +129,3 @@ export const getUserByIdController = async (req: Request, res: Response): Promis
     res.status(500).json({ message: 'Failed to fetch user', error });
   }
 };
-
