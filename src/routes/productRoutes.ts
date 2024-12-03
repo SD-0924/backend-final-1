@@ -11,7 +11,6 @@ import {
   getProductsByBrandController
 } from "../controllers/productController";
 
-
 import {
   validateGetAllProducts,
   validateGetProductById,
@@ -22,77 +21,20 @@ import {
   validateGetNewArrivals,
   validateGetBrandProduct
 } from "../validations/productValidation";
-import { validateRequest } from "../middlewares/validateRequest";
 
+import { validateRequest } from "../middlewares/validateRequest";
+import { authenticateJWT, isAdmin } from '../middlewares/authMiddleware';
 
 const router = Router();
 
-/**
- * @swagger
- * /products:
- *   get:
- *     summary: Get all products
- *     description: Retrieve a list of all products.
- *     responses:
- *       200:
- *         description: List of products retrieved successfully.
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: string
- *                   name:
- *                     type: string
- *                   imageUrl:
- *                     type: string
- *       500:
- *         description: Server error.
- */
-router.get(
-  "/api/products",
-  validateGetAllProducts,
-  getAllProducts
-);
+// Routes for products
+router.get("/api/products", authenticateJWT, validateGetAllProducts, getAllProducts);
+router.get("/api/products/:id", authenticateJWT, validateGetProductById, getProductById);
+router.post("/api/products", upload.single('image'), authenticateJWT, isAdmin, validateAddProduct, validateRequest, addProduct);
+router.put("/api/products/:id", upload.single('productImage'), authenticateJWT, isAdmin, validateUpdateProduct, updateProduct);
+router.delete("/api/products/:id", authenticateJWT, isAdmin, validateDeleteProduct, validateRequest, deleteProduct);
+router.get("/api/products/:id/ratings", validateGetProductRatings, getProductRatings);
+router.get("/api/products/new-arrivals", validateGetNewArrivals, getNewArrivals);
+router.get("/api/brands/:id/products", validateGetBrandProduct, validateGetAllProducts, getProductsByBrandController);
 
-router.get(
-  "/api/products/:id",
-  validateGetProductById,
-  getProductById
-);
-
-router.post("/api/products", upload.single('image'), validateAddProduct, validateRequest, addProduct);
-
-router.put('/products/:id', upload.single('productImage'), validateUpdateProduct, updateProduct);
-
-
-router.delete(
-  "/api/products/:id",
-  validateDeleteProduct,
-  validateRequest,
-  deleteProduct
-);
-
-router.get(
-  "/api/products/:id/ratings",
-  validateGetProductRatings,
-  getProductRatings
-);
-
-// Route for fetching new arrivals
-router.get(
-  "/api/products/new-arrivals",
-  validateGetNewArrivals,
-  getNewArrivals
-);
-
-router.get(
-  "/api/brands/:id/products",
-  validateGetBrandProduct,
-  validateGetAllProducts,
-  getProductsByBrandController
-)
 export default router;
