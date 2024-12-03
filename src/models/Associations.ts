@@ -22,7 +22,7 @@ export const setupAssociations = () => {
   Products.hasMany(CartItems, { foreignKey: "productId" });
   CartItems.belongsTo(Products, { foreignKey: "productId" });
 
-  // Products - CartItems
+  // Users - CartItems
   Users.hasMany(CartItems, { foreignKey: "userId" });
   CartItems.belongsTo(Users, { foreignKey: "userId" });
 
