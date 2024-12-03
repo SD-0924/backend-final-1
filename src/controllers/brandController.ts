@@ -60,7 +60,6 @@ export const getAllBrands = async (req: Request, res: Response) => {
         const brands = await getAllBrandsService();
         res.status(200).json(brands);
     } catch (error) {
-        console.error("Error in controller fetching all brands:", error);
         res.status(500).json({ message: "Internal server error" });
     }
 };
@@ -73,7 +72,6 @@ export const deleteBrandById = async (req: Request, res: Response) => {
         .status(200)
         .json({ message: `Brand with ID ${id} deleted successfully.` });
     } catch (error: any) {
-        console.error(`Error in deleting brand with ID ${id}:`, error.message);
         if (error.message === "Brand not found") {
         res.status(404).json({ message: "Brand not found" });
         } else {
@@ -95,7 +93,6 @@ export const updateBrandController = async (req: Request, res: Response) => {
         brand: updatedBrand,
         });
     } catch (error: any) {
-        console.error("Error updating brand:", error);
         res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
 };

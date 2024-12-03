@@ -37,8 +37,17 @@ export const createBrandService = async (name: string, file: Express.Multer.File
         const logoUrl = await uploadBrandLogoToFirebase(tempFilePath, brandId);
         await updateLogoURL(brandId, logoUrl);   // updating the temp logo with the actual image URL
 
+        const brandUpdatedLogo = await getBrandById(brandId);
+        const brandUrl = await getBrandImageUrlFromFirebase(brandUpdatedLogo!.logo);
+        return {
+            id: brandUpdatedLogo!.id,
+            name: brandUpdatedLogo!.name,
+            logo: brandUrl,
+        };
+
         fs.unlinkSync(tempFilePath);             // deleting the temporary file after upload
-        return newBrand;
+
+        return brandUpdatedLogo;
 
     } catch (error) {
         // cleaning up the image file in case of an error
@@ -144,8 +153,6 @@ export const updateBrandService = async (id: string, name?: string, file?: Expre
         if (file) {    // if we want to update the image logo
         const tempFilePath = file.path;
         try {
-            const oldFileName = brand.logo.split(`${process.env.FIREBASE_STORAGE_BUCKET}/`)[1];
-            await deleteBrandImageFromFirebase(oldFileName);
             const newLogoUrl = await uploadBrandLogoToFirebase(tempFilePath, id);
             updatedData.logo = newLogoUrl;
         } catch (error:any) {

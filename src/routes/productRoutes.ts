@@ -35,6 +35,6 @@ router.put("/api/products/:id", upload.single('productImage'), authenticateJWT, 
 router.delete("/api/products/:id", authenticateJWT, isAdmin, validateDeleteProduct, validateRequest, deleteProduct);
 router.get("/api/products/:id/ratings", validateGetProductRatings, getProductRatings);
 router.get("/api/products/new-arrivals", validateGetNewArrivals, getNewArrivals);
-router.get("/api/brands/:id/products", validateGetBrandProduct, validateGetAllProducts, getProductsByBrandController);
+router.get("/api/products/by-brand/:brandId", validateGetBrandProduct, validateGetAllProducts, getProductsByBrandController);
 
 export default router;
