@@ -199,6 +199,8 @@
  *     summary: Update user address by user ID
  *     description: Update address of a user by their ID. Requires admin privileges.
  *     operationId: updateUseradress
+ *     tags:
+ *       - user
  *     parameters:
  *       - name: id
  *         in: path

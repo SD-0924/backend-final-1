@@ -1,6 +1,32 @@
 /**
  * @swagger
  * /api/categories:
+ *   post:
+ *     summary: Create a new category
+ *     description: Add a new category to the system.
+ *     operationId: createCategory
+ *     tags:
+ *       - Category
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "New Category"
+ *     responses:
+ *       201:
+ *         description: Category created successfully
+ *       500:
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /api/categories:
  *   get:
  *     summary: Get all categories
  *     description: Retrieve a paginated list of all categories.
@@ -56,26 +82,23 @@
 
 /**
  * @swagger
- * /api/categories:
- *   post:
- *     summary: Create a new category
- *     description: Add a new category to the system.
- *     operationId: createCategory
+ * /api/categories/{id}/products:
+ *   get:
+ *     summary: Get products by category ID
+ *     description: Retrieve a list of products belonging to a specific category.
+ *     operationId: getProductsByCategoryId
  *     tags:
  *       - Category
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 example: "New Category"
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the category.
+ *         schema:
+ *           type: string
  *     responses:
- *       201:
- *         description: Category created successfully
+ *       200:
+ *         description: Products retrieved successfully
  *       500:
  *         description: Internal server error
  */
@@ -140,25 +163,3 @@
  *         description: Internal server error
  */
 
-/**
- * @swagger
- * /api/categories/{id}/products:
- *   get:
- *     summary: Get products by category ID
- *     description: Retrieve a list of products belonging to a specific category.
- *     operationId: getProductsByCategoryId
- *     tags:
- *       - Category
- *     parameters:
- *       - name: id
- *         in: path
- *         required: true
- *         description: The ID of the category.
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Products retrieved successfully
- *       500:
- *         description: Internal server error
- */
