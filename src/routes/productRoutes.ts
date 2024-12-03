@@ -28,7 +28,7 @@ import { authenticateJWT, isAdmin } from '../middlewares/authMiddleware';
 const router = Router();
 
 // Routes for products
-router.get("/api/products", validateGetAllProducts, getAllProducts);
+router.get("/api/products", authenticateJWT, validateGetAllProducts, getAllProducts);
 router.get("/api/products/:id", authenticateJWT, validateGetProductById, getProductById);
 router.post("/api/products", upload.single('image'), authenticateJWT, isAdmin, validateAddProduct, validateRequest, addProduct);
 router.put("/api/products/:id", upload.single('productImage'), authenticateJWT, isAdmin, validateUpdateProduct, updateProduct);
