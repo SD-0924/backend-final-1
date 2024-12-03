@@ -22,7 +22,7 @@ const router = express.Router();
 router.post(
   "/api/brands",
   upload.single("logo"),
-  authenticateJWT, isAdmin,
+  //authenticateJWT, isAdmin,
   validateAddBrand,
   validateRequest,
   createBrand
@@ -31,7 +31,7 @@ router.post(
 // get brand by ID endpoint
 router.get(
   "/api/brands/:id", 
-  authenticateJWT, 
+  //authenticateJWT, 
   validateBrandId, 
   validateRequest, 
   getBrandById);
@@ -39,7 +39,7 @@ router.get(
 // get all brands
 router.get(
   "/api/brands", 
-  authenticateJWT, 
+  //authenticateJWT, 
   validateGetAllBrands,
   validateRequest,
   getAllBrands
@@ -48,7 +48,7 @@ router.get(
 // delete brand by id
 router.delete(
   "/api/brands/:id",
-  authenticateJWT, isAdmin,
+  //authenticateJWT, isAdmin,
   validateBrandId,
   validateRequest,
   deleteBrandById
@@ -57,7 +57,7 @@ router.delete(
 // update brand
 router.put(
   "/api/brands/:id",
-  authenticateJWT, isAdmin,
+  //authenticateJWT, isAdmin,
   upload.single("logo"),
   validateUpdateBrand,
   validateRequest,
