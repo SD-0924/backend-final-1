@@ -83,16 +83,53 @@ export const deleteDiscount = async (req: Request, res: Response) => {
     }
 };
 
+const formatTime = (milliseconds: number) => {
+    const hours = Math.floor(milliseconds / (1000 * 60 * 60));
+    const minutes = Math.floor((milliseconds % (1000 * 60 * 60)) / (1000 * 60));
+    const days = Math.floor(hours / 24);
+    const hoursRemaining = hours % 24;
+
+    return `${days} days, ${hoursRemaining} hours, ${minutes} minutes`;
+};
+
+
 export const getDiscountTimeRemainingById = async (req: Request, res: Response) => {
+    const { discountId } = req.params;
+
     try {
-        const { discountId } = req.params;
-        const result = await discountService.getDiscountTimeRemainingById(discountId);
-        res.status(200).json(result);
-    } catch (error: any) {
-        if (error.message === 'Discount not found') {
-            res.status(404).json({ message: error.message });
-        } else {
-            res.status(500).json({ error: error.message });
+        const discount = await discountService.getDiscountById(discountId);
+
+        if (!discount) {
+             res.status(404).json({ message: 'Discount not found' });
+             return
         }
+
+        const currentTime = new Date();
+        const discountEndTime = new Date(discount.endDate);
+
+        const remainingTime = discountEndTime.getTime() - currentTime.getTime();
+
+        if (remainingTime <= 0) {
+             res.status(200).json({
+                remainingTime: 0,
+                message: 'Discount has expired',
+                formattedTime: '0 days, 0 hours, 0 minutes'
+            });
+            return
+        }
+
+        const formattedTime = formatTime(remainingTime);
+
+         res.status(200).json({
+            remainingTime,
+            message: 'Discount is still active',
+            formattedTime
+        });
+        return
+
+    } catch (error) {
+        console.error(error);
+         res.status(500).json({ message: 'Internal server error' });
+         return
     }
 };

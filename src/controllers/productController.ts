@@ -11,6 +11,8 @@ import {
 } from "../services/productService";
 import { uploadProductImageToFirebase, getProductImageUrlFromFirebase,deleteProductImageFromFirebase } from "../utils/firebaseUtils";
 import {getDiscountByProductId} from '../services/discountService'
+import {getDiscountTimeRemainingById} from '../services/discountService'
+
 export const getAllProducts = async (req: Request, res: Response) => {
   try {
     const products = await getAllProductsService();
@@ -229,26 +231,51 @@ export const getProductsByBrandController = async (req: Request, res: Response):
 };
 
 export const getProductPriceAfterDiscount = async (req: Request, res: Response) => {
-  const { id } = req.params;  
+  const { id } = req.params;
+
   try {
-      const product = await getProductByIdService(id);      
+      const product = await getProductByIdService(id);
       if (!product) {
            res.status(404).json({ message: 'Product not found' });
            return
       }
-
       const discount = await getDiscountByProductId(id);
 
       if (discount) {
-          const discountAmount = product.price * (discount.discountPercentage / 100);
-          const finalPrice = product.price - discountAmount;
-           res.json({ productId: product.id, finalPrice, originalPrice: product.price });
-           return
+          const discountTimeStatus = await getDiscountTimeRemainingById(discount.id);
+
+          if (discountTimeStatus.remainingTime > 0) {
+              const discountAmount = product.price * (discount.discountPercentage / 100);
+              const finalPrice = product.price - discountAmount;
+               res.json({ 
+                  productId: product.id, 
+                  finalPrice, 
+                  originalPrice: product.price,
+                  discountPercentage: discount.discountPercentage,
+                  discountEndDate: discount.endDate
+              });
+              return
+          } else {
+               res.json({ 
+                  productId: product.id, 
+                  finalPrice: product.price, 
+                  originalPrice: product.price,
+                  discountPercentage: 0,
+                  discountEndDate: null
+              });
+              return
+          }
       } else {
-        
-           res.json({ productId: product.id, finalPrice: product.price, originalPrice: product.price });
-           return
+           res.json({ 
+              productId: product.id, 
+              finalPrice: product.price, 
+              originalPrice: product.price,
+              discountPercentage: 0,
+              discountEndDate: null
+          });
+          return
       }
+
   } catch (error) {
       console.error(error);
        res.status(500).json({ message: 'Internal server error' });
