@@ -1,6 +1,7 @@
 import express, { Application } from "express";
 import authRoutes from "./routes/userRoutes";
 import productRouts from "./routes/productRoutes";
+import cartRouts from "./routes/cartRoutes";
 import couponRouts from "./routes/couponRoutes";
 import categoryRouts from "./routes/categoryRoutes";
 import errorHandlingMiddleware from "./errorHandling";
@@ -27,8 +28,9 @@ app.use(authRoutes);
 app.use(productRouts);
 app.use(couponRouts);
 app.use(categoryRouts);
-app.use(brandRouter)
 app.use(descountRouter);
+app.use(brandRouter);
+app.use(cartRouts);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
