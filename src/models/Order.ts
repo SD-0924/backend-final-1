@@ -39,7 +39,7 @@ Order.init(
     },
     couponId: {
       type: DataTypes.UUID,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: Coupon,
         key: "id",

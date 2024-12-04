@@ -229,8 +229,6 @@
  *     responses:
  *       200:
  *         description: User updated successfully
- *       400:
- *         description: Old password is incorrect
  *       404:
  *         description: User not found
  *       500:
