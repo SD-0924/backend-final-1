@@ -2,6 +2,7 @@ import express, { Application } from "express";
 import authRoutes from "./routes/userRoutes";
 import productRouts from "./routes/productRoutes";
 import cartRouts from "./routes/cartRoutes";
+import orderRouts from "./routes/orderRoutes";
 import couponRouts from "./routes/couponRoutes";
 import categoryRouts from "./routes/categoryRoutes";
 import errorHandlingMiddleware from "./errorHandling";
@@ -11,7 +12,7 @@ import swaggerUi from "swagger-ui-express";
 import path from "path";
 import cookieParser from 'cookie-parser';
 import brandRouter from './routes/brandRoutes'
-
+import cors from "cors";
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
 
 const app: Application = express();
@@ -23,12 +24,22 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
+// Allow specific origin
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Replace with your frontend URL
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
 app.use(authRoutes);
 app.use(productRouts);
 app.use(couponRouts);
 app.use(categoryRouts);
 app.use(brandRouter);
 app.use(cartRouts);
+app.use(orderRouts);
 
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
