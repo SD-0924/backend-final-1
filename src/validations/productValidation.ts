@@ -75,3 +75,8 @@ export const validateGetNewArrivals = [
 export const validateGetBrandProduct = [
   param("id").isUUID().withMessage("Brand ID must be a valid UUID"),
 ];
+
+export const validateGetPriceAfterDiscount = [
+  param("productId").isUUID().withMessage("Invalid product ID"),
+  param("discountId").isUUID().withMessage("Invalid discount ID"),
+];
