@@ -15,8 +15,18 @@ import { getCategoryByIdService } from "./categoryService";
 
 import Product from "../models/Product";
 
-export const getAllProductsService = async () => {
-  return await getAllProductsRepository();
+export const getAllProductsService = async (page: number, limit: number) => {
+  const offset = (page - 1) * limit;
+  const { rows: products, count: totalProducts } =
+    await getAllProductsRepository(limit, offset);
+  return {
+    products,
+    pagination: {
+      currentPage: page,
+      totalProducts,
+      totalPages: Math.ceil(totalProducts / limit),
+    },
+  };
 };
 
 export const getProductByIdService = async (productId: string) => {

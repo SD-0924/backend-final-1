@@ -2,8 +2,15 @@ import { Op } from "sequelize";
 import Product from "../models/Product";
 import Rating from "../models/Rating";
 
-export const getAllProductsRepository = async () => {
-  return await Product.findAll();
+export const getAllProductsRepository = async (
+  limit: number,
+  offset: number
+) => {
+  return await Product.findAndCountAll({
+    order: [["createdAt", "DESC"]],
+    limit,
+    offset,
+  });
 };
 
 export const getProductByIdRepository = async (productId: string) => {

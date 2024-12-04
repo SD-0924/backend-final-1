@@ -14,7 +14,7 @@ import {
 } from "../controllers/productController";
 
 import {
-  validateGetAllProducts,
+  validatePaganation,
   validateGetProductById,
   validateAddProduct,
   validateUpdateProduct,
@@ -35,7 +35,7 @@ const router = Router();
 router.get(
   "/api/products",
   authenticateJWT,
-  validateGetAllProducts,
+  validatePaganation,
   getAllProducts
 );
 router.get(
@@ -77,18 +77,19 @@ router.get(
 router.get(
   "/api/products/new-arrivals",
   validateGetNewArrivals,
+  validatePaganation,
   getNewArrivals
 );
 router.get(
   "/api/products/by-brand/:brandId",
   validateGetBrandProduct,
-  validateGetAllProducts,
+  validatePaganation,
   getProductsByBrandController
 );
 router.get(
   "/api/products/by-category/:categoryId",
   validateGetCategoryProduct,
-  validateGetAllProducts,
+  validatePaganation,
   getProductsByCategory
 );
 router.get(
