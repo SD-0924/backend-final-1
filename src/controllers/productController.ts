@@ -22,7 +22,15 @@ export const getAllProducts = async (req: Request, res: Response) => {
   try {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
-    const { products, pagination } = await getAllProductsService(page, limit);
+    const brandName = req.query.brandName;
+    const categoryName = req.query.categoryName;
+
+    const { products, pagination } = await getAllProductsService(
+      page,
+      limit,
+      brandName,
+      categoryName
+    );
 
     const productsWithImages = await Promise.all(
       products.map(async (product) => {

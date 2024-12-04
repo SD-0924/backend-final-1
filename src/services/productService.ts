@@ -15,10 +15,15 @@ import { getCategoryByIdService } from "./categoryService";
 
 import Product from "../models/Product";
 
-export const getAllProductsService = async (page: number, limit: number) => {
+export const getAllProductsService = async (
+  page: number,
+  limit: number,
+  brandName?: any,
+  categoryName?: any
+) => {
   const offset = (page - 1) * limit;
   const { rows: products, count: totalProducts } =
-    await getAllProductsRepository(limit, offset);
+    await getAllProductsRepository(limit, offset, brandName, categoryName);
   return {
     products,
     pagination: {

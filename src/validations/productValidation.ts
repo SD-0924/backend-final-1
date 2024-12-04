@@ -11,6 +11,19 @@ export const validatePaganation = [
     .withMessage("page must be a non-negative integer"),
 ];
 
+export const validatGetAllProducts = [
+  query("brandName")
+    .optional()
+    .isString()
+    .isLength({ min: 3, max: 100 })
+    .withMessage("Brand name must be a string between 3 and 100 characters"),
+  query("categoryName")
+    .optional()
+    .isString()
+    .isLength({ min: 3, max: 100 })
+    .withMessage("Category name must be a string between 3 and 100 characters"),
+];
+
 export const validateGetProductById = [
   param("id").isUUID().withMessage("Product ID must be a valid UUID"),
 ];

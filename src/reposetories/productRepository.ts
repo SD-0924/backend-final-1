@@ -1,12 +1,48 @@
 import { Op } from "sequelize";
 import Product from "../models/Product";
 import Rating from "../models/Rating";
+import Category from "../models/Category";
+import Brand from "../models/Brand";
 
 export const getAllProductsRepository = async (
   limit: number,
-  offset: number
+  offset: number,
+  brandName?: any,
+  categoryName?: any
 ) => {
+  const whereConditions: any = {};
+
+  if (categoryName) {
+    whereConditions.category = {
+      name: {
+        [Op.eq]: categoryName,
+      },
+    };
+  }
+
+  if (brandName) {
+    whereConditions.brand = {
+      name: {
+        [Op.eq]: brandName,
+      },
+    };
+  }
+
   return await Product.findAndCountAll({
+    include: [
+      {
+        model: Category,
+        as: "category",
+        where: categoryName ? whereConditions.category : undefined,
+        attributes: ["name"],
+      },
+      {
+        model: Brand,
+        as: "brand",
+        where: brandName ? whereConditions.brand : undefined,
+        attributes: ["name"],
+      },
+    ],
     order: [["createdAt", "DESC"]],
     limit,
     offset,

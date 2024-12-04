@@ -15,6 +15,7 @@ import {
 
 import {
   validatePaganation,
+  validatGetAllProducts,
   validateGetProductById,
   validateAddProduct,
   validateUpdateProduct,
@@ -36,6 +37,7 @@ router.get(
   "/api/products",
   authenticateJWT,
   validatePaganation,
+  validatGetAllProducts,
   getAllProducts
 );
 router.get(
