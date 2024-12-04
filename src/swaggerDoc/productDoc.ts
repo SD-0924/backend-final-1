@@ -277,3 +277,44 @@
  *       500:
  *         description: Internal server error
  */
+
+/**
+ * @swagger
+ * /api/products/{id}/price-after-discount:
+ *   get:
+ *     summary: Get product price after discount
+ *     description: Fetch the price of a product after applying any available discount.
+ *     operationId: getProductPriceAfterDiscount
+ *     tags:
+ *       - Products  # التاج هنا هو "Products"
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the product.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Price after discount
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 productId:
+ *                   type: integer
+ *                   description: The ID of the product.
+ *                 finalPrice:
+ *                   type: number
+ *                   format: float
+ *                   description: The price of the product after the discount.
+ *                 originalPrice:
+ *                   type: number
+ *                   format: float
+ *                   description: The original price of the product.
+ *       404:
+ *         description: Product not found
+ *       500:
+ *         description: Failed to fetch price after discount
+ */

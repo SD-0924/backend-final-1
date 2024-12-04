@@ -82,3 +82,17 @@ export const deleteDiscount = async (req: Request, res: Response) => {
         }
     }
 };
+
+export const getDiscountTimeRemainingById = async (req: Request, res: Response) => {
+    try {
+        const { discountId } = req.params;
+        const result = await discountService.getDiscountTimeRemainingById(discountId);
+        res.status(200).json(result);
+    } catch (error: any) {
+        if (error.message === 'Discount not found') {
+            res.status(404).json({ message: error.message });
+        } else {
+            res.status(500).json({ error: error.message });
+        }
+    }
+};
