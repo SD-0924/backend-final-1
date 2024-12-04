@@ -166,7 +166,7 @@
 
 /**
  * @swagger
- * /api/brands/{id}/products:
+ * /api/products/by-brand/{brandId}:
  *   get:
  *     summary: Get products by brand
  *     description: Fetch products that belong to a specific brand.
@@ -276,4 +276,53 @@
  *         description: Product not found
  *       500:
  *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /api/products/{id}/price-after-discount:
+ *   get:
+ *     summary: Get product price after discount
+ *     description: Fetch the price of a product after applying any available discount. If no discount is available or it has expired, the original price will be returned.
+ *     operationId: getProductPriceAfterDiscount
+ *     tags:
+ *       - Products  # The tag here is "Products"
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The unique identifier of the product.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Successfully fetched the price after applying the discount.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 productId:
+ *                   type: integer
+ *                   description: The unique ID of the product.
+ *                 finalPrice:
+ *                   type: number
+ *                   format: float
+ *                   description: The price of the product after the discount (if any).
+ *                 originalPrice:
+ *                   type: number
+ *                   format: float
+ *                   description: The original price of the product before any discount.
+ *                 discountPercentage:
+ *                   type: number
+ *                   format: float
+ *                   description: The percentage of the discount applied to the product.
+ *                 discountEndDate:
+ *                   type: string
+ *                   format: date-time
+ *                   description: The end date of the discount (null if no discount or expired).
+ *       404:
+ *         description: The product with the provided ID was not found.
+ *       500:
+ *         description: Internal server error when fetching price after discount.
  */

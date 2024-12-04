@@ -8,7 +8,8 @@ import {
   deleteProduct,
   getProductRatings,
   getNewArrivals,
-  getProductsByBrandController
+  getProductsByBrandController,
+  getProductPriceAfterDiscount
 } from "../controllers/productController";
 
 import {
@@ -19,7 +20,8 @@ import {
   validateDeleteProduct,
   validateGetProductRatings,
   validateGetNewArrivals,
-  validateGetBrandProduct
+  validateGetBrandProduct,
+  validateGetPriceAfterDiscount
 } from "../validations/productValidation";
 
 import { validateRequest } from "../middlewares/validateRequest";
@@ -36,5 +38,5 @@ router.delete("/api/products/:id", authenticateJWT, isAdmin, validateDeleteProdu
 router.get("/api/products/:id/ratings", validateGetProductRatings, getProductRatings);
 router.get("/api/products/new-arrivals", validateGetNewArrivals, getNewArrivals);
 router.get("/api/products/by-brand/:brandId", validateGetBrandProduct, validateGetAllProducts, getProductsByBrandController);
-
+router.get("/api/products/:id/price-after-discount", authenticateJWT,validateGetPriceAfterDiscount, getProductPriceAfterDiscount);
 export default router;
