@@ -52,10 +52,6 @@ export const handleLogin = async (
 
     res.cookie("token", token, { httpOnly: true, secure: process.env.NODE_ENV === "production" });
 
-    if (user.role === "Admin") {
-      return res.redirect("/home");
-    }
-
     res.status(200).json({ message: "Login successful", token });
   } catch (error: unknown) {
     res.status(401).json({
