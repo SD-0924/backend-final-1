@@ -12,7 +12,7 @@ import path from "path";
 import cookieParser from 'cookie-parser';
 import brandRouter from './routes/brandRoutes'
 import descountRouter from './routes/discountRouter';
-
+import cors from "cors";
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
 
 const app: Application = express();
@@ -23,6 +23,16 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
+
+
+// Allow specific origin
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Replace with your frontend URL
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 app.use(authRoutes);
 app.use(productRouts);
