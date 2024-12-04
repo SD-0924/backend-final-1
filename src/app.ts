@@ -10,6 +10,7 @@ import swaggerUi from "swagger-ui-express";
 import path from "path";
 import cookieParser from 'cookie-parser';
 import brandRouter from './routes/brandRoutes'
+import descountRouter from './routes/discountRouter';
 
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
 
@@ -27,6 +28,7 @@ app.use(productRouts);
 app.use(couponRouts);
 app.use(categoryRouts);
 app.use(brandRouter)
+app.use(descountRouter);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
