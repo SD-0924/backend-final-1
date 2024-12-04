@@ -6,14 +6,6 @@ import { authenticateJWT } from '../middlewares/authMiddleware';
 import { validateRequest } from '../middlewares/validateRequest';
 const router = express.Router();
 
-router.get("/login", (req, res) => {
-  res.render("login");
-});
-
-router.get("/register", (req, res) => {
-  res.render("register");
-});
-
 
 router.post('/register', validateUserRegistration, validateRequest, handleRegister);
 

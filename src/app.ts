@@ -36,6 +36,10 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(errorHandlingMiddleware);
 
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "OK" });
+});
+
 app.all("*", (req, res) => {
   res.status(404).send("Request not supported");
 });
