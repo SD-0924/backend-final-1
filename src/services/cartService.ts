@@ -41,3 +41,27 @@ export const addItemToCartService = async (userId: string, productId: string, qu
     return newCartItem;
   }
 };
+
+export const getUserCartService = async (userId: string) => {
+  // Fetch cart items for the user
+  const cartItems = await CartItem.findAll({
+    where: { userId },  // Filter cart items by userId
+  });
+
+  // Fetch product details for each cart item
+  const cartItemsWithProductInfo = await Promise.all(
+    cartItems.map(async (cartItem) => {
+      const product = await Product.findOne({
+        where: { id: cartItem.productId },  // Find the product using the productId from CartItem
+      });
+
+      // Return cartItem with product info (if found)
+      return {
+        cartItem,
+        product: product || null, // If product is not found, return null
+      };
+    })
+  );
+
+  return cartItemsWithProductInfo;
+};
