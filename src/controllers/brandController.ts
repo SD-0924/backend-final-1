@@ -18,6 +18,7 @@ export const createBrand = async (req: Request, res: Response) => {
             success: false,
             message: "A logo file is required for brand creation.",
         });
+        return
         }
 
         const newBrand = await createBrandService(name, file!);
@@ -27,6 +28,7 @@ export const createBrand = async (req: Request, res: Response) => {
         message: "Brand created successfully",
         data: newBrand,
         });
+        return
     } catch (error) {
         console.error("Error in Creating Brand.");
 
@@ -34,6 +36,7 @@ export const createBrand = async (req: Request, res: Response) => {
         success: false,
         message: "Error creating brand",
         });
+        return
     }
 };
 
