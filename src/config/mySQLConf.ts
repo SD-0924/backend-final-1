@@ -17,7 +17,7 @@ const sequelize = new Sequelize(
         rejectUnauthorized: false, // For secure Aiven connections
       },
     },
-    logging: process.env.DB_LOGGING === 'true' ? console.log : false, // Logging toggle
+    logging: process.env.DB_LOGGING === "true" ? console.log : false, // Logging toggle
   }
 );
 
