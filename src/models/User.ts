@@ -12,16 +12,9 @@ interface UserAttributes {
   role: string | null;
 }
 
-interface UserCreationAttributes
-  extends Optional<
-    UserAttributes,
-    "id" | "first" | "last" | "mobileNum" | "address" | "role"
-  > {}
+interface UserCreationAttributes extends Optional<UserAttributes, "id"> {}
 
-class User
-  extends Model<UserAttributes, UserCreationAttributes>
-  implements UserAttributes
-{
+class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: string;
   public email!: string;
   public first!: string | null;
@@ -42,7 +35,6 @@ User.init(
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
     },
     first: {
       type: DataTypes.STRING,

@@ -42,7 +42,6 @@ Coupon.init(
     code: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
     },
     discountType: {
       type: DataTypes.STRING,

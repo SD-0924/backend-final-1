@@ -7,6 +7,7 @@ import Brands from "./Brand";
 import Categories from "./Category";
 import Discounts from "./Discount";
 import Rating from "./Rating";
+import CartItems from "./CartItem";
 
 export const setupAssociations = () => {
   // Users - Orders
@@ -17,9 +18,13 @@ export const setupAssociations = () => {
   Orders.hasMany(OrderItems, { foreignKey: "orderId" });
   OrderItems.belongsTo(Orders, { foreignKey: "orderId" });
 
-  // Products - OrderItems
-  Products.hasMany(OrderItems, { foreignKey: "productId" });
-  OrderItems.belongsTo(Products, { foreignKey: "productId" });
+  // Products - CartItems
+  Products.hasMany(CartItems, { foreignKey: "productId" });
+  CartItems.belongsTo(Products, { foreignKey: "productId" });
+
+  // Users - CartItems
+  Users.hasMany(CartItems, { foreignKey: "userId" });
+  CartItems.belongsTo(Users, { foreignKey: "userId" });
 
   // Products - Categories
   Categories.hasMany(Products, { foreignKey: "categoryId" });

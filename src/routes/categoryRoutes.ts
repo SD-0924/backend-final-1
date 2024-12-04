@@ -18,11 +18,13 @@ import {
 } from "../validations/categoryValidation";
 
 import { validateRequest } from "../middlewares/validateRequest";
+import { authenticateJWT, isAdmin } from '../middlewares/authMiddleware';
 
 const router = Router();
 
 router.get(
   "/api/categories",
+  authenticateJWT, 
   validateGetAllCategories,
   validateRequest,
   getAllCategories
@@ -30,6 +32,7 @@ router.get(
 
 router.get(
   "/api/categories/:id",
+  authenticateJWT, 
   validateGetCategoryById,
   validateRequest,
   getCategoryById
@@ -37,6 +40,7 @@ router.get(
 
 router.post(
   "/api/categories",
+  authenticateJWT, isAdmin,
   validateCreateCategory,
   validateRequest,
   createCategory
@@ -44,6 +48,7 @@ router.post(
 
 router.put(
   "/api/categories/:id",
+  authenticateJWT, isAdmin,
   validateUpdateCategory,
   validateRequest,
   updateCategory
@@ -51,6 +56,7 @@ router.put(
 
 router.delete(
   "/api/categories/:id",
+  authenticateJWT, isAdmin,
   validateDeleteCategory,
   validateRequest,
   deleteCategory
@@ -58,6 +64,7 @@ router.delete(
 
 router.get(
   "/api/categories/:id/products",
+  authenticateJWT, 
   validateGetProductsByCategoryId,
   validateRequest,
   getProductsByCategoryId
