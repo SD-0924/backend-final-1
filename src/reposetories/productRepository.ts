@@ -84,6 +84,12 @@ export const getProductRatingsRepository = async (productId: string) => {
   });
 };
 
+export const getLimitedEditionRepository = async () => {
+  return await Product.findAll({
+    where: { isLimitedEdition: true },
+  });
+};
+
 export const getNewArrivalsRepository = async (
   dateThreshold: Date,
   limit: number,

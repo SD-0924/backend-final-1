@@ -8,6 +8,7 @@ import {
   getProductRatingsRepository,
   getProductsByBrandRepository,
   getProductsByCategoryRepository,
+  getLimitedEditionRepository,
 } from "../reposetories/productRepository";
 
 import { fetchBrandByIdService } from "./brandService";
@@ -55,6 +56,10 @@ export const deleteProductService = async (productId: string) => {
 
 export const getProductRatingsService = async (productId: string) => {
   return await getProductRatingsRepository(productId);
+};
+
+export const getLimitedEditionService = async () => {
+  return await getLimitedEditionRepository();
 };
 
 export const getNewArrivalsService = async (page: number, limit: number) => {

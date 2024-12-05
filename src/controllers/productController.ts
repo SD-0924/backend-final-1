@@ -9,6 +9,7 @@ import {
   getProductRatingsService,
   getProductsByBrandService,
   getProductsByCategoryService,
+  getLimitedEditionService,
 } from "../services/productService";
 import {
   uploadProductImageToFirebase,
@@ -188,6 +189,15 @@ export const getProductRatings = async (req: Request, res: Response) => {
     res.status(201).json(ratings);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch ratings" });
+  }
+};
+
+export const getLimitedEdition = async (req: Request, res: Response) => {
+  try {
+    const limitied = await getLimitedEditionService();
+    res.status(201).json(limitied);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch limited edition" });
   }
 };
 
