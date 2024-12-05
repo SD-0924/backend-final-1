@@ -7,6 +7,8 @@
  *     operationId: createDiscount
  *     tags:
  *       - Discount
+ *     security:
+ *       - JWT: []
  *     requestBody:
  *       required: true
  *       content:
@@ -31,8 +33,97 @@
  *     responses:
  *       201:
  *         description: Discount created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: "Discount created successfully"
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       example: "a5798ecf-54c9-4529-8a59-fd32dc5e41a2"
+ *                     discountPercentage:
+ *                       type: integer
+ *                       example: 5
+ *                     productId:
+ *                       type: string
+ *                       example: "7ced51a9-1403-4dbb-a34d-15b8287b50d9"
+ *                     startDate:
+ *                       type: string
+ *                       example: "2024-12-20T15:38:42.000Z"
+ *                     endDate:
+ *                       type: string
+ *                       example: "2024-12-20T15:38:42.000Z"
  *       400:
  *         description: Invalid input data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Invalid input data"
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Internal server error"
+ */
+
+/**
+ * @swagger
+ * /api/discounts:
+ *   get:
+ *     summary: Retrieve all discounts
+ *     description: Fetch a list of all discounts for products.
+ *     operationId: getAllDiscounts
+ *     tags:
+ *       - Discount
+ *     security:
+ *       - JWT: []
+ *     responses:
+ *       200:
+ *         description: A list of discounts
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: string
+ *                     description: The unique identifier of the discount.
+ *                   discountPercentage:
+ *                     type: integer
+ *                     description: The percentage of the discount.
+ *                   productId:
+ *                     type: string
+ *                     description: The ID of the product the discount applies to.
+ *                   startDate:
+ *                     type: string
+ *                     format: date-time
+ *                     description: The start date of the discount period.
+ *                   endDate:
+ *                     type: string
+ *                     format: date-time
+ *                     description: The end date of the discount period.
+ *       401:
+ *         description: Unauthorized, invalid or missing JWT token.
  *       500:
  *         description: Internal server error
  */
@@ -46,6 +137,8 @@
  *     operationId: getDiscountById
  *     tags:
  *       - Discount
+ *     security:
+ *       - JWT: []
  *     parameters:
  *       - name: discountId
  *         in: path
@@ -63,21 +156,21 @@
  *               properties:
  *                 id:
  *                   type: string
- *                   example: "b78c8d70-456f-412f-97b8-cf99f9b97b18"
+ *                   example: "6afd477d-e3cb-489a-ae09-3bb39fd6fde8"
  *                 discountPercentage:
  *                   type: integer
- *                   example: 20
+ *                   example: 30
  *                 productId:
  *                   type: string
- *                   example: "b78c8d70-456f-412f-97b8-cf99f9b97b18"
+ *                   example: "7ced51a9-1403-4dbb-a34d-15b8287b50d9"
  *                 startDate:
  *                   type: string
- *                   format: date
+ *                   format: date-time
  *                   example: "2024-12-01T00:00:00Z"
  *                 endDate:
  *                   type: string
- *                   format: date
- *                   example: "2024-12-31T00:00:00Z"
+ *                   format: date-time
+ *                   example: "2024-12-31T23:59:59Z"
  *       404:
  *         description: Discount not found
  *       500:
@@ -93,6 +186,8 @@
  *     operationId: getDiscountTimeRemainingById
  *     tags:
  *       - Discount
+ *     security:
+ *       - JWT: []
  *     parameters:
  *       - name: discountId
  *         in: path
@@ -110,13 +205,13 @@
  *               properties:
  *                 remainingTime:
  *                   type: integer
- *                   example: 3600000
+ *                   example: 2338243755
  *                 message:
  *                   type: string
  *                   example: "Discount is still active"
  *                 formattedTime:
  *                   type: string
- *                   example: "0 days, 1 hours, 0 minutes"
+ *                   example: "27 days, 1 hours, 30 minutes"
  *       404:
  *         description: Discount not found
  *       500:
@@ -132,6 +227,8 @@
  *     operationId: updateDiscount
  *     tags:
  *       - Discount
+ *     security:
+ *       - JWT: []
  *     parameters:
  *       - name: discountId
  *         in: path
@@ -148,21 +245,43 @@
  *             properties:
  *               discountPercentage:
  *                 type: integer
- *                 example: 25
+ *                 example: 33
  *               productId:
  *                 type: string
- *                 example: "b78c8d70-456f-412f-97b8-cf99f9b97b18"
+ *                 example: "7ced51a9-1403-4dbb-a34d-15b8287b50d9"
  *               startDate:
  *                 type: string
- *                 format: date
- *                 example: "2024-12-01T00:00:00Z"
+ *                 format: date-time
+ *                 example: "2024-12-20T15:38:42.000Z"
  *               endDate:
  *                 type: string
- *                 format: date
- *                 example: "2024-12-31T00:00:00Z"
+ *                 format: date-time
+ *                 example: "2024-12-20T15:38:42.000Z"
  *     responses:
  *       200:
  *         description: Discount updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                   example: "6afd477d-e3cb-489a-ae09-3bb39fd6fde8"
+ *                 discountPercentage:
+ *                   type: integer
+ *                   example: 33
+ *                 productId:
+ *                   type: string
+ *                   example: "7ced51a9-1403-4dbb-a34d-15b8287b50d9"
+ *                 startDate:
+ *                   type: string
+ *                   format: date-time
+ *                   example: "2024-12-20T15:38:42.000Z"
+ *                 endDate:
+ *                   type: string
+ *                   format: date-time
+ *                   example: "2024-12-20T15:38:42.000Z"
  *       400:
  *         description: Invalid input data
  *       404:
@@ -180,6 +299,8 @@
  *     operationId: deleteDiscount
  *     tags:
  *       - Discount
+ *     security:
+ *       - JWT: []
  *     parameters:
  *       - name: discountId
  *         in: path
