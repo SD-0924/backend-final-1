@@ -8,7 +8,7 @@ import {
   getProductRatingsRepository,
   getProductsByBrandRepository,
   getProductsByCategoryRepository,
-  getLimitedEditionRepository,,
+  getLimitedEditionRepository,
   getHandpickedProducts,
 } from "../reposetories/productRepository";
 
@@ -101,7 +101,6 @@ export const getProductsByCategoryService = async (categoryId: string) => {
   }
   return await getProductsByCategoryRepository(categoryId);
 };
-
 
 export const fetchHandpickedProducts = async () => {
   return await getHandpickedProducts();

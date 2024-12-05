@@ -9,7 +9,7 @@ import {
   getProductRatingsService,
   getProductsByBrandService,
   getProductsByCategoryService,
-  getLimitedEditionService,,
+  getLimitedEditionService,
   fetchHandpickedProducts,
 } from "../services/productService";
 import {
@@ -203,11 +203,9 @@ export const getLimitedEdition = async (req: Request, res: Response) => {
 };
 
 export const getNewArrivals = async (
-  
   req: Request,
- 
-  res: Response
 
+  res: Response
 ): Promise<void> => {
   try {
     const page = parseInt(req.query.page as string) || 1;
