@@ -1,4 +1,4 @@
-import { Op } from "sequelize";
+import { Op, fn, col, literal, where } from "sequelize";
 import sequelize from "../config/mySQLConf"; // Import sequelize instance
 import Product from "../models/Product";
 import Rating from "../models/Rating";
@@ -124,21 +124,55 @@ export const getHandpickedProducts = async () => {
   const currentDate = new Date();
 
   const products = await Product.findAll({
-    where: sequelize.literal(`
-      EXISTS (
-        SELECT 1
-        FROM ratings
-        WHERE ratings.ratingValue IS NOT NULL
-          AND ratings.productId = Product.id -- Use correct alias here
-        GROUP BY ratings.productId
-        HAVING AVG(ratings.ratingValue) > 4.5
-      )
+    include: [
+      {
+        model: Rating,
+        attributes: [], // No need to retrieve Rating fields
+        where: {
+          ratingValue: {
+            [Op.ne]: null,
+          },
+        },
+        required: true, // Only include products with ratings
+      },
+      {
+        model: Discount,
+        attributes: [], // No need to retrieve Discount fields
+        where: {
+          productId: col("Product.id"),
+          startDate: {
+            [Op.lte]: currentDate,
+          },
+          endDate: {
+            [Op.gte]: currentDate,
+          },
+        },
+        required: false, // Discounts are optional
+      },
+    ],
+    attributes: {
+      include: [
+        [
+          fn(
+            "COALESCE",
+            literal(
+              `Product.price - (Product.price * (SELECT discountPercentage / 100 FROM discounts WHERE productId = Product.id AND startDate <= '${currentDate.toISOString()}' AND endDate >= '${currentDate.toISOString()}' LIMIT 1))`
+            ),
+            col("Product.price")
+          ),
+          "finalPrice",
+        ],
+      ],
+    },
+    group: ["Product.id"], // Group by product ID to use aggregate functions
+    having: literal(`
+      AVG(ratings.ratingValue) > 4.5
       AND COALESCE(
         Product.price - (
           Product.price * (
             SELECT discountPercentage / 100
             FROM discounts
-            WHERE discounts.productId = Product.id -- Use correct alias here
+            WHERE discounts.productId = Product.id
               AND discounts.startDate <= '${currentDate.toISOString()}'
               AND discounts.endDate >= '${currentDate.toISOString()}'
             LIMIT 1

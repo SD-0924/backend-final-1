@@ -7,7 +7,7 @@ export const addRatingController = async (req: Request, res: Response): Promise<
         const newRating = await addRating(ratingData);
         res.status(201).json(newRating);
     } catch (error: any) {
-        res.status(400).json({ error: error.message });
+        res.status(400).json({ error});
     }
 };
 
