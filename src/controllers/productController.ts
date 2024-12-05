@@ -22,8 +22,8 @@ export const getAllProducts = async (req: Request, res: Response) => {
   try {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
-    const brandName = req.query.brandName;
-    const categoryName = req.query.categoryName;
+    const brandName = req.query.brandName || "";
+    const categoryName = req.query.categoryName || "";
 
     const { products, pagination } = await getAllProductsService(
       page,
@@ -52,7 +52,7 @@ export const getAllProducts = async (req: Request, res: Response) => {
       pagination,
     });
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch products" });
+    res.status(500).json({ error });
   }
 };
 
@@ -200,7 +200,6 @@ export const getNewArrivals = async (
     const limit = parseInt(req.query.limit as string) || 10;
 
     const { products, pagination } = await getNewArrivalsService(page, limit);
-    console.log("Fetched products:", products);
 
     const updatedProducts = await Promise.all(
       products.map(async (product) => {
@@ -228,8 +227,6 @@ export const getNewArrivals = async (
         return product;
       })
     );
-
-    console.log("Final updated products:", updatedProducts);
 
     res.status(200).json({
       success: true,

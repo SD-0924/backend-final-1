@@ -41,6 +41,13 @@ router.get(
   getAllProducts
 );
 router.get(
+  "/api/products/new-arrivals",
+  validateGetNewArrivals,
+  validatePaganation,
+  getNewArrivals
+);
+
+router.get(
   "/api/products/:id",
   authenticateJWT,
   validateGetProductById,
@@ -75,12 +82,6 @@ router.get(
   "/api/products/:id/ratings",
   validateGetProductRatings,
   getProductRatings
-);
-router.get(
-  "/api/products/new-arrivals",
-  validateGetNewArrivals,
-  validatePaganation,
-  getNewArrivals
 );
 router.get(
   "/api/products/by-brand/:brandId",

@@ -10,43 +10,45 @@ export const getAllProductsRepository = async (
   brandName?: any,
   categoryName?: any
 ) => {
-  const whereConditions: any = {};
-
-  if (categoryName) {
-    whereConditions.category = {
-      name: {
-        [Op.eq]: categoryName,
-      },
-    };
-  }
-
-  if (brandName) {
-    whereConditions.brand = {
-      name: {
-        [Op.eq]: brandName,
-      },
-    };
-  }
-
-  return await Product.findAndCountAll({
-    include: [
-      {
-        model: Category,
-        as: "category",
-        where: categoryName ? whereConditions.category : undefined,
-        attributes: ["name"],
-      },
-      {
-        model: Brand,
-        as: "brand",
-        where: brandName ? whereConditions.brand : undefined,
-        attributes: ["name"],
-      },
-    ],
-    order: [["createdAt", "DESC"]],
-    limit,
-    offset,
+  const brand = await Brand.findOne({
+    where: { name: brandName },
   });
+
+  const brandId = brand ? brand.dataValues.id : "";
+
+  const category = await Category.findOne({
+    where: { name: categoryName },
+  });
+
+  const categoryId = category ? category.dataValues.id : "";
+
+  const brandProducts = brandId
+    ? await Product.findAll({
+        where: { brandId },
+      })
+    : [];
+
+  // Step 2: Find all products based on categoryId
+  const categoryProducts = categoryId
+    ? await Product.findAll({
+        where: { categoryId },
+      })
+    : [];
+
+  // Step 3: Combine the products and remove duplicates by product ID
+  const allProducts = [...brandProducts, ...categoryProducts];
+
+  const uniqueProducts = Array.from(
+    new Map(
+      allProducts.map((product) => [product.dataValues.id, product])
+    ).values()
+  );
+
+  // Step 4: Return the unique products and the total count
+  return {
+    rows: uniqueProducts,
+    count: uniqueProducts.length,
+  };
 };
 
 export const getProductByIdRepository = async (productId: string) => {
