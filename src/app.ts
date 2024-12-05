@@ -12,6 +12,8 @@ import path from "path";
 import cookieParser from 'cookie-parser';
 import brandRouter from './routes/brandRoutes'
 import descountRouter from './routes/discountRouter';
+import orderRouter from './routes/orderRoutes';
+import orderItemRouter from './routes/orderItemRoutes';
 import cors from "cors";
 import ratingRouter from './routes/ratingRoutes'
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
@@ -43,6 +45,9 @@ app.use(descountRouter);
 app.use(brandRouter);
 app.use(cartRouts);
 app.use(ratingRouter);
+app.use(orderRouter);
+app.use(orderItemRouter);
+
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(errorHandlingMiddleware);
