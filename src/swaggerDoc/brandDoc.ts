@@ -97,6 +97,8 @@
  *     operationId: getBrandById
  *     tags:
  *       - Brand
+ *     security:
+ *       - JWT: []
  *     parameters:
  *       - name: id
  *         in: path
@@ -169,6 +171,8 @@
  *     operationId: getAllBrands
  *     tags:
  *       - Brand
+ *     security:
+ *       - JWT: []
  *     responses:
  *       200:
  *         description: A list of all brands
@@ -196,6 +200,8 @@
  *     operationId: updateBrand
  *     tags:
  *       - Brand
+ *     security:
+ *       - JWT: []
  *     parameters:
  *       - name: id
  *         in: path
@@ -289,6 +295,8 @@
  *     operationId: deleteBrandById
  *     tags:
  *       - Brand
+ *     security:
+ *       - JWT: []
  *     parameters:
  *       - name: id
  *         in: path
