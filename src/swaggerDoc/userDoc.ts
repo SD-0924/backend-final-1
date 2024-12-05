@@ -60,7 +60,7 @@
 
 /**
  * @swagger
- * /api/users/login:
+ * /login:
  *   post:
  *     summary: User login
  *     description: Logs in a user and returns a JWT token along with user details.
