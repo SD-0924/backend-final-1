@@ -1,6 +1,8 @@
 import { Op } from "sequelize";
+import sequelize from "../config/mySQLConf"; // Import sequelize instance
 import Product from "../models/Product";
 import Rating from "../models/Rating";
+import Discount from "../models/Discount";
 
 export const getAllProductsRepository = async () => {
   return await Product.findAll();
@@ -61,4 +63,54 @@ export const getNewArrivalsRepository = async (
 
 export const getProductsByBrandRepository = async (brandId: string) => {
   return await Product.findAll({ where: { brandId } });
+};
+
+export const getHandpickedProducts = async () => {
+  const currentDate = new Date();
+
+  // Subquery to calculate average rating for products
+  const subQuery = `
+    SELECT "productId", AVG("ratingValue") AS "averageRating"
+    FROM ratings
+    GROUP BY "productId"
+    HAVING AVG("ratingValue") > 4.5
+  `;
+
+  // Fetch products
+  const products = await Product.findAll({
+    attributes: [
+      "id",
+      "name",
+      "description",
+      "price",
+      "imageUrl",
+      [
+        sequelize.literal(`COALESCE(
+          products.price - (products.price * (SELECT "discountPercentage" / 100 FROM discounts WHERE "productId" = products.id AND "startDate" <= '${currentDate.toISOString()}' AND "endDate" >= '${currentDate.toISOString()}' LIMIT 1)),
+          products.price
+        )`),
+        "finalPrice",
+      ],
+    ],
+    include: [
+      {
+        model: Discount,
+        attributes: [], // No need to include discount fields in the final result
+        required: false,
+        where: {
+          startDate: { [Op.lte]: currentDate },
+          endDate: { [Op.gte]: currentDate },
+        },
+      },
+    ],
+    where: sequelize.literal(`
+      EXISTS (${subQuery} AND products.id = "productId")
+      AND COALESCE(
+        products.price - (products.price * (SELECT "discountPercentage" / 100 FROM discounts WHERE "productId" = products.id AND "startDate" <= '${currentDate.toISOString()}' AND "endDate" >= '${currentDate.toISOString()}' LIMIT 1)),
+        products.price
+      ) < 100
+    `),
+  });
+
+  return products;
 };

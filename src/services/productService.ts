@@ -6,12 +6,11 @@ import {
   deleteProductRepository,
   getNewArrivalsRepository,
   getProductRatingsRepository,
-  getProductsByBrandRepository
+  getProductsByBrandRepository,
+  getHandpickedProducts,
 } from "../reposetories/productRepository";
 
-import { 
-  fetchBrandByIdService 
-} from "./brandService";
+import { fetchBrandByIdService } from "./brandService";
 
 import Product from "../models/Product";
 
@@ -63,11 +62,15 @@ export const getNewArrivalsService = async (page: number, limit: number) => {
   };
 };
 
-export const getProductsByBrandService = async(brandId: string) => {
+export const getProductsByBrandService = async (brandId: string) => {
   // check if the brand exists or not by brandId
   const brandExists = await fetchBrandByIdService(brandId);
-    if (!brandExists) {
-        throw new Error("Brand not found");
-    }
+  if (!brandExists) {
+    throw new Error("Brand not found");
+  }
   return await getProductsByBrandRepository(brandId);
+};
+
+export const fetchHandpickedProducts = async () => {
+  return await getHandpickedProducts();
 };

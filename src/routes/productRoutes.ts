@@ -8,8 +8,9 @@ import {
   deleteProduct,
   getProductRatings,
   getNewArrivals,
+  getHandpicked,
   getProductsByBrandController,
-  getProductPriceAfterDiscount
+  getProductPriceAfterDiscount,
 } from "../controllers/productController";
 
 import {
@@ -21,22 +22,73 @@ import {
   validateGetProductRatings,
   validateGetNewArrivals,
   validateGetBrandProduct,
-  validateGetPriceAfterDiscount
+  validateGetPriceAfterDiscount,
 } from "../validations/productValidation";
 
 import { validateRequest } from "../middlewares/validateRequest";
-import { authenticateJWT, isAdmin } from '../middlewares/authMiddleware';
+import { authenticateJWT, isAdmin } from "../middlewares/authMiddleware";
 
 const router = Router();
 
 // Routes for products
-router.get("/api/products", authenticateJWT, validateGetAllProducts, getAllProducts);
-router.get("/api/products/:id", authenticateJWT, validateGetProductById, getProductById);
-router.post("/api/products", upload.single('image'), authenticateJWT, isAdmin, validateAddProduct, validateRequest, addProduct);
-router.put("/api/products/:id", upload.single('productImage'), authenticateJWT, isAdmin, validateUpdateProduct, updateProduct);
-router.delete("/api/products/:id", authenticateJWT, isAdmin, validateDeleteProduct, validateRequest, deleteProduct);
-router.get("/api/products/:id/ratings", validateGetProductRatings, getProductRatings);
-router.get("/api/products/new-arrivals", validateGetNewArrivals, getNewArrivals);
-router.get("/api/products/by-brand/:brandId", validateGetBrandProduct, validateGetAllProducts, getProductsByBrandController);
-router.get("/api/products/:id/price-after-discount", authenticateJWT,validateGetPriceAfterDiscount, getProductPriceAfterDiscount);
+router.get(
+  "/api/products",
+  authenticateJWT,
+  validateGetAllProducts,
+  getAllProducts
+);
+router.get(
+  "/api/products/new-arrivals",
+  validateGetNewArrivals,
+  getNewArrivals
+);
+router.get("/api/products/handpicked", getHandpicked);
+router.get(
+  "/api/products/:id",
+  authenticateJWT,
+  validateGetProductById,
+  getProductById
+);
+router.post(
+  "/api/products",
+  upload.single("image"),
+  authenticateJWT,
+  isAdmin,
+  validateAddProduct,
+  validateRequest,
+  addProduct
+);
+router.put(
+  "/api/products/:id",
+  upload.single("productImage"),
+  authenticateJWT,
+  isAdmin,
+  validateUpdateProduct,
+  updateProduct
+);
+router.delete(
+  "/api/products/:id",
+  authenticateJWT,
+  isAdmin,
+  validateDeleteProduct,
+  validateRequest,
+  deleteProduct
+);
+router.get(
+  "/api/products/:id/ratings",
+  validateGetProductRatings,
+  getProductRatings
+);
+router.get(
+  "/api/products/by-brand/:brandId",
+  validateGetBrandProduct,
+  validateGetAllProducts,
+  getProductsByBrandController
+);
+router.get(
+  "/api/products/:id/price-after-discount",
+  authenticateJWT,
+  validateGetPriceAfterDiscount,
+  getProductPriceAfterDiscount
+);
 export default router;
