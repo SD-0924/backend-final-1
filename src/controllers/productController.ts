@@ -52,7 +52,7 @@ export const getAllProducts = async (req: Request, res: Response) => {
       pagination,
     });
   } catch (error) {
-    res.status(500).json({ error });
+    res.status(500).json({ error: "Failed to fetch products" });
   }
 };
 
