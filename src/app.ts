@@ -1,6 +1,7 @@
 import express, { Application } from "express";
 import authRoutes from "./routes/userRoutes";
 import productRouts from "./routes/productRoutes";
+import ratingRouts from "./routes/ratingRoutes";
 import cartRouts from "./routes/cartRoutes";
 import couponRouts from "./routes/couponRoutes";
 import categoryRouts from "./routes/categoryRoutes";
@@ -9,21 +10,20 @@ import swaggerOptions from "./utils/swagger";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import path from "path";
-import cookieParser from 'cookie-parser';
-import brandRouter from './routes/brandRoutes'
-import descountRouter from './routes/discountRouter';
+import cookieParser from "cookie-parser";
+import brandRouter from "./routes/brandRoutes";
+import descountRouter from "./routes/discountRouter";
 import cors from "cors";
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
 
 const app: Application = express();
 
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views")); 
+app.set("views", path.join(__dirname, "views"));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
-
 
 // Allow specific origin
 app.use(
@@ -41,6 +41,7 @@ app.use(categoryRouts);
 app.use(descountRouter);
 app.use(brandRouter);
 app.use(cartRouts);
+app.use(ratingRouts);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
