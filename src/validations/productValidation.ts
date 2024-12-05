@@ -1,14 +1,27 @@
 import { body, param, query } from "express-validator";
 
-export const validateGetAllProducts = [
+export const validatePaganation = [
   query("limit")
     .optional()
     .isInt({ min: 1, max: 100 })
     .withMessage("Limit must be a number between 1 and 100"),
-  query("offset")
+  query("page")
     .optional()
     .isInt({ min: 0 })
-    .withMessage("Offset must be a non-negative integer"),
+    .withMessage("page must be a non-negative integer"),
+];
+
+export const validatGetAllProducts = [
+  query("brandName")
+    .optional()
+    .isString()
+    .isLength({ min: 3, max: 100 })
+    .withMessage("Brand name must be a string between 3 and 100 characters"),
+  query("categoryName")
+    .optional()
+    .isString()
+    .isLength({ min: 3, max: 100 })
+    .withMessage("Category name must be a string between 3 and 100 characters"),
 ];
 
 export const validateGetProductById = [
@@ -58,14 +71,6 @@ export const validateGetProductRatings = [
 ];
 
 export const validateGetNewArrivals = [
-  query("limit")
-    .optional()
-    .isInt({ min: 1, max: 100 })
-    .withMessage("Limit must be a number between 1 and 100"),
-  query("offset")
-    .optional()
-    .isInt({ min: 0 })
-    .withMessage("Offset must be a non-negative number"),
   query("dateThreshold")
     .optional()
     .isISO8601()
@@ -74,6 +79,10 @@ export const validateGetNewArrivals = [
 
 export const validateGetBrandProduct = [
   param("id").isUUID().withMessage("Brand ID must be a valid UUID"),
+];
+
+export const validateGetCategoryProduct = [
+  param("id").isUUID().withMessage("Category ID must be a valid UUID"),
 ];
 
 export const validateGetPriceAfterDiscount = [

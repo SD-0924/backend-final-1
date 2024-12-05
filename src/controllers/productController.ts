@@ -8,6 +8,8 @@ import {
   deleteProductService,
   getProductRatingsService,
   getProductsByBrandService,
+  getProductsByCategoryService,
+  getLimitedEditionService,,
   fetchHandpickedProducts,
 } from "../services/productService";
 import {
@@ -20,23 +22,37 @@ import { getDiscountTimeRemainingById } from "../services/discountService";
 
 export const getAllProducts = async (req: Request, res: Response) => {
   try {
-    const products = await getAllProductsService();
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const brandName = req.query.brandName || "";
+    const categoryName = req.query.categoryName || "";
 
-    // const productsWithImages = await Promise.all(
-    //   products.map(async (product) => {
-    //     if (product.imageUrl) {
-    //       product.imageUrl = await getProductImageUrlFromFirebase(
-    //         product.imageUrl
-    //       );
-    //     } else {
-    //       product.imageUrl =
-    //         "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png";
-    //     }
-    //     return product;
-    //   })
-    // );
+    const { products, pagination } = await getAllProductsService(
+      page,
+      limit,
+      brandName,
+      categoryName
+    );
 
-    res.status(201).json(products);
+    const productsWithImages = await Promise.all(
+      products.map(async (product) => {
+        if (product.imageUrl) {
+          product.imageUrl = await getProductImageUrlFromFirebase(
+            product.imageUrl
+          );
+        } else {
+          product.imageUrl =
+            "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png";
+        }
+        return product;
+      })
+    );
+
+    res.status(201).json({
+      success: true,
+      data: productsWithImages,
+      pagination,
+    });
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch products" });
   }
@@ -177,16 +193,27 @@ export const getProductRatings = async (req: Request, res: Response) => {
   }
 };
 
+export const getLimitedEdition = async (req: Request, res: Response) => {
+  try {
+    const limitied = await getLimitedEditionService();
+    res.status(201).json(limitied);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch limited edition" });
+  }
+};
+
 export const getNewArrivals = async (
+  
   req: Request,
+ 
   res: Response
+
 ): Promise<void> => {
   try {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
 
     const { products, pagination } = await getNewArrivalsService(page, limit);
-    console.log("Fetched products:", products);
 
     const updatedProducts = await Promise.all(
       products.map(async (product) => {
@@ -214,8 +241,6 @@ export const getNewArrivals = async (
         return product;
       })
     );
-
-    console.log("Final updated products:", updatedProducts);
 
     res.status(200).json({
       success: true,
@@ -269,6 +294,41 @@ export const getProductsByBrandController = async (
     console.error("Error fetching products by brand:", error.message);
     if (error.message === "Brand not found") {
       res.status(404).json({ message: "Brand not found" });
+    } else {
+      res.status(500).json({ message: "Server error" });
+    }
+  }
+};
+
+export const getProductsByCategory = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { categoryId } = req.params;
+  try {
+    const products = await getProductsByCategoryService(categoryId);
+    if (products.length === 0) {
+      res
+        .status(404)
+        .json({ message: "No products found for the specified category." });
+    } else {
+      const updatedProducts = await Promise.all(
+        products.map(async (product) => {
+          const updatedImageUrl = await getProductImageUrlFromFirebase(
+            product.imageUrl
+          );
+          return {
+            ...product.toJSON(),
+            logoUrl: updatedImageUrl,
+          };
+        })
+      );
+      res.status(200).json({ products: updatedProducts });
+    }
+  } catch (error: any) {
+    console.error("Error fetching products by category:", error.message);
+    if (error.message === "Category not found") {
+      res.status(404).json({ message: "Category not found" });
     } else {
       res.status(500).json({ message: "Server error" });
     }

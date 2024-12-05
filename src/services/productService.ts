@@ -7,15 +7,33 @@ import {
   getNewArrivalsRepository,
   getProductRatingsRepository,
   getProductsByBrandRepository,
+  getProductsByCategoryRepository,
+  getLimitedEditionRepository,,
   getHandpickedProducts,
 } from "../reposetories/productRepository";
 
 import { fetchBrandByIdService } from "./brandService";
+import { getCategoryByIdService } from "./categoryService";
 
 import Product from "../models/Product";
 
-export const getAllProductsService = async () => {
-  return await getAllProductsRepository();
+export const getAllProductsService = async (
+  page: number,
+  limit: number,
+  brandName?: any,
+  categoryName?: any
+) => {
+  const offset = (page - 1) * limit;
+  const { rows: products, count: totalProducts } =
+    await getAllProductsRepository(limit, offset, brandName, categoryName);
+  return {
+    products,
+    pagination: {
+      currentPage: page,
+      totalProducts,
+      totalPages: Math.ceil(totalProducts / limit),
+    },
+  };
 };
 
 export const getProductByIdService = async (productId: string) => {
@@ -39,6 +57,10 @@ export const deleteProductService = async (productId: string) => {
 
 export const getProductRatingsService = async (productId: string) => {
   return await getProductRatingsRepository(productId);
+};
+
+export const getLimitedEditionService = async () => {
+  return await getLimitedEditionRepository();
 };
 
 export const getNewArrivalsService = async (page: number, limit: number) => {
@@ -70,6 +92,16 @@ export const getProductsByBrandService = async (brandId: string) => {
   }
   return await getProductsByBrandRepository(brandId);
 };
+
+export const getProductsByCategoryService = async (categoryId: string) => {
+  //check if the category exists or not by categoryId
+  const categoryExists = await getCategoryByIdService(categoryId);
+  if (!categoryExists) {
+    throw new Error("Category not found");
+  }
+  return await getProductsByCategoryRepository(categoryId);
+};
+
 
 export const fetchHandpickedProducts = async () => {
   return await getHandpickedProducts();

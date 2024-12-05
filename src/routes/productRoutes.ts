@@ -10,11 +10,14 @@ import {
   getNewArrivals,
   getHandpicked,
   getProductsByBrandController,
+  getProductsByCategory,
   getProductPriceAfterDiscount,
+  getLimitedEdition,
 } from "../controllers/productController";
 
 import {
-  validateGetAllProducts,
+  validatePaganation,
+  validatGetAllProducts,
   validateGetProductById,
   validateAddProduct,
   validateUpdateProduct,
@@ -22,6 +25,7 @@ import {
   validateGetProductRatings,
   validateGetNewArrivals,
   validateGetBrandProduct,
+  validateGetCategoryProduct,
   validateGetPriceAfterDiscount,
 } from "../validations/productValidation";
 
@@ -34,15 +38,19 @@ const router = Router();
 router.get(
   "/api/products",
   authenticateJWT,
-  validateGetAllProducts,
+  validatePaganation,
+  validatGetAllProducts,
   getAllProducts
 );
+
+router.get("/api/products/limited-edition", getLimitedEdition);
 router.get(
   "/api/products/new-arrivals",
   validateGetNewArrivals,
+  validatePaganation,
   getNewArrivals
 );
-router.get("/api/products/handpicked", getHandpicked);
+
 router.get(
   "/api/products/:id",
   authenticateJWT,
@@ -82,8 +90,14 @@ router.get(
 router.get(
   "/api/products/by-brand/:brandId",
   validateGetBrandProduct,
-  validateGetAllProducts,
+  validatePaganation,
   getProductsByBrandController
+);
+router.get(
+  "/api/products/by-category/:categoryId",
+  validateGetCategoryProduct,
+  validatePaganation,
+  getProductsByCategory
 );
 router.get(
   "/api/products/:id/price-after-discount",
