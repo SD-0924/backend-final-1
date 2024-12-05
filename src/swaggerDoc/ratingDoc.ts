@@ -32,7 +32,7 @@
 
 /**
  * @swagger
- * /ratings:
+ * api/ratings:
  *   post:
  *     summary: Add a new rating
  *     tags: [Ratings]
@@ -51,7 +51,7 @@
 
 /**
  * @swagger
- * /ratings/{ratingId}:
+ * api/ratings/{ratingId}:
  *   put:
  *     summary: Edit an existing rating
  *     tags: [Ratings]
@@ -79,7 +79,7 @@
 
 /**
  * @swagger
- * /ratings/{ratingId}:
+ * api/ratings/{ratingId}:
  *   delete:
  *     summary: Delete a rating
  *     tags: [Ratings]
@@ -99,7 +99,7 @@
 
 /**
  * @swagger
- * /ratings/user/{userId}:
+ * api/ratings/user/{userId}:
  *   get:
  *     summary: Fetch ratings by user ID
  *     tags: [Ratings]
@@ -125,7 +125,7 @@
 
 /**
  * @swagger
- * /ratings/product/{productId}:
+ * api/ratings/product/{productId}:
  *   get:
  *     summary: Fetch ratings by product ID
  *     tags: [Ratings]
@@ -151,7 +151,7 @@
 
 /**
  * @swagger
- * /ratings/product/{productId}/average:
+ * api/ratings/product/{productId}/average:
  *   get:
  *     summary: Calculate average rating for a product
  *     tags: [Ratings]
@@ -178,7 +178,7 @@
 
 /**
  * @swagger
- * /ratings/product/{productId}/count:
+ * api/ratings/product/{productId}/count:
  *   get:
  *     summary: Count total ratings for a product
  *     tags: [Ratings]
