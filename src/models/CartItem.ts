@@ -7,7 +7,6 @@ interface CartItemAttributes {
   id: string;
   userId: string;
   productId: string;
-  price: number;
   quantity: number;
 }
 
@@ -20,7 +19,6 @@ class CartItem
   public id!: string;
   public userId!: string;
   public productId!: string;
-  public price!: number;
   public quantity!: number;
 }
 
@@ -46,10 +44,6 @@ CartItem.init(
         model: Product,
         key: "id",
       },
-    },
-    price: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
     },
     quantity: {
       type: DataTypes.INTEGER,

@@ -34,7 +34,6 @@ export const addItemToCartService = async (userId: string, productId: string, qu
     const newCartItem = await CartItem.create({
       userId,
       productId,
-      price: product.price,
       quantity,
     });
 

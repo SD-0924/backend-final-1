@@ -7,7 +7,6 @@ interface OrderItemAttributes {
   id: string;
   orderId: string;
   productId: string;
-  price: number;
   quantity: number;
 }
 
@@ -21,7 +20,6 @@ class OrderItem
   public id!: string;
   public orderId!: string;
   public productId!: string;
-  public price!: number;
   public quantity!: number;
 }
 
@@ -47,10 +45,6 @@ OrderItem.init(
         model: Product,
         key: "id",
       },
-    },
-    price: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
     },
     quantity: {
       type: DataTypes.INTEGER,
