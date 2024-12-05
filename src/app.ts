@@ -1,7 +1,6 @@
 import express, { Application } from "express";
 import authRoutes from "./routes/userRoutes";
 import productRouts from "./routes/productRoutes";
-import ratingRouts from "./routes/ratingRoutes";
 import cartRouts from "./routes/cartRoutes";
 import couponRouts from "./routes/couponRoutes";
 import categoryRouts from "./routes/categoryRoutes";
@@ -14,6 +13,7 @@ import cookieParser from "cookie-parser";
 import brandRouter from "./routes/brandRoutes";
 import descountRouter from "./routes/discountRouter";
 import cors from "cors";
+import ratingRouter from "./routes/ratingRoutes";
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
 
 const app: Application = express();
@@ -41,8 +41,7 @@ app.use(categoryRouts);
 app.use(descountRouter);
 app.use(brandRouter);
 app.use(cartRouts);
-app.use(ratingRouts);
-
+app.use(ratingRouter);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(errorHandlingMiddleware);
