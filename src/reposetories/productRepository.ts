@@ -123,46 +123,28 @@ export const getProductsByCategoryRepository = async (categoryId: string) => {
 export const getHandpickedProducts = async () => {
   const currentDate = new Date();
 
-  // Subquery to calculate average rating for products
-  const subQuery = `
-    SELECT "productId", AVG("ratingValue") AS "averageRating"
-    FROM ratings
-    GROUP BY "productId"
-    HAVING AVG("ratingValue") > 4.5
-  `;
-
-  // Fetch products
   const products = await Product.findAll({
-    attributes: [
-      "id",
-      "name",
-      "description",
-      "price",
-      "imageUrl",
-      [
-        sequelize.literal(`COALESCE(
-          products.price - (products.price * (SELECT "discountPercentage" / 100 FROM discounts WHERE "productId" = products.id AND "startDate" <= '${currentDate.toISOString()}' AND "endDate" >= '${currentDate.toISOString()}' LIMIT 1)),
-          products.price
-        )`),
-        "finalPrice",
-      ],
-    ],
-    include: [
-      {
-        model: Discount,
-        attributes: [], // No need to include discount fields in the final result
-        required: false,
-        where: {
-          startDate: { [Op.lte]: currentDate },
-          endDate: { [Op.gte]: currentDate },
-        },
-      },
-    ],
     where: sequelize.literal(`
-      EXISTS (${subQuery} AND products.id = "productId")
+      EXISTS (
+        SELECT 1
+        FROM ratings
+        WHERE ratings.ratingValue IS NOT NULL
+          AND ratings.productId = Product.id -- Use correct alias here
+        GROUP BY ratings.productId
+        HAVING AVG(ratings.ratingValue) > 4.5
+      )
       AND COALESCE(
-        products.price - (products.price * (SELECT "discountPercentage" / 100 FROM discounts WHERE "productId" = products.id AND "startDate" <= '${currentDate.toISOString()}' AND "endDate" >= '${currentDate.toISOString()}' LIMIT 1)),
-        products.price
+        Product.price - (
+          Product.price * (
+            SELECT discountPercentage / 100
+            FROM discounts
+            WHERE discounts.productId = Product.id -- Use correct alias here
+              AND discounts.startDate <= '${currentDate.toISOString()}'
+              AND discounts.endDate >= '${currentDate.toISOString()}'
+            LIMIT 1
+          )
+        ),
+        Product.price
       ) < 100
     `),
   });
