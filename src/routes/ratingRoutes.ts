@@ -1,4 +1,5 @@
 import express from 'express';
+
 import { addRatingController, editRatingController, deleteRatingController, getRatingsByUserIdController, getRatingsByProductIdController, calculateRatingController, countRatingsController } from '../controllers/ratingController';
 import { authenticateJWT, isAdmin } from '../middlewares/authMiddleware';
 import {validateRating} from '../validations/ratingValidation'
