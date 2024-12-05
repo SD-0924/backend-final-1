@@ -11,6 +11,7 @@ import {
   getProductsByBrandController,
   getProductsByCategory,
   getProductPriceAfterDiscount,
+  getLimitedEdition,
 } from "../controllers/productController";
 
 import {
@@ -40,6 +41,8 @@ router.get(
   validatGetAllProducts,
   getAllProducts
 );
+
+router.get("/api/products/limited-edition", getLimitedEdition);
 router.get(
   "/api/products/new-arrivals",
   validateGetNewArrivals,

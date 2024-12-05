@@ -85,7 +85,7 @@ Product.init(
         key: "id",
       },
     },
-    imageUrl: {  
+    imageUrl: {
       type: DataTypes.STRING,
       allowNull: true,
     },
@@ -104,5 +104,16 @@ Product.init(
     modelName: "Product",
   }
 );
+
+// Add hooks to update isLimitedEdition based on stockQuantity
+Product.addHook("beforeCreate", (product) => {
+  const productInstance = product as Product; // Cast to the Product type
+  productInstance.isLimitedEdition = productInstance.stockQuantity < 20;
+});
+
+Product.addHook("beforeUpdate", (product) => {
+  const productInstance = product as Product; // Cast to the Product type
+  productInstance.isLimitedEdition = productInstance.stockQuantity < 20;
+});
 
 export default Product;
