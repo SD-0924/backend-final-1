@@ -10,6 +10,7 @@ import {
   getProductsByBrandService,
   getProductsByCategoryService,
   getLimitedEditionService,
+  getDiscountedProductsService,
 } from "../services/productService";
 import {
   uploadProductImageToFirebase,
@@ -198,6 +199,20 @@ export const getLimitedEdition = async (req: Request, res: Response) => {
     res.status(201).json(limitied);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch limited edition" });
+  }
+};
+
+export const getDiscountedProducts = async (req: Request, res: Response) => {
+  try {
+    const products = await getDiscountedProductsService();
+
+    if (products.length === 0) {
+      res.status(404).json({ message: "No discounted products found." });
+    }
+
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error });
   }
 };
 

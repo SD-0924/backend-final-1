@@ -1,8 +1,9 @@
-import { Op } from "sequelize";
-import Product from "../models/Product";
+import { Op, fn, col, literal } from "sequelize";
 import Rating from "../models/Rating";
 import Category from "../models/Category";
 import Brand from "../models/Brand";
+import Discount from "../models/Discount";
+import Product from "../models/Product";
 
 export const getAllProductsRepository = async (
   limit: number,
@@ -88,6 +89,44 @@ export const getLimitedEditionRepository = async () => {
   return await Product.findAll({
     where: { isLimitedEdition: true },
   });
+};
+
+export const getDiscountedProductsRepository = async () => {
+  const currentDate = new Date();
+  // Step 1: Fetch discounts with discountPercentage <= 15
+  const discounts = await Discount.findAll({
+    where: {
+      discountPercentage: {
+        [Op.lte]: 15,
+      },
+      startDate: {
+        [Op.lte]: currentDate,
+      },
+      endDate: {
+        [Op.gte]: currentDate,
+      },
+    },
+    attributes: ["productId"], // Only fetch productId
+  });
+
+  // Step 2: Extract productIds
+  const productIds = discounts.map((discount) => discount.productId);
+
+  if (productIds.length === 0) {
+    // No matching products found
+    return [];
+  }
+
+  // Step 3: Fetch products based on productIds
+  const products = await Product.findAll({
+    where: {
+      id: {
+        [Op.in]: productIds,
+      },
+    },
+  });
+
+  return products;
 };
 
 export const getNewArrivalsRepository = async (
