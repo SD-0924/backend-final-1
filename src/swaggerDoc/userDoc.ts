@@ -63,7 +63,7 @@
  * /api/users/login:
  *   post:
  *     summary: User login
- *     description: Logs in a user and returns a JWT token.
+ *     description: Logs in a user and returns a JWT token along with user details.
  *     operationId: loginUser
  *     tags:
  *       - User
@@ -94,11 +94,26 @@
  *                 token:
  *                   type: string
  *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *                 firstName:
+ *                   type: string
+ *                   example: "John"
+ *                 lastName:
+ *                   type: string
+ *                   example: "Doe"
  *       401:
  *         description: Invalid email or password
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Invalid email or password"
  *       500:
  *         description: Internal server error
  */
+
 
 /**
  * @swagger
@@ -217,7 +232,7 @@
 
 /**
  * @swagger
- * /api/users/address/{id}:
+ * /users/address/{id}:
  *   put:
  *     summary: Update user address
  *     description: Update the address and mobile number for the user.
@@ -287,7 +302,7 @@
 
 /**
  * @swagger
- * /api/users/{id}:
+ * /users/{id}:
  *   delete:
  *     summary: Delete a user by ID
  *     description: Deletes the user with the provided ID from the system.

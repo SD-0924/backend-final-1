@@ -52,7 +52,8 @@ export const handleLogin = async (
 
     res.cookie("token", token, { httpOnly: true, secure: process.env.NODE_ENV === "production" });
 
-    res.status(200).json({ message: "Login successful", token });
+    res.status(200).json({ message: "Login successful", token,  firstName: user.first,
+      lastName: user.last, });
   } catch (error: unknown) {
     res.status(401).json({
       message: error instanceof Error ? error.message : "Unauthorized",
