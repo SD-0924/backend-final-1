@@ -19,8 +19,10 @@ import {
   getProductImageUrlFromFirebase,
   deleteProductImageFromFirebase,
 } from "../utils/firebaseUtils";
-import { getDiscountByProductId } from "../services/discountService";
-import { getDiscountTimeRemainingById } from "../services/discountService";
+import {
+  getDiscountByProductId,
+  getDiscountTimeRemainingById,
+} from "../services/discountService";
 
 export const getAllProducts = async (req: Request, res: Response) => {
   // BUG
@@ -44,7 +46,11 @@ export const getAllProducts = async (req: Request, res: Response) => {
 
     const updatedProducts = await Promise.all(
       products.map(async (product) => {
-        if (product.imageUrl) {
+        if (
+          product.imageUrl &&
+          product.imageUrl !==
+            "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png"
+        ) {
           try {
             const updatedImageUrl = await getProductImageUrlFromFirebase(
               product.imageUrl
@@ -69,9 +75,13 @@ export const getAllProducts = async (req: Request, res: Response) => {
       })
     );
 
+    const finalProducts = await getProductsfinalPriceAndDiscount(
+      updatedProducts
+    );
+
     res.status(201).json({
       success: true,
-      data: updatedProducts,
+      data: finalProducts,
       pagination,
     });
   } catch (error) {
@@ -558,4 +568,37 @@ export const getProductPriceAfterDiscount = async (
     res.status(500).json({ message: "Internal server error" });
     return;
   }
+};
+
+export const getProductsfinalPriceAndDiscount = async (products: any[]) => {
+  const updatedProducts = await Promise.all(
+    products.map(async (product) => {
+      try {
+        const discount = await getDiscountByProductId(product.dataValues.id);
+        let finalPrice = product.dataValues.price;
+        if (discount) {
+          const discountTimeStatus = await getDiscountTimeRemainingById(
+            discount.dataValues.id
+          );
+
+          if (discountTimeStatus.remainingTime > 0) {
+            const discountAmount =
+              product.dataValues.price *
+              (discount.dataValues.discountPercentage / 100);
+            finalPrice = product.dataValues.price - discountAmount;
+          }
+        }
+        return {
+          ...product.dataValues,
+          discountPercentage: discount
+            ? discount.dataValues.discountPercentage
+            : 0,
+          finalPrice,
+        };
+      } catch (error) {
+        throw error;
+      }
+    })
+  );
+  return updatedProducts;
 };
