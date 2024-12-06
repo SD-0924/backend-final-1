@@ -28,5 +28,6 @@ router.delete(
     validatecartId,
     validateRequest,
     deleteCartItemController
-)
+);
+
 export default router;

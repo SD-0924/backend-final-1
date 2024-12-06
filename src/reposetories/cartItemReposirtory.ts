@@ -49,3 +49,8 @@ export const deleteCartItemsByUserId = async (userId: string) => {
         where: { userId }
     });
 };
+
+// getting the items of specific user
+export const getCartItemsByUserIdRepository = async (userId: string) => {
+    return await CartItem.findAll({ where: { userId } });
+};
