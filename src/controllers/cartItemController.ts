@@ -2,7 +2,8 @@ import { Request, Response } from "express";
 import { 
     addToCartService,
     deleteCartItemService,
-    deleteAllCartItemsForUserService
+    deleteAllCartItemsForUserService,
+    getCartItemsWithProductDetailsService
 } from "../services/cartItemService";
 
 // add items to cart functionality
@@ -69,5 +70,19 @@ export const deleteAllCartItems = async (req: Request, res: Response) => {
                 message: "An error occurred while deleting the cart items. Please try again later."
             });
         }
+    }
+};
+
+export const getCartItemsByUserId = async (req: Request, res: Response) => {
+    try{
+        const userId = req.params.userId;
+        // fetching the cart items for the user
+        const cartItems = await getCartItemsWithProductDetailsService(userId);
+        
+        res.status(200).json(cartItems);
+
+    }catch(error: any){
+        
+
     }
 };

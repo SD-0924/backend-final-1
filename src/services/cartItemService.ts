@@ -100,6 +100,12 @@ export const deleteAllCartItemsForUserService = async (userId: string) => {
 
 export const getCartItemsWithProductDetailsService = async (userId: string) => {
 
+  const user = await getUserById(userId);
+
+  if (!user) {
+    throw new Error("User not found")
+  }
+
   const cartItems = await getCartItemsByUserId(userId);
 
   if (!cartItems || cartItems.length === 0) {
@@ -113,12 +119,14 @@ export const getCartItemsWithProductDetailsService = async (userId: string) => {
       if (!product) {
         throw new Error(`Product with ID ${cartItem.productId} not found.`);
       }
+      const totalPrice = cartItem.quantity * product.price;
       // returning the response
       return{
         id: cartItem.id,
         userId: cartItem.userId,
         productId: cartItem.productId,
         quantity: cartItem.quantity,
+        totalPrice,
         product: {
           name: product.name,
           price: product.price,
