@@ -293,7 +293,7 @@ export const getHandpicked = async (req: Request, res: Response) => {
   }
 };
 
-export const getProductsByBrandController = async (
+export const getProductsByBrand = async (
   req: Request,
   res: Response
 ): Promise<void> => {
