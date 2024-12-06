@@ -1,5 +1,8 @@
 import { Request, Response } from "express";
-import { addToCartService } from "../services/cartItemService";
+import { 
+    addToCartService,
+    deleteCartItemService
+} from "../services/cartItemService";
 
 // add items to cart functionality
 export const addToCartController = async (req: Request, res: Response) => {
@@ -30,3 +33,21 @@ export const addToCartController = async (req: Request, res: Response) => {
         }
     }
 };
+
+export const deleteCartItemController = async (req: Request, res: Response) => {
+    try{
+
+        const { cartId } = req.params;
+        await deleteCartItemService(cartId);
+        return res.status(200).json({ message: `cart item with id {$cartId} deleted successfully.` });
+
+    }catch(error: any){
+
+        if(error.message === "cartId not found"){
+            res.status(404).json({ message: "cartItem not found" });
+        }else{
+            res.status(500).json({ message: "An error occurred while deleting the cart item" });
+        }
+        
+    }
+}
