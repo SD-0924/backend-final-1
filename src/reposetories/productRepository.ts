@@ -1,8 +1,10 @@
-import { Op } from "sequelize";
+import { Op, fn, col, literal, where } from "sequelize";
+import sequelize from "../config/mySQLConf"; // Import sequelize instance
 import Product from "../models/Product";
 import Rating from "../models/Rating";
 import Category from "../models/Category";
 import Brand from "../models/Brand";
+import Discount from "../models/Discount";
 
 export const getAllProductsRepository = async (
   limit: number,
@@ -116,4 +118,70 @@ export const getProductsByBrandRepository = async (brandId: string) => {
 
 export const getProductsByCategoryRepository = async (categoryId: string) => {
   return await Product.findAll({ where: { categoryId } });
+};
+
+export const getHandpickedProducts = async () => {
+  const currentDate = new Date();
+
+  const products = await Product.findAll({
+    include: [
+      {
+        model: Rating,
+        attributes: [], // No need to retrieve Rating fields
+        where: {
+          ratingValue: {
+            [Op.ne]: null,
+          },
+        },
+        required: true, // Only include products with ratings
+      },
+      {
+        model: Discount,
+        attributes: [], // No need to retrieve Discount fields
+        where: {
+          productId: col("Product.id"),
+          startDate: {
+            [Op.lte]: currentDate,
+          },
+          endDate: {
+            [Op.gte]: currentDate,
+          },
+        },
+        required: false, // Discounts are optional
+      },
+    ],
+    attributes: {
+      include: [
+        [
+          fn(
+            "COALESCE",
+            literal(
+              `Product.price - (Product.price * (SELECT discountPercentage / 100 FROM discounts WHERE productId = Product.id AND startDate <= '${currentDate.toISOString()}' AND endDate >= '${currentDate.toISOString()}' LIMIT 1))`
+            ),
+            col("Product.price")
+          ),
+          "finalPrice",
+        ],
+      ],
+    },
+    group: ["Product.id"], // Group by product ID to use aggregate functions
+    having: literal(`
+      AVG(ratings.ratingValue) > 4.5
+      AND COALESCE(
+        Product.price - (
+          Product.price * (
+            SELECT discountPercentage / 100
+            FROM discounts
+            WHERE discounts.productId = Product.id
+              AND discounts.startDate <= '${currentDate.toISOString()}'
+              AND discounts.endDate >= '${currentDate.toISOString()}'
+            LIMIT 1
+          )
+        ),
+        Product.price
+      ) < 100
+    `),
+  });
+
+  return products;
 };
