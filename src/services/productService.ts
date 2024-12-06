@@ -9,6 +9,7 @@ import {
   getProductsByBrandRepository,
   getProductsByCategoryRepository,
   getLimitedEditionRepository,
+  getHandpickedProducts,
   getDiscountedProductsRepository,
 } from "../reposetories/productRepository";
 
@@ -104,4 +105,8 @@ export const getProductsByCategoryService = async (categoryId: string) => {
     throw new Error("Category not found");
   }
   return await getProductsByCategoryRepository(categoryId);
+};
+
+export const fetchHandpickedProducts = async () => {
+  return await getHandpickedProducts();
 };

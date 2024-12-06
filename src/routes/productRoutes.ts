@@ -8,6 +8,7 @@ import {
   deleteProduct,
   getProductRatings,
   getNewArrivals,
+  getHandpicked,
   getProductsByBrandController,
   getProductsByCategory,
   getProductPriceAfterDiscount,
@@ -53,6 +54,8 @@ router.get(
   validatePaganation,
   getNewArrivals
 );
+
+router.get("/api/products/handpicked", getHandpicked);
 
 router.get(
   "/api/products/:id",

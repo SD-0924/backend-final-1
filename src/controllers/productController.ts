@@ -10,6 +10,7 @@ import {
   getProductsByBrandService,
   getProductsByCategoryService,
   getLimitedEditionService,
+  fetchHandpickedProducts,
   getDiscountedProductsService,
 } from "../services/productService";
 import {
@@ -218,6 +219,7 @@ export const getDiscountedProducts = async (req: Request, res: Response) => {
 
 export const getNewArrivals = async (
   req: Request,
+
   res: Response
 ): Promise<void> => {
   try {
@@ -264,6 +266,15 @@ export const getNewArrivals = async (
       success: false,
       message: "Failed to fetch new arrivals. Please try again later.",
     });
+  }
+};
+
+export const getHandpicked = async (req: Request, res: Response) => {
+  try {
+    const handpickedProducts = await fetchHandpickedProducts();
+    res.status(200).json({ success: true, data: handpickedProducts });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error });
   }
 };
 
