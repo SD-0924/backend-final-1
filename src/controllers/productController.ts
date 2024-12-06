@@ -12,6 +12,7 @@ import {
   getLimitedEditionService,
   fetchHandpickedProducts,
   getDiscountedProductsService,
+  getPopularProductsService,
 } from "../services/productService";
 import {
   uploadProductImageToFirebase,
@@ -209,6 +210,20 @@ export const getDiscountedProducts = async (req: Request, res: Response) => {
 
     if (products.length === 0) {
       res.status(404).json({ message: "No discounted products found." });
+    }
+
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
+export const getPopularProducts = async (req: Request, res: Response) => {
+  try {
+    const products = await getPopularProductsService();
+
+    if (products.length === 0) {
+      res.status(404).json({ message: "No popular products found." });
     }
 
     res.status(200).json(products);

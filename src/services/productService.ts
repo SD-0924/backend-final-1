@@ -11,6 +11,7 @@ import {
   getLimitedEditionRepository,
   getHandpickedProducts,
   getDiscountedProductsRepository,
+  getPopularProductsRepository,
 } from "../reposetories/productRepository";
 
 import { fetchBrandByIdService } from "./brandService";
@@ -66,6 +67,10 @@ export const getLimitedEditionService = async () => {
 
 export const getDiscountedProductsService = async () => {
   return await getDiscountedProductsRepository();
+};
+
+export const getPopularProductsService = async () => {
+  return await getPopularProductsRepository();
 };
 
 export const getNewArrivalsService = async (page: number, limit: number) => {
