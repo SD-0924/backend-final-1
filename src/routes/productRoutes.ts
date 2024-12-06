@@ -38,7 +38,6 @@ const router = Router();
 
 // Routes for products
 router.get(
-  // bug
   "/api/products",
   authenticateJWT,
   validatePaganation,
