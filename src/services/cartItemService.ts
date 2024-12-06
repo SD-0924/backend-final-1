@@ -80,7 +80,7 @@ export const deleteCartItemService = async (cartId: string) =>{
   }
 };
 
-export const deleteAllCartItemsForUser = async (userId: string) => {
+export const deleteAllCartItemsForUserService = async (userId: string) => {
   try{
     const user = await getUserById(userId);
     if(!user){
