@@ -3,13 +3,15 @@ import { authenticateJWT } from "../middlewares/authMiddleware";
 import { 
     validateAddToCart,
     validatecartId,
-    validateuserId
+    validateuserId,
+    validateUpdateQuantity
 } from "../validations/cartItemValidation";
 import { validateRequest } from "../middlewares/validateRequest";
 import { 
     addToCartController,
     deleteCartItemController,
-    getCartItemsByUserId
+    getCartItemsByUserId,
+    updateCartItemQuantityController
 } from "../controllers/cartItemController";
 
 
@@ -38,5 +40,13 @@ router.get(
     validateuserId,
     validateRequest,
     getCartItemsByUserId
+)
+
+router.put(
+    "/api/carts/:cartId",
+    // authenticateJWT, will add it later
+    validateUpdateQuantity,
+    validateRequest,
+    updateCartItemQuantityController
 )
 export default router;
