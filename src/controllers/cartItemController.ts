@@ -82,7 +82,14 @@ export const getCartItemsByUserId = async (req: Request, res: Response) => {
         res.status(200).json(cartItems);
 
     }catch(error: any){
-        
-
+        if (error.message === "User not found") {
+            res.status(404).json({ error: "User not found" });
+        } else if (error.message === "No cart items found for this user.") {
+            res.status(404).json({ error: error.message });
+        } else if (error.message.includes("Product with ID")) {
+            res.status(404).json({ error: error.message });
+        } else {
+            res.status(500).json({ error: "Failed to fetch cart items." });
+        }   
     }
 };
