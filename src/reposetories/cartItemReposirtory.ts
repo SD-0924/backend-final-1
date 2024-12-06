@@ -18,9 +18,19 @@ export const updateCartItemQuantity = async (cartItemId: string, quantity: numbe
     );
 };
 
+// get cart by id
 export const getCartByCartId = async (cartId: string) => {
     return CartItem.findOne({
         where: { id: cartId },
         attributes: ['id', 'userId', 'productId', 'quantity'],
     });
+};
+
+// delete item from cartItem table
+export const deleteCartItemById = async (cartId: string) => {
+    const item = await CartItem.findByPk(cartId);
+    if (!item) {
+        throw new Error("cartId not found");
+    }
+    return await item.destroy(); 
 };
