@@ -16,6 +16,7 @@ import {
 
 import { fetchBrandByIdService, getBrandByIdService } from "./brandService";
 import { getCategoryByIdService } from "./categoryService";
+import { calculateRating, countRatingsForProduct } from "./ratingService";
 import {
   getDiscountTimeRemainingById,
   getDiscountByProductId,
@@ -33,7 +34,7 @@ export const getAllProductsService = async (
   const { rows: products, count: totalProducts } =
     await getAllProductsRepository(limit, offset, brandName, categoryName);
 
-  const finalProducts = await getProductsfinalPriceAndDiscount(products);
+  const finalProducts = await addCustomFields(products);
   return {
     products: finalProducts,
     pagination: {
@@ -46,7 +47,7 @@ export const getAllProductsService = async (
 
 export const getProductByIdService = async (productId: string) => {
   const product = await getProductByIdRepository(productId);
-  const updatedProduct = await getProductsfinalPriceAndDiscount([product]);
+  const updatedProduct = await addCustomFields([product]);
   return updatedProduct[0];
 };
 
@@ -71,17 +72,17 @@ export const getProductRatingsService = async (productId: string) => {
 
 export const getLimitedEditionService = async () => {
   const products = await getLimitedEditionRepository();
-  return await getProductsfinalPriceAndDiscount(products);
+  return await addCustomFields(products);
 };
 
 export const getDiscountedProductsService = async () => {
   const products = await getDiscountedProductsRepository();
-  return await getProductsfinalPriceAndDiscount(products);
+  return await addCustomFields(products);
 };
 
 export const getPopularProductsService = async () => {
   const products = await getPopularProductsRepository();
-  return await getProductsfinalPriceAndDiscount(products);
+  return await addCustomFields(products);
 };
 
 export const getNewArrivalsService = async (page: number, limit: number) => {
@@ -95,7 +96,7 @@ export const getNewArrivalsService = async (page: number, limit: number) => {
   const { rows: products, count: totalProducts } =
     await getNewArrivalsRepository(threeMonthsAgo, limit, offset);
 
-  const finalProducts = await getProductsfinalPriceAndDiscount(products);
+  const finalProducts = await addCustomFields(products);
   return {
     products: finalProducts,
     pagination: {
@@ -122,15 +123,15 @@ export const getProductsByCategoryService = async (categoryId: string) => {
     throw new Error("Category not found");
   }
   const products = await getProductsByCategoryRepository(categoryId);
-  return await getProductsfinalPriceAndDiscount(products);
+  return await addCustomFields(products);
 };
 
 export const fetchHandpickedProducts = async () => {
   const products = await getHandpickedProducts();
-  return await getProductsfinalPriceAndDiscount(products);
+  return await addCustomFields(products);
 };
 
-const getProductsfinalPriceAndDiscount = async (products: any[]) => {
+const addCustomFields = async (products: any[]) => {
   const updatedProducts = await Promise.all(
     products.map(async (product) => {
       try {
@@ -141,6 +142,10 @@ const getProductsfinalPriceAndDiscount = async (products: any[]) => {
           product.dataValues.categoryId
         );
         const categoryName = category ? category.dataValues.name : null;
+
+        const ratingAverage = await calculateRating(product.dataValues.id);
+        const ratingTotal = await countRatingsForProduct(product.dataValues.id);
+
         const discount = await getDiscountByProductId(product.dataValues.id);
         let finalPrice = product.dataValues.price;
         if (discount) {
@@ -159,6 +164,8 @@ const getProductsfinalPriceAndDiscount = async (products: any[]) => {
           ...product.dataValues,
           brandName,
           categoryName,
+          ratingAverage,
+          ratingTotal,
           discountPercentage: discount
             ? discount.dataValues.discountPercentage
             : 0,
