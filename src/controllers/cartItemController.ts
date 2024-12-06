@@ -39,7 +39,7 @@ export const deleteCartItemController = async (req: Request, res: Response) => {
 
         const { cartId } = req.params;
         await deleteCartItemService(cartId);
-        return res.status(200).json({ message: `cart item with id {$cartId} deleted successfully.` });
+        res.status(200).json({ message: `cart item with id {$cartId} deleted successfully.` });
 
     }catch(error: any){
 
@@ -48,6 +48,6 @@ export const deleteCartItemController = async (req: Request, res: Response) => {
         }else{
             res.status(500).json({ message: "An error occurred while deleting the cart item" });
         }
-        
+
     }
 }

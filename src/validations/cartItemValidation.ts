@@ -10,3 +10,8 @@ export const validateAddToCart = [
     body('quantity')
         .isInt({ gt: 0 }).withMessage('Quantity is required and must be a positive integer')
 ];
+
+export const validatecartId = [
+    param('cartId')
+        .isUUID().withMessage("Invalid cartId. It must be a valid UUID.")
+];
