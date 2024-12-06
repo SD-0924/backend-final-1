@@ -142,10 +142,10 @@ export const getCartItemsWithProductDetailsService = async (userId: string) => {
   return enrichedCartItems;
 };
 
-export const updateCartItemQuantityService = async( cartItemId: string, newQuantity: number) =>{
+export const updateCartItemQuantityService = async( cartId: string, newQuantity: number) =>{
 
   // validating the cartId
-  const cartItem = await getCartByCartId(cartItemId);
+  const cartItem = await getCartByCartId(cartId);
   if (!cartItem) {
     throw new Error("Cart item not found.");
   }

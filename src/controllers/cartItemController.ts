@@ -98,16 +98,23 @@ export const getCartItemsByUserId = async (req: Request, res: Response) => {
 export const updateCartItemQuantityController = async (req: Request, res: Response) => {
     try {
 
-    const cartItemId = req.params.cartItemId;
+    const cartId = req.params.cartId;
     const { quantity } = req.body;
 
-    const result = await updateCartItemQuantityService(cartItemId, quantity);
+    const result = await updateCartItemQuantityService(cartId, quantity);
     
     res.status(200).json({
         message: result.message,
         updatedCartItem: result.updatedCartItem,
     });
     } catch (error: any) {
-        res.status(500).json({ error: "Error updating the item quantity." });
+        if (error.message === "Cart item not found.") {
+            res.status(404).json({ error: "Cart item not found." });
+        }else if(error.message === "Product not found."){
+            res.status(404).json({ error: "Product not found." });
+        }else{
+            res.status(500).json({ error: "Error updating the item quantity." });
+        }
+        
     }
 };
