@@ -1,53 +1,6 @@
 /**
  * @swagger
  * /api/products:
- *   post:
- *     summary: Add a new product
- *     description: Add a new product to the catalog.
- *     operationId: addProduct
- *     tags:
- *       - Products  # التاج هنا هو "Products"
- *     security:
- *       - JWT: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 example: "Product Name"
- *               price:
- *                 type: number
- *                 format: float
- *                 example: 19.99
- *               description:
- *                 type: string
- *                 example: "This is a product description."
- *               category:
- *                 type: string
- *                 example: "Electronics"
- *               brand:
- *                 type: string
- *                 example: "Brand Name"
- *               imageUrl:
- *                 type: string
- *                 format: uri
- *                 example: "https://example.com/product-image.png"
- *     responses:
- *       201:
- *         description: Product added successfully
- *       400:
- *         description: Invalid request data
- *       500:
- *         description: Internal server error
- */
-
-/**
- * @swagger
- * /api/products:
  *   get:
  *     summary: Retrieve all products
  *     description: Fetch a list of all products with optional pagination.
@@ -57,6 +10,20 @@
  *     security:
  *       - JWT: []
  *     parameters:
+ *       - name: brandName
+ *         in: query
+ *         description: The brand name.
+ *         required: false
+ *         schema:
+ *           type: string
+ *           default: ""
+ *       - name: categoryName
+ *         in: query
+ *         description: The category name.
+ *         required: false
+ *         schema:
+ *           type: string
+ *           default: ""
  *       - name: page
  *         in: query
  *         description: The page number for pagination.
@@ -82,6 +49,121 @@
  *                 $ref: '#/components/schemas/Product'
  *       500:
  *         description: Failed to fetch products
+ */
+
+/**
+ * @swagger
+ * /api/products/discounted:
+ *   get:
+ *     summary: Get discounted products
+ *     description: Fetch any products that have a discount of 15% or more.
+ *     operationId: discounted
+ *     tags:
+ *       - Products  # التاج هنا هو "Products"
+ *     responses:
+ *       200:
+ *         description: List of discounted products
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Product'
+ *       500:
+ *         description: Failed to fetch discounted
+ */
+
+/**
+ * @swagger
+ * /api/products/popular:
+ *   get:
+ *     summary: Get popular products
+ *     description: Fetch any products that have a rating of 4.5 or more.
+ *     operationId: popular
+ *     tags:
+ *       - Products  # التاج هنا هو "Products"
+ *     responses:
+ *       200:
+ *         description: List of popular products
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Product'
+ *       500:
+ *         description: Failed to fetch popular
+ */
+
+/**
+ * @swagger
+ * /api/products:
+ *   post:
+ *     summary: Add a new product
+ *     description: Add a new product to the catalog.
+ *     operationId: addProduct
+ *     tags:
+ *       - Products  # التاج هنا هو "Products"
+ *     security:
+ *       - JWT: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: "Product Name"
+ *               price:
+ *                 type: number
+ *                 format: float
+ *                 example: 19.99
+ *               description:
+ *                 type: string
+ *                 example: "This is a product description."
+ *               stockQuantity:
+ *                  type: number
+ *                  example: 50
+ *               categoryId:
+ *                 type: string
+ *                 example: "not-required-bc4fbd6e-37a1-40ee-86ba-80bb695a56ee"
+ *               brandId:
+ *                 type: string
+ *                 example: "not-required-a84c591a-6a2b-4800-997f-32d39f5bf65a"
+ *               imageUrl:
+ *                 type: string
+ *                 format: uri
+ *                 example: "not-required-https://example.com/product-image.png"
+ *     responses:
+ *       201:
+ *         description: Product added successfully
+ *       400:
+ *         description: Invalid request data
+ *       500:
+ *         description: Internal server error
+ */
+/**
+ * @swagger
+ * /api/products/limited-edition:
+ *   get:
+ *     summary: Get limited edition products
+ *     description: Fetch any products that are less than 20 in stock.
+ *     operationId: limited-edition
+ *     tags:
+ *       - Products  # التاج هنا هو "Products"
+ *     responses:
+ *       200:
+ *         description: List of limited edition products
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Product'
+ *       500:
+ *         description: Failed to fetch limited edition
  */
 
 /**
@@ -197,6 +279,37 @@
 
 /**
  * @swagger
+ * /api/products/by-category/{categoryId}:
+ *   get:
+ *     summary: Get products by category Id
+ *     description: Fetch products that belong to a specific category.
+ *     operationId: getProductsByCategory
+ *     tags:
+ *       - Products  # التاج هنا هو "Products"
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         description: The ID of the category.
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Products by category
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Product'
+ *       404:
+ *         description: No products found for the category
+ *       500:
+ *         description: Failed to fetch products by category
+ */
+
+/**
+ * @swagger
  * /api/products/{id}:
  *   put:
  *     summary: Update a product
@@ -230,12 +343,12 @@
  *               description:
  *                 type: string
  *                 example: "Updated product description."
- *               category:
+ *               categoryId:
  *                 type: string
- *                 example: "Electronics"
- *               brand:
+ *                 example: "not-required-bc4fbd6e-37a1-40ee-86ba-80bb695a56ee"
+ *               brandId:
  *                 type: string
- *                 example: "Updated Brand Name"
+ *                 example: "not-required-a84c591a-6a2b-4800-997f-32d39f5bf65a"
  *               imageUrl:
  *                 type: string
  *                 format: uri
