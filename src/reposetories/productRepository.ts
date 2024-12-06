@@ -94,37 +94,17 @@ export const getLimitedEditionRepository = async () => {
 
 export const getDiscountedProductsRepository = async () => {
   const currentDate = new Date();
-  // Step 1: Fetch discounts with discountPercentage <= 15
-  const discounts = await Discount.findAll({
-    where: {
-      discountPercentage: {
-        [Op.lte]: 15,
-      },
-      startDate: {
-        [Op.lte]: currentDate,
-      },
-      endDate: {
-        [Op.gte]: currentDate,
-      },
-    },
-    attributes: ["productId"], // Only fetch productId
-  });
-
-  // Step 2: Extract productIds
-  const productIds = discounts.map((discount) => discount.productId);
-
-  if (productIds.length === 0) {
-    // No matching products found
-    return [];
-  }
-
-  // Step 3: Fetch products based on productIds
   const products = await Product.findAll({
-    where: {
-      id: {
-        [Op.in]: productIds,
-      },
-    },
+    where: sequelize.literal(`
+      EXISTS (
+        SELECT 1
+        FROM discounts
+        WHERE discounts.productId = Product.id
+          AND discounts.discountPercentage >= 15 -- Ensure discount is 15% or more
+          AND discounts.startDate <= '${currentDate.toISOString()}' -- Active discount
+          AND discounts.endDate >= '${currentDate.toISOString()}' -- Active discount
+      )
+    `),
   });
 
   return products;
