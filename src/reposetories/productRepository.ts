@@ -104,13 +104,21 @@ export const getProductRatingsRepository = async (productId: string) => {
   });
 };
 
-export const getLimitedEditionRepository = async () => {
+export const getLimitedEditionRepository = async (
+  limit: number,
+  offset: number
+) => {
   return await Product.findAll({
     where: { isLimitedEdition: true },
+    limit,
+    offset,
   });
 };
 
-export const getDiscountedProductsRepository = async () => {
+export const getDiscountedProductsRepository = async (
+  limit: number,
+  offset: number
+) => {
   const currentDate = new Date();
   const products = await Product.findAll({
     where: sequelize.literal(`
@@ -123,12 +131,17 @@ export const getDiscountedProductsRepository = async () => {
           AND discounts.endDate >= '${currentDate.toISOString()}' -- Active discount
       )
     `),
+    limit,
+    offset,
   });
 
   return products;
 };
 
-export const getPopularProductsRepository = async () => {
+export const getPopularProductsRepository = async (
+  limit: number,
+  offset: number
+) => {
   const currentDate = new Date();
   const products = await Product.findAll({
     where: sequelize.literal(`
@@ -141,6 +154,8 @@ export const getPopularProductsRepository = async () => {
         HAVING AVG(ratings.ratingValue) >= 4.5 -- Popular products with average rating >= 4.5
       )
     `),
+    limit,
+    offset,
   });
 
   return products;
@@ -166,15 +181,23 @@ export const getNewArrivalsRepository = async (
   });
 };
 
-export const getProductsByBrandRepository = async (brandId: string) => {
-  return await Product.findAll({ where: { brandId } });
+export const getProductsByBrandRepository = async (
+  brandId: string,
+  limit: number,
+  offset: number
+) => {
+  return await Product.findAll({ where: { brandId }, limit, offset });
 };
 
-export const getProductsByCategoryRepository = async (categoryId: string) => {
-  return await Product.findAll({ where: { categoryId } });
+export const getProductsByCategoryRepository = async (
+  categoryId: string,
+  limit: number,
+  offset: number
+) => {
+  return await Product.findAll({ where: { categoryId }, limit, offset });
 };
 
-export const getHandpickedProducts = async () => {
+export const getHandpickedProducts = async (limit: number, offset: number) => {
   const currentDate = new Date();
 
   const products = await Product.findAll({
@@ -201,6 +224,8 @@ export const getHandpickedProducts = async () => {
       Product.price
     ) < 100
   `),
+    limit,
+    offset,
   });
 
   return products;
