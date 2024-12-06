@@ -1,7 +1,7 @@
 import express, { Application } from "express";
 import authRoutes from "./routes/userRoutes";
 import productRouts from "./routes/productRoutes";
-import cartRouts from "./routes/cartRoutes";
+import cartRouts from "./routes/cartItemRoutes";
 import couponRouts from "./routes/couponRoutes";
 import categoryRouts from "./routes/categoryRoutes";
 import errorHandlingMiddleware from "./errorHandling";
