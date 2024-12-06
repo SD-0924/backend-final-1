@@ -25,7 +25,7 @@ export const getAllProductsRepository = async (
   const categoryId = category ? category.dataValues.id : "";
 
   if (brandId === "" && categoryId === "") {
-    const noFillterProducts = await Product.findAll();
+    const noFillterProducts = await Product.findAll({ limit, offset });
     return {
       rows: noFillterProducts,
       count: noFillterProducts.length,
@@ -33,11 +33,15 @@ export const getAllProductsRepository = async (
   }
 
   const noFillterProducts =
-    brandId === "" && categoryId === "" ? await Product.findAll() : [];
+    brandId === "" && categoryId === ""
+      ? await Product.findAll({ limit, offset })
+      : [];
 
   const brandProducts = brandId
     ? await Product.findAll({
         where: { brandId },
+        limit,
+        offset,
       })
     : [];
 
@@ -45,6 +49,8 @@ export const getAllProductsRepository = async (
   const categoryProducts = categoryId
     ? await Product.findAll({
         where: { categoryId },
+        limit,
+        offset,
       })
     : [];
 
