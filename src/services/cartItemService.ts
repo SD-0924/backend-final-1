@@ -4,7 +4,8 @@ import{
     updateCartItemQuantity,
     getCartByCartId,
     deleteCartItemById,
-    deleteCartItemsByUserId
+    deleteCartItemsByUserId,
+    getCartItemsByUserId
 } from "../reposetories/cartItemReposirtory";
 
 import{
@@ -14,6 +15,10 @@ import{
 import{
     getUserById
 } from "../reposetories/userRepository";
+
+import{
+  getProductImageUrlFromFirebase
+} from "../utils/firebaseUtils";
 
 export const addToCartService = async(userId: string, productId: string, quantity: number) =>{
 
@@ -91,4 +96,40 @@ export const deleteAllCartItemsForUserService = async (userId: string) => {
   }catch(error){
     throw new Error("An error occurred while deleting the cart item");
   }
+};
+
+export const getCartItemsWithProductDetailsService = async (userId: string) => {
+
+  const cartItems = await getCartItemsByUserId(userId);
+
+  if (!cartItems || cartItems.length === 0) {
+    throw new Error("No cart items found for this user.");
+  }
+
+  const enrichedCartItems = await Promise.all(
+    cartItems.map(async (cartItem) => {
+      // fetchign the product from the id
+      const product = await getProductByIdRepository(cartItem.productId);
+      if (!product) {
+        throw new Error(`Product with ID ${cartItem.productId} not found.`);
+      }
+      // returning the response
+      return{
+        id: cartItem.id,
+        userId: cartItem.userId,
+        productId: cartItem.productId,
+        quantity: cartItem.quantity,
+        product: {
+          name: product.name,
+          price: product.price,
+          stockQuantity: product.stockQuantity,
+          imageUrl: product.imageUrl
+            ? await getProductImageUrlFromFirebase(product.imageUrl)
+            : "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png",
+        },
+      };
+    })
+  );
+  
+  return enrichedCartItems;
 };
