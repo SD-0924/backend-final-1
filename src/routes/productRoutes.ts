@@ -9,7 +9,7 @@ import {
   getProductRatings,
   getNewArrivals,
   getHandpicked,
-  getProductsByBrandController,
+  getProductsByBrand,
   getProductsByCategory,
   getProductPriceAfterDiscount,
   getLimitedEdition,
@@ -100,7 +100,7 @@ router.get(
   "/api/products/by-brand/:brandId",
   validateGetBrandProduct,
   validatePaganation,
-  getProductsByBrandController
+  getProductsByBrand
 );
 router.get(
   "/api/products/by-category/:categoryId",
