@@ -13,6 +13,7 @@ import {
   getDiscountedProductsRepository,
   getPopularProductsRepository,
 } from "../reposetories/productRepository";
+import { getBrandById } from "../reposetories/brandRepository";
 
 import { fetchBrandByIdService } from "./brandService";
 import { getCategoryByIdService } from "./categoryService";
@@ -134,6 +135,8 @@ const getProductsfinalPriceAndDiscount = async (products: any[]) => {
   const updatedProducts = await Promise.all(
     products.map(async (product) => {
       try {
+        const brand = await getBrandById(product.dataValues.brandId);
+        const brandName = brand ? brand.dataValues.name : null;
         const discount = await getDiscountByProductId(product.dataValues.id);
         let finalPrice = product.dataValues.price;
         if (discount) {
@@ -150,6 +153,7 @@ const getProductsfinalPriceAndDiscount = async (products: any[]) => {
         }
         return {
           ...product.dataValues,
+          brandName,
           discountPercentage: discount
             ? discount.dataValues.discountPercentage
             : 0,
