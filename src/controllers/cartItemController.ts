@@ -3,7 +3,8 @@ import {
     addToCartService,
     deleteCartItemService,
     deleteAllCartItemsForUserService,
-    getCartItemsWithProductDetailsService
+    getCartItemsWithProductDetailsService,
+    updateCartItemQuantityService
 } from "../services/cartItemService";
 
 // add items to cart functionality
@@ -91,5 +92,22 @@ export const getCartItemsByUserId = async (req: Request, res: Response) => {
         } else {
             res.status(500).json({ error: "Failed to fetch cart items." });
         }   
+    }
+};
+
+export const updateCartItemQuantityController = async (req: Request, res: Response) => {
+    try {
+
+    const cartItemId = req.params.cartItemId;
+    const { quantity } = req.body;
+
+    const result = await updateCartItemQuantityService(cartItemId, quantity);
+    
+    res.status(200).json({
+        message: result.message,
+        updatedCartItem: result.updatedCartItem,
+    });
+    } catch (error: any) {
+        res.status(500).json({ error: "Error updating the item quantity." });
     }
 };
