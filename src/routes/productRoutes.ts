@@ -39,7 +39,7 @@ const router = Router();
 // Routes for products
 router.get(
   "/api/products",
-  authenticateJWT,
+  //authenticateJWT,
   validatePaganation,
   validatGetAllProducts,
   getAllProducts

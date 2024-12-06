@@ -10,7 +10,9 @@ const router = express.Router();
 router.post('/register', validateUserRegistration, validateRequest, handleRegister);
 
 router.post('/login', validateUserLogin, validateRequest, handleLogin);
-router.get('/users', authenticateJWT, handleGetAllUsers);
+router.get('/users', 
+    //authenticateJWT, 
+    handleGetAllUsers);
 router.get('/users/:id', authenticateJWT, getUserByIdController);
 router.put('users/address/:id',authenticateJWT, handleUpdateUseradress); // Update user by ID
 router.put("/users/:id",authenticateJWT, validateUserUpdate, handleUpdateUser);
