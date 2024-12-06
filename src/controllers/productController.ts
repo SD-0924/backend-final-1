@@ -25,7 +25,6 @@ import {
 } from "../services/discountService";
 
 export const getAllProducts = async (req: Request, res: Response) => {
-  // BUG
   try {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
@@ -75,13 +74,9 @@ export const getAllProducts = async (req: Request, res: Response) => {
       })
     );
 
-    const finalProducts = await getProductsfinalPriceAndDiscount(
-      updatedProducts
-    );
-
     res.status(201).json({
       success: true,
-      data: finalProducts,
+      data: updatedProducts,
       pagination,
     });
   } catch (error) {
@@ -568,37 +563,4 @@ export const getProductPriceAfterDiscount = async (
     res.status(500).json({ message: "Internal server error" });
     return;
   }
-};
-
-export const getProductsfinalPriceAndDiscount = async (products: any[]) => {
-  const updatedProducts = await Promise.all(
-    products.map(async (product) => {
-      try {
-        const discount = await getDiscountByProductId(product.dataValues.id);
-        let finalPrice = product.dataValues.price;
-        if (discount) {
-          const discountTimeStatus = await getDiscountTimeRemainingById(
-            discount.dataValues.id
-          );
-
-          if (discountTimeStatus.remainingTime > 0) {
-            const discountAmount =
-              product.dataValues.price *
-              (discount.dataValues.discountPercentage / 100);
-            finalPrice = product.dataValues.price - discountAmount;
-          }
-        }
-        return {
-          ...product.dataValues,
-          discountPercentage: discount
-            ? discount.dataValues.discountPercentage
-            : 0,
-          finalPrice,
-        };
-      } catch (error) {
-        throw error;
-      }
-    })
-  );
-  return updatedProducts;
 };
