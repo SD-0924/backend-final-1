@@ -3,7 +3,8 @@ import{
     getCartItemByUserAndProduct,
     updateCartItemQuantity,
     getCartByCartId,
-    deleteCartItemById
+    deleteCartItemById,
+    deleteCartItemsByUserId
 } from "../reposetories/cartItemReposirtory";
 
 import{
@@ -74,6 +75,19 @@ export const deleteCartItemService = async (cartId: string) =>{
     }
     await deleteCartItemById(cartId);
 
+  }catch(error){
+    throw new Error("An error occurred while deleting the cart item");
+  }
+};
+
+export const deleteAllCartItemsForUser = async (userId: string) => {
+  try{
+    const user = await getUserById(userId);
+    if(!user){
+      throw new Error("User not found");
+    }
+    await deleteCartItemsByUserId(userId);
+    
   }catch(error){
     throw new Error("An error occurred while deleting the cart item");
   }
