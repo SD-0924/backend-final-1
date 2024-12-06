@@ -24,6 +24,9 @@ export const getAllProductsRepository = async (
 
   const categoryId = category ? category.dataValues.id : "";
 
+  const noFillterProducts =
+    brandId === "" && categoryId === "" ? await Product.findAll() : [];
+
   const brandProducts = brandId
     ? await Product.findAll({
         where: { brandId },
@@ -38,6 +41,12 @@ export const getAllProductsRepository = async (
     : [];
 
   // Step 3: Combine the products and remove duplicates by product ID
+  if (noFillterProducts.length > 0) {
+    return {
+      rows: noFillterProducts,
+      count: noFillterProducts.length,
+    };
+  }
   const allProducts = [...brandProducts, ...categoryProducts];
 
   const uniqueProducts = Array.from(
