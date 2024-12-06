@@ -2,12 +2,14 @@ import { Router } from "express";
 import { authenticateJWT } from "../middlewares/authMiddleware";
 import { 
     validateAddToCart,
-    validatecartId
+    validatecartId,
+    validateuserId
 } from "../validations/cartItemValidation";
 import { validateRequest } from "../middlewares/validateRequest";
 import { 
     addToCartController,
-    deleteCartItemController
+    deleteCartItemController,
+    getCartItemsByUserId
 } from "../controllers/cartItemController";
 
 
@@ -30,4 +32,11 @@ router.delete(
     deleteCartItemController
 );
 
+router.get(
+    "/api/carts/:userId",
+    // authenticateJWT, will add it later
+    validateuserId,
+    validateRequest,
+    getCartItemsByUserId
+)
 export default router;
