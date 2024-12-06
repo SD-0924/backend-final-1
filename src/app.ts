@@ -9,24 +9,23 @@ import swaggerOptions from "./utils/swagger";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import path from "path";
-import cookieParser from 'cookie-parser';
-import brandRouter from './routes/brandRoutes'
-import descountRouter from './routes/discountRouter';
-import orderRouter from './routes/orderRoutes';
-import orderItemRouter from './routes/orderItemRoutes';
+import cookieParser from "cookie-parser";
+import brandRouter from "./routes/brandRoutes";
+import descountRouter from "./routes/discountRouter";
+import orderRouter from "./routes/orderRoutes";
+import orderItemRouter from "./routes/orderItemRoutes";
 import cors from "cors";
-import ratingRouter from './routes/ratingRoutes'
+import ratingRouter from "./routes/ratingRoutes";
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
 
 const app: Application = express();
 
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views")); 
+app.set("views", path.join(__dirname, "views"));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
-
 
 // Allow specific origin
 app.use(

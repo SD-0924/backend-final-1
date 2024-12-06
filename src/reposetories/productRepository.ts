@@ -1,8 +1,10 @@
-import { Op } from "sequelize";
+import { Op, fn, col, literal, where } from "sequelize";
+import sequelize from "../config/mySQLConf"; // Import sequelize instance
 import Product from "../models/Product";
 import Rating from "../models/Rating";
 import Category from "../models/Category";
 import Brand from "../models/Brand";
+import Discount from "../models/Discount";
 
 export const getAllProductsRepository = async (
   limit: number,
@@ -90,6 +92,42 @@ export const getLimitedEditionRepository = async () => {
   });
 };
 
+export const getDiscountedProductsRepository = async () => {
+  const currentDate = new Date();
+  const products = await Product.findAll({
+    where: sequelize.literal(`
+      EXISTS (
+        SELECT 1
+        FROM discounts
+        WHERE discounts.productId = Product.id
+          AND discounts.discountPercentage >= 15 -- Ensure discount is 15% or more
+          AND discounts.startDate <= '${currentDate.toISOString()}' -- Active discount
+          AND discounts.endDate >= '${currentDate.toISOString()}' -- Active discount
+      )
+    `),
+  });
+
+  return products;
+};
+
+export const getPopularProductsRepository = async () => {
+  const currentDate = new Date();
+  const products = await Product.findAll({
+    where: sequelize.literal(`
+      EXISTS (
+        SELECT 1
+        FROM ratings
+        WHERE ratings.productId = Product.id -- Link ratings to products
+          AND ratings.ratingValue IS NOT NULL
+        GROUP BY ratings.productId
+        HAVING AVG(ratings.ratingValue) >= 4.5 -- Popular products with average rating >= 4.5
+      )
+    `),
+  });
+
+  return products;
+};
+
 export const getNewArrivalsRepository = async (
   dateThreshold: Date,
   limit: number,
@@ -116,4 +154,36 @@ export const getProductsByBrandRepository = async (brandId: string) => {
 
 export const getProductsByCategoryRepository = async (categoryId: string) => {
   return await Product.findAll({ where: { categoryId } });
+};
+
+export const getHandpickedProducts = async () => {
+  const currentDate = new Date();
+
+  const products = await Product.findAll({
+    where: sequelize.literal(`
+    EXISTS (
+      SELECT 1
+      FROM ratings
+      WHERE ratings.ratingValue IS NOT NULL
+        AND ratings.productId = Product.id -- Use correct alias here
+      GROUP BY ratings.productId
+      HAVING AVG(ratings.ratingValue) > 4.5
+    )
+    AND COALESCE(
+      Product.price - (
+        Product.price * (
+          SELECT discountPercentage / 100
+          FROM discounts
+          WHERE discounts.productId = Product.id -- Use correct alias here
+            AND discounts.startDate <= '${currentDate.toISOString()}'
+            AND discounts.endDate >= '${currentDate.toISOString()}'
+          LIMIT 1
+        )
+      ),
+      Product.price
+    ) < 100
+  `),
+  });
+
+  return products;
 };

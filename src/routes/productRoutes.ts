@@ -8,10 +8,13 @@ import {
   deleteProduct,
   getProductRatings,
   getNewArrivals,
+  getHandpicked,
   getProductsByBrandController,
   getProductsByCategory,
   getProductPriceAfterDiscount,
   getLimitedEdition,
+  getDiscountedProducts,
+  getPopularProducts,
 } from "../controllers/productController";
 
 import {
@@ -43,12 +46,19 @@ router.get(
 );
 
 router.get("/api/products/limited-edition", getLimitedEdition);
+
+router.get("/api/products/discounted", getDiscountedProducts);
+
+router.get("/api/products/popular", getPopularProducts);
+
 router.get(
   "/api/products/new-arrivals",
   validateGetNewArrivals,
   validatePaganation,
   getNewArrivals
 );
+
+router.get("/api/products/handpicked", getHandpicked);
 
 router.get(
   "/api/products/:id",

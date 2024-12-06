@@ -10,6 +10,9 @@ import {
   getProductsByBrandService,
   getProductsByCategoryService,
   getLimitedEditionService,
+  fetchHandpickedProducts,
+  getDiscountedProductsService,
+  getPopularProductsService,
 } from "../services/productService";
 import {
   uploadProductImageToFirebase,
@@ -201,8 +204,37 @@ export const getLimitedEdition = async (req: Request, res: Response) => {
   }
 };
 
+export const getDiscountedProducts = async (req: Request, res: Response) => {
+  try {
+    const products = await getDiscountedProductsService();
+
+    if (products.length === 0) {
+      res.status(404).json({ message: "No discounted products found." });
+    }
+
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
+export const getPopularProducts = async (req: Request, res: Response) => {
+  try {
+    const products = await getPopularProductsService();
+
+    if (products.length === 0) {
+      res.status(404).json({ message: "No popular products found." });
+    }
+
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
 export const getNewArrivals = async (
   req: Request,
+
   res: Response
 ): Promise<void> => {
   try {
@@ -249,6 +281,15 @@ export const getNewArrivals = async (
       success: false,
       message: "Failed to fetch new arrivals. Please try again later.",
     });
+  }
+};
+
+export const getHandpicked = async (req: Request, res: Response) => {
+  try {
+    const handpickedProducts = await fetchHandpickedProducts();
+    res.status(200).json({ success: true, data: handpickedProducts });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error });
   }
 };
 

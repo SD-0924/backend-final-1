@@ -9,6 +9,9 @@ import {
   getProductsByBrandRepository,
   getProductsByCategoryRepository,
   getLimitedEditionRepository,
+  getHandpickedProducts,
+  getDiscountedProductsRepository,
+  getPopularProductsRepository,
 } from "../reposetories/productRepository";
 
 import { fetchBrandByIdService } from "./brandService";
@@ -62,6 +65,14 @@ export const getLimitedEditionService = async () => {
   return await getLimitedEditionRepository();
 };
 
+export const getDiscountedProductsService = async () => {
+  return await getDiscountedProductsRepository();
+};
+
+export const getPopularProductsService = async () => {
+  return await getPopularProductsRepository();
+};
+
 export const getNewArrivalsService = async (page: number, limit: number) => {
   const offset = (page - 1) * limit;
 
@@ -99,4 +110,8 @@ export const getProductsByCategoryService = async (categoryId: string) => {
     throw new Error("Category not found");
   }
   return await getProductsByCategoryRepository(categoryId);
+};
+
+export const fetchHandpickedProducts = async () => {
+  return await getHandpickedProducts();
 };
