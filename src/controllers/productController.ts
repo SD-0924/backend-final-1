@@ -23,6 +23,7 @@ import { getDiscountByProductId } from "../services/discountService";
 import { getDiscountTimeRemainingById } from "../services/discountService";
 
 export const getAllProducts = async (req: Request, res: Response) => {
+  // BUG
   try {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
@@ -36,12 +37,30 @@ export const getAllProducts = async (req: Request, res: Response) => {
       categoryName
     );
 
-    const productsWithImages = await Promise.all(
+    if (products.length === 0) {
+      res.status(404).json({ message: "No products found." });
+      return;
+    }
+
+    const updatedProducts = await Promise.all(
       products.map(async (product) => {
         if (product.imageUrl) {
-          product.imageUrl = await getProductImageUrlFromFirebase(
-            product.imageUrl
-          );
+          try {
+            const updatedImageUrl = await getProductImageUrlFromFirebase(
+              product.imageUrl
+            );
+            console.log(
+              `Updated image URL for product ${product.id}:`,
+              updatedImageUrl
+            );
+            return { ...product, imageUrl: updatedImageUrl };
+          } catch (error) {
+            console.error(
+              `Error fetching image for product ${product.id}:`,
+              error
+            );
+            return product;
+          }
         } else {
           product.imageUrl =
             "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png";
@@ -50,13 +69,9 @@ export const getAllProducts = async (req: Request, res: Response) => {
       })
     );
 
-    res.status(201).json({
-      success: true,
-      data: productsWithImages,
-      pagination,
-    });
+    res.status(200).json(updatedProducts);
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch products" });
+    res.status(500).json({ message: "Internal server error", error });
   }
 };
 
@@ -197,10 +212,42 @@ export const getProductRatings = async (req: Request, res: Response) => {
 
 export const getLimitedEdition = async (req: Request, res: Response) => {
   try {
-    const limitied = await getLimitedEditionService();
-    res.status(201).json(limitied);
+    const products = await getLimitedEditionService();
+    if (products.length === 0) {
+      res.status(404).json({ message: "No limited edition products found." });
+      return;
+    }
+
+    const updatedProducts = await Promise.all(
+      products.map(async (product) => {
+        if (product.imageUrl) {
+          try {
+            const updatedImageUrl = await getProductImageUrlFromFirebase(
+              product.imageUrl
+            );
+            console.log(
+              `Updated image URL for product ${product.id}:`,
+              updatedImageUrl
+            );
+            return { ...product, imageUrl: updatedImageUrl };
+          } catch (error) {
+            console.error(
+              `Error fetching image for product ${product.id}:`,
+              error
+            );
+            return product;
+          }
+        } else {
+          product.imageUrl =
+            "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png";
+        }
+        return product;
+      })
+    );
+
+    res.status(200).json(updatedProducts);
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch limited edition" });
+    res.status(500).json({ message: "Internal server error", error });
   }
 };
 
@@ -210,9 +257,37 @@ export const getDiscountedProducts = async (req: Request, res: Response) => {
 
     if (products.length === 0) {
       res.status(404).json({ message: "No discounted products found." });
+      return;
     }
 
-    res.status(200).json(products);
+    const updatedProducts = await Promise.all(
+      products.map(async (product) => {
+        if (product.imageUrl) {
+          try {
+            const updatedImageUrl = await getProductImageUrlFromFirebase(
+              product.imageUrl
+            );
+            console.log(
+              `Updated image URL for product ${product.id}:`,
+              updatedImageUrl
+            );
+            return { ...product, imageUrl: updatedImageUrl };
+          } catch (error) {
+            console.error(
+              `Error fetching image for product ${product.id}:`,
+              error
+            );
+            return product;
+          }
+        } else {
+          product.imageUrl =
+            "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png";
+        }
+        return product;
+      })
+    );
+
+    res.status(200).json(updatedProducts);
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error });
   }
@@ -224,9 +299,37 @@ export const getPopularProducts = async (req: Request, res: Response) => {
 
     if (products.length === 0) {
       res.status(404).json({ message: "No popular products found." });
+      return;
     }
 
-    res.status(200).json(products);
+    const updatedProducts = await Promise.all(
+      products.map(async (product) => {
+        if (product.imageUrl) {
+          try {
+            const updatedImageUrl = await getProductImageUrlFromFirebase(
+              product.imageUrl
+            );
+            console.log(
+              `Updated image URL for product ${product.id}:`,
+              updatedImageUrl
+            );
+            return { ...product, imageUrl: updatedImageUrl };
+          } catch (error) {
+            console.error(
+              `Error fetching image for product ${product.id}:`,
+              error
+            );
+            return product;
+          }
+        } else {
+          product.imageUrl =
+            "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png";
+        }
+        return product;
+      })
+    );
+
+    res.status(200).json(updatedProducts);
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error });
   }
@@ -286,10 +389,42 @@ export const getNewArrivals = async (
 
 export const getHandpicked = async (req: Request, res: Response) => {
   try {
-    const handpickedProducts = await fetchHandpickedProducts();
-    res.status(200).json({ success: true, data: handpickedProducts });
+    const products = await fetchHandpickedProducts();
+    if (products.length === 0) {
+      res.status(404).json({ message: "No handpicked products found." });
+      return;
+    }
+
+    const updatedProducts = await Promise.all(
+      products.map(async (product) => {
+        if (product.imageUrl) {
+          try {
+            const updatedImageUrl = await getProductImageUrlFromFirebase(
+              product.imageUrl
+            );
+            console.log(
+              `Updated image URL for product ${product.id}:`,
+              updatedImageUrl
+            );
+            return { ...product, imageUrl: updatedImageUrl };
+          } catch (error) {
+            console.error(
+              `Error fetching image for product ${product.id}:`,
+              error
+            );
+            return product;
+          }
+        } else {
+          product.imageUrl =
+            "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png";
+        }
+        return product;
+      })
+    );
+
+    res.status(200).json(updatedProducts);
   } catch (error) {
-    res.status(500).json({ success: false, message: error });
+    res.status(500).json({ message: "Internal server error", error });
   }
 };
 
