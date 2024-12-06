@@ -69,7 +69,11 @@ export const getAllProducts = async (req: Request, res: Response) => {
       })
     );
 
-    res.status(200).json(updatedProducts);
+    res.status(201).json({
+      success: true,
+      data: updatedProducts,
+      pagination,
+    });
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error });
   }
