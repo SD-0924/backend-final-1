@@ -110,6 +110,24 @@ export const getDiscountedProductsRepository = async () => {
   return products;
 };
 
+export const getPopularProductsRepository = async () => {
+  const currentDate = new Date();
+  const products = await Product.findAll({
+    where: sequelize.literal(`
+      EXISTS (
+        SELECT 1
+        FROM ratings
+        WHERE ratings.productId = Product.id -- Link ratings to products
+          AND ratings.ratingValue IS NOT NULL
+        GROUP BY ratings.productId
+        HAVING AVG(ratings.ratingValue) >= 4.5 -- Popular products with average rating >= 4.5
+      )
+    `),
+  });
+
+  return products;
+};
+
 export const getNewArrivalsRepository = async (
   dateThreshold: Date,
   limit: number,

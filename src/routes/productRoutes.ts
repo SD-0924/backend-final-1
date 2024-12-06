@@ -14,6 +14,7 @@ import {
   getProductPriceAfterDiscount,
   getLimitedEdition,
   getDiscountedProducts,
+  getPopularProducts,
 } from "../controllers/productController";
 
 import {
@@ -47,6 +48,8 @@ router.get(
 router.get("/api/products/limited-edition", getLimitedEdition);
 
 router.get("/api/products/discounted", getDiscountedProducts);
+
+router.get("/api/products/popular", getPopularProducts);
 
 router.get(
   "/api/products/new-arrivals",
