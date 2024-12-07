@@ -25,3 +25,7 @@ export const findOrderItemsByOrderId = async (orderId: string) => {
 
   return orderItemsWithProducts;
 };
+
+export const createOrderItems = async (orderItems: any[]) => {
+    return await OrderItems.bulkCreate(orderItems);
+};
