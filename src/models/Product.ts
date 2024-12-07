@@ -55,10 +55,7 @@ Product.init(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    longDescription: {
-      type: DataTypes.TEXT,
-        },
-    price: {
+      price: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
     },
@@ -94,6 +91,10 @@ Product.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
+    longDescription: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+        },
     createdAt: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
