@@ -32,9 +32,6 @@ export const getAllProductsRepository = async (
     };
   }
 
-  const noFillterProducts =
-    brandId === "" && categoryId === "" ? await Product.findAll() : [];
-
   const brandProducts = brandId
     ? await Product.findAll({
         where: { brandId },

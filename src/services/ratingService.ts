@@ -38,10 +38,12 @@ export const getRatingsByProductId = async (productId: string) => {
 };
 
 export const calculateRating = async (productId: string) => {
-    const ratings = await Rating.findAll({ where: { productId } });
-    const total = ratings.reduce((acc, rating) => acc + rating.ratingValue, 0);
-    const average = ratings.length > 0 ? total / ratings.length : 0;
-    return average;
+  const ratings = await Rating.findAll({ where: { productId } });
+  const total = ratings.reduce(
+    (acc, rating) => acc + Number(rating.ratingValue),
+    0
+  );  const average = ratings.length > 0 ? total / ratings.length : 0;
+  return average
 };
 
 export const countRatingsForProduct = async (productId: string) => {
