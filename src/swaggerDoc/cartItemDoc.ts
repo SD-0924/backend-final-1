@@ -295,15 +295,22 @@
  * @swagger
  * /api/carts/{cartId}:
  *   put:
- *     summary: Update the quantity of a cart item.
- *     description: Updates the quantity of a specific cart item. Validates the cart ID and associated product, ensuring the quantity does not exceed available stock.
+ *     summary: Update the quantity of a cart item
+ *     description: Updates the quantity of a specific cart item, ensuring it doesn't exceed the available stock. Validates both the cart item and the associated product.
+ *     operationId: updateCartItemQuantity
+ *     tags:
+ *       - CartItem
+ *     security:
+ *       - JWT: []
  *     parameters:
  *       - in: path
  *         name: cartId
  *         required: true
- *         description: The unique identifier of the cart item.
+ *         description: The unique identifier of the cart item to be updated.
  *         schema:
  *           type: string
+ *           format: uuid
+ *         example: "a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6"
  *       - in: body
  *         name: quantity
  *         required: true
@@ -330,10 +337,13 @@
  *                   properties:
  *                     id:
  *                       type: string
+ *                       format: uuid
  *                     userId:
  *                       type: string
+ *                       format: uuid
  *                     productId:
  *                       type: string
+ *                       format: uuid
  *                     quantity:
  *                       type: integer
  *                     priceBeforeDiscount:
@@ -400,5 +410,3 @@
  *                   type: string
  *                   example: "Error updating the item quantity."
  */
-
-
