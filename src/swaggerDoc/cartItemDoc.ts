@@ -169,3 +169,124 @@
  *                   description: Error message
  *                   example: "An error occurred while deleting the cart item"
  */
+
+/**
+ * @swagger
+ * /api/carts/{userId}:
+ *   get:
+ *     summary: Fetch cart items for a user
+ *     description: Retrieves all cart items for a given user along with detailed product information and a summary of the cart.
+ *     operationId: getCartItemsByUserId
+ *     tags:
+ *       - CartItem
+ *     security:
+ *       - JWT: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: The unique identifier of the user whose cart items are to be fetched.
+ *         schema:
+ *           type: string
+ *           format: uuid
+ *         example: "a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6"
+ *     responses:
+ *       200:
+ *         description: Successfully fetched cart items and summary for the user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 cartItems:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: string
+ *                         format: uuid
+ *                       userId:
+ *                         type: string
+ *                         format: uuid
+ *                       productId:
+ *                         type: string
+ *                         format: uuid
+ *                       quantity:
+ *                         type: integer
+ *                       priceBeforeDiscount:
+ *                         type: number
+ *                         format: float
+ *                       priceAfterDiscount:
+ *                         type: number
+ *                         format: float
+ *                       totalPriceBeforeDiscount:
+ *                         type: number
+ *                         format: float
+ *                       totalPriceAfterDiscount:
+ *                         type: number
+ *                         format: float
+ *                       itemDiscount:
+ *                         type: number
+ *                         format: float
+ *                       product:
+ *                         type: object
+ *                         properties:
+ *                           name:
+ *                             type: string
+ *                           price:
+ *                             type: number
+ *                             format: float
+ *                           finalPrice:
+ *                             type: number
+ *                             format: float
+ *                           stockQuantity:
+ *                             type: integer
+ *                           discountPercentage:
+ *                             type: number
+ *                             format: float
+ *                           ratingAverage:
+ *                             type: number
+ *                             format: float
+ *                           ratingTotal:
+ *                             type: integer
+ *                           brandName:
+ *                             type: string
+ *                           categoryName:
+ *                             type: string
+ *                           imageUrl:
+ *                             type: string
+ *                             format: url
+ *                 summary:
+ *                   type: object
+ *                   properties:
+ *                     subtotal:
+ *                       type: number
+ *                       format: float
+ *                     discount:
+ *                       type: number
+ *                       format: float
+ *                     grandTotal:
+ *                       type: number
+ *                       format: float
+ *       404:
+ *         description: User not found or no cart items available for the user.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "User not found"
+ *       500:
+ *         description: Internal server error while fetching cart items.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Failed to fetch cart items."
+ */
