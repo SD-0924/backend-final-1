@@ -1,4 +1,6 @@
 import CartItem from "../models/CartItem";
+import { getProductByIdRepository } from "../reposetories/productRepository";
+
 
 // create new cartItem record
 export const addToCartItem = async(cartItem: any) =>{
@@ -53,4 +55,20 @@ export const deleteCartItemsByUserId = async (userId: string) => {
 // getting the items of specific user
 export const getCartItemsByUserId = async (userId: string) => {
     return await CartItem.findAll({ where: { userId } });
+};
+
+export const getCartItemsWithProductDetails = async (userId: string) => {
+  const cartItems = await getCartItemsByUserId(userId);
+
+  const cartItemsWithDetails = await Promise.all(
+    cartItems.map(async (item) => {
+      const product = await getProductByIdRepository(item.productId); // Fetch product details manually
+      return {
+        ...item.dataValues,
+        product,
+      };
+    })
+  );
+
+  return cartItemsWithDetails;
 };
