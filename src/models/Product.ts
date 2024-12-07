@@ -7,6 +7,7 @@ interface ProductAttributes {
   id: string;
   name: string;
   description: string;
+  longDescription: string;
   price: number;
   stockQuantity: number;
   isLimitedEdition: boolean;
@@ -27,6 +28,7 @@ class Product
   public id!: string;
   public name!: string;
   public description!: string;
+  public longDescription!: string;
   public price!: number;
   public stockQuantity!: number;
   public isLimitedEdition!: boolean;
@@ -53,7 +55,7 @@ Product.init(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    price: {
+      price: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
     },
@@ -89,6 +91,10 @@ Product.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
+    longDescription: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+        },
     createdAt: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,

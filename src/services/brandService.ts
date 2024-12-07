@@ -175,3 +175,8 @@ export const updateBrandService = async (id: string, name?: string, file?: Expre
         throw new Error("Service Error: " + error.message);
 }
 };
+
+
+export const getBrandByIdService = async (id: string) => {
+    return await getBrandById(id);
+  };

@@ -9,7 +9,7 @@ import {
   getProductRatings,
   getNewArrivals,
   getHandpicked,
-  getProductsByBrandController,
+  getProductsByBrand,
   getProductsByCategory,
   getProductPriceAfterDiscount,
   getLimitedEdition,
@@ -39,17 +39,25 @@ const router = Router();
 // Routes for products
 router.get(
   "/api/products",
-  authenticateJWT,
+  //authenticateJWT,
   validatePaganation,
   validatGetAllProducts,
   getAllProducts
 );
 
-router.get("/api/products/limited-edition", getLimitedEdition);
+router.get(
+  "/api/products/limited-edition",
+  validatePaganation,
+  getLimitedEdition
+);
 
-router.get("/api/products/discounted", getDiscountedProducts);
+router.get(
+  "/api/products/discounted",
+  validatePaganation,
+  getDiscountedProducts
+);
 
-router.get("/api/products/popular", getPopularProducts);
+router.get("/api/products/popular", validatePaganation, getPopularProducts);
 
 router.get(
   "/api/products/new-arrivals",
@@ -58,7 +66,7 @@ router.get(
   getNewArrivals
 );
 
-router.get("/api/products/handpicked", getHandpicked);
+router.get("/api/products/handpicked", validatePaganation, getHandpicked);
 
 router.get(
   "/api/products/:id",
@@ -100,7 +108,7 @@ router.get(
   "/api/products/by-brand/:brandId",
   validateGetBrandProduct,
   validatePaganation,
-  getProductsByBrandController
+  getProductsByBrand
 );
 router.get(
   "/api/products/by-category/:categoryId",

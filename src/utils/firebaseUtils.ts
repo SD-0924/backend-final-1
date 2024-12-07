@@ -38,7 +38,17 @@ export const deleteProductImageFromFirebase = async (imageUrl: string): Promise<
 
 
 export const getProductImageUrlFromFirebase = async (imageUrl: string): Promise<string> => {
+  if (!imageUrl.includes(bucket.name)) {
+    console.error("Invalid image URL:", imageUrl);
+    throw new Error("Invalid image URL.");
+  }
+
   const fileName = imageUrl.split(`${bucket.name}/`)[1];
+  if (!fileName) {
+    console.error("Invalid file name:", fileName);
+    throw new Error("Invalid file name extracted from image URL.");
+  }
+
   const file = bucket.file(fileName);
   try {
     const [fileExists] = await file.exists();
@@ -55,6 +65,7 @@ export const getProductImageUrlFromFirebase = async (imageUrl: string): Promise<
   }
   return imageUrl;
 };
+
 
 // Brands Functions
 export const uploadBrandLogoToFirebase = async (filePath: string, brandId: string): Promise<string> => {
