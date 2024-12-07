@@ -16,6 +16,13 @@ export const getAllProductsRepository = async (
     where: { name: brandName },
   });
 
+  if (!categoryName && !brandName) {
+    const noFillterProducts = await Product.findAll({ limit, offset });
+    return {
+      rows: noFillterProducts,
+      count: noFillterProducts.length,
+    };
+  }
   const brandId = brand ? brand.dataValues.id : "";
 
   const category = await Category.findOne({
@@ -24,13 +31,6 @@ export const getAllProductsRepository = async (
 
   const categoryId = category ? category.dataValues.id : "";
 
-  if (brandId === "" && categoryId === "") {
-    const noFillterProducts = await Product.findAll({ limit, offset });
-    return {
-      rows: noFillterProducts,
-      count: noFillterProducts.length,
-    };
-  }
   const brandProducts = brandId
     ? await Product.findAll({
         where: { brandId },
