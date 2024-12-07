@@ -221,7 +221,9 @@ export const getProductRatings = async (req: Request, res: Response) => {
 
 export const getLimitedEdition = async (req: Request, res: Response) => {
   try {
-    const products = await getLimitedEditionService();
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const products = await getLimitedEditionService(page, limit);
     if (products.length === 0) {
       res.status(404).json({ message: "No limited edition products found." });
       return;
@@ -262,7 +264,9 @@ export const getLimitedEdition = async (req: Request, res: Response) => {
 
 export const getDiscountedProducts = async (req: Request, res: Response) => {
   try {
-    const products = await getDiscountedProductsService();
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const products = await getDiscountedProductsService(page, limit);
 
     if (products.length === 0) {
       res.status(404).json({ message: "No discounted products found." });
@@ -304,7 +308,9 @@ export const getDiscountedProducts = async (req: Request, res: Response) => {
 
 export const getPopularProducts = async (req: Request, res: Response) => {
   try {
-    const products = await getPopularProductsService();
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const products = await getPopularProductsService(page, limit);
 
     if (products.length === 0) {
       res.status(404).json({ message: "No popular products found." });
@@ -398,7 +404,9 @@ export const getNewArrivals = async (
 
 export const getHandpicked = async (req: Request, res: Response) => {
   try {
-    const products = await fetchHandpickedProducts();
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const products = await fetchHandpickedProducts(page, limit);
     if (products.length === 0) {
       res.status(404).json({ message: "No handpicked products found." });
       return;
@@ -443,7 +451,9 @@ export const getProductsByBrand = async (
 ): Promise<void> => {
   const { brandId } = req.params;
   try {
-    const products = await getProductsByBrandService(brandId);
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const products = await getProductsByBrandService(brandId, page, limit);
     if (products.length === 0) {
       res
         .status(404)
@@ -478,7 +488,13 @@ export const getProductsByCategory = async (
 ): Promise<void> => {
   const { categoryId } = req.params;
   try {
-    const products = await getProductsByCategoryService(categoryId);
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const products = await getProductsByCategoryService(
+      categoryId,
+      page,
+      limit
+    );
     if (products.length === 0) {
       res
         .status(404)

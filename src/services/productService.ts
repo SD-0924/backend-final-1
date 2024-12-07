@@ -70,18 +70,27 @@ export const getProductRatingsService = async (productId: string) => {
   return await getProductRatingsRepository(productId);
 };
 
-export const getLimitedEditionService = async () => {
-  const products = await getLimitedEditionRepository();
+export const getLimitedEditionService = async (page: number, limit: number) => {
+  const offset = (page - 1) * limit;
+  const products = await getLimitedEditionRepository(limit, offset);
   return await addCustomFields(products);
 };
 
-export const getDiscountedProductsService = async () => {
-  const products = await getDiscountedProductsRepository();
+export const getDiscountedProductsService = async (
+  page: number,
+  limit: number
+) => {
+  const offset = (page - 1) * limit;
+  const products = await getDiscountedProductsRepository(limit, offset);
   return await addCustomFields(products);
 };
 
-export const getPopularProductsService = async () => {
-  const products = await getPopularProductsRepository();
+export const getPopularProductsService = async (
+  page: number,
+  limit: number
+) => {
+  const offset = (page - 1) * limit;
+  const products = await getPopularProductsRepository(limit, offset);
   return await addCustomFields(products);
 };
 
@@ -107,27 +116,43 @@ export const getNewArrivalsService = async (page: number, limit: number) => {
   };
 };
 
-export const getProductsByBrandService = async (brandId: string) => {
+export const getProductsByBrandService = async (
+  brandId: string,
+  page: number,
+  limit: number
+) => {
+  const offset = (page - 1) * limit;
   // check if the brand exists or not by brandId
   const brandExists = await fetchBrandByIdService(brandId);
   if (!brandExists) {
     throw new Error("Brand not found");
   }
-  return await getProductsByBrandRepository(brandId);
+  return await getProductsByBrandRepository(brandId, limit, offset);
 };
 
-export const getProductsByCategoryService = async (categoryId: string) => {
+export const getProductsByCategoryService = async (
+  categoryId: string,
+  page: number,
+  limit: number
+) => {
+  const offset = (page - 1) * limit;
   //check if the category exists or not by categoryId
   const categoryExists = await getCategoryByIdService(categoryId);
   if (!categoryExists) {
     throw new Error("Category not found");
   }
-  const products = await getProductsByCategoryRepository(categoryId);
+  const products = await getProductsByCategoryRepository(
+    categoryId,
+    limit,
+    offset
+  );
   return await addCustomFields(products);
 };
 
-export const fetchHandpickedProducts = async () => {
-  const products = await getHandpickedProducts();
+export const fetchHandpickedProducts = async (page: number, limit: number) => {
+  const offset = (page - 1) * limit;
+  const products = await getHandpickedProducts(limit, offset);
+
   return await addCustomFields(products);
 };
 
