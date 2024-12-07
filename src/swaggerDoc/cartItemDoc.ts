@@ -45,7 +45,7 @@
  *                 message:
  *                   type: string
  *                   description: A detailed message about the operation
- *                   example: "Product added to cart successfully."
+ *                   example: "Product quantity updated successfully."
  *                 cartItem:
  *                   type: object
  *                   description: The updated or newly added cart item
@@ -68,7 +68,28 @@
  *                     quantity:
  *                       type: integer
  *                       description: The quantity of the product in the cart
- *                       example: 3
+ *                       example: 5
+ *             examples:
+ *               addedNewProduct:
+ *                 summary: Adding a new product to the cart
+ *                 value:
+ *                   success: "Product Added to cart."
+ *                   message: "Product added to cart successfully."
+ *                   cartItem:
+ *                     id: "1a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6"
+ *                     userId: "a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6"
+ *                     productId: "z1y2x3w4-v5u6-t7s8-r9q0-p1o2n3m4l5k6"
+ *                     quantity: 2
+ *               updatedExistingProduct:
+ *                 summary: Updating the quantity of an existing product in the cart
+ *                 value:
+ *                   success: "Product Added to cart."
+ *                   message: "Product quantity updated successfully."
+ *                   cartItem:
+ *                     id: "1a2b3c4d-5e6f-7g8h-9i0j-k1l2m3n4o5p6"
+ *                     userId: "a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6"
+ *                     productId: "z1y2x3w4-v5u6-t7s8-r9q0-p1o2n3m4l5k6"
+ *                     quantity: 5
  *       404:
  *         description: User or Product not found
  *         content:

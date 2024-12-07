@@ -20,7 +20,7 @@ const router = Router();
 
 router.post(
     "/api/carts",
-    //authenticateJWT,
+    authenticateJWT,
     validateAddToCart,
     validateRequest,
     addToCartController
