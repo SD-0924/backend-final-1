@@ -52,7 +52,7 @@ export const handleLogin = async (
 
     res.cookie("token", token, { httpOnly: true, secure: process.env.NODE_ENV === "production" });
 
-    res.status(200).json({ message: "Login successful", token,  firstName: user.first,
+    res.status(200).json({ message: "Login successful", id: user.id, token,  firstName: user.first,
       lastName: user.last, });
   } catch (error: unknown) {
     res.status(401).json({
