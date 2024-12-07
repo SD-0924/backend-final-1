@@ -14,8 +14,13 @@ import {
   getPopularProductsRepository,
 } from "../reposetories/productRepository";
 
-import { fetchBrandByIdService } from "./brandService";
+import { fetchBrandByIdService, getBrandByIdService } from "./brandService";
 import { getCategoryByIdService } from "./categoryService";
+import { calculateRating, countRatingsForProduct } from "./ratingService";
+import {
+  getDiscountTimeRemainingById,
+  getDiscountByProductId,
+} from "./discountService";
 
 import Product from "../models/Product";
 
@@ -28,8 +33,10 @@ export const getAllProductsService = async (
   const offset = (page - 1) * limit;
   const { rows: products, count: totalProducts } =
     await getAllProductsRepository(limit, offset, brandName, categoryName);
+
+  const finalProducts = await addCustomFields(products);
   return {
-    products,
+    products: finalProducts,
     pagination: {
       currentPage: page,
       totalProducts,
@@ -39,7 +46,9 @@ export const getAllProductsService = async (
 };
 
 export const getProductByIdService = async (productId: string) => {
-  return await getProductByIdRepository(productId);
+  const product = await getProductByIdRepository(productId);
+  const updatedProduct = await addCustomFields([product]);
+  return updatedProduct[0];
 };
 
 export const addProductService = async (productData: Partial<Product>) => {
@@ -63,7 +72,8 @@ export const getProductRatingsService = async (productId: string) => {
 
 export const getLimitedEditionService = async (page: number, limit: number) => {
   const offset = (page - 1) * limit;
-  return await getLimitedEditionRepository(limit, offset);
+  const products = await getLimitedEditionRepository(limit, offset);
+  return await addCustomFields(products);
 };
 
 export const getDiscountedProductsService = async (
@@ -71,7 +81,8 @@ export const getDiscountedProductsService = async (
   limit: number
 ) => {
   const offset = (page - 1) * limit;
-  return await getDiscountedProductsRepository(limit, offset);
+  const products = await getDiscountedProductsRepository(limit, offset);
+  return await addCustomFields(products);
 };
 
 export const getPopularProductsService = async (
@@ -79,7 +90,8 @@ export const getPopularProductsService = async (
   limit: number
 ) => {
   const offset = (page - 1) * limit;
-  return await getPopularProductsRepository(limit, offset);
+  const products = await getPopularProductsRepository(limit, offset);
+  return await addCustomFields(products);
 };
 
 export const getNewArrivalsService = async (page: number, limit: number) => {
@@ -93,8 +105,9 @@ export const getNewArrivalsService = async (page: number, limit: number) => {
   const { rows: products, count: totalProducts } =
     await getNewArrivalsRepository(threeMonthsAgo, limit, offset);
 
+  const finalProducts = await addCustomFields(products);
   return {
-    products,
+    products: finalProducts,
     pagination: {
       currentPage: page,
       totalProducts,
@@ -128,10 +141,65 @@ export const getProductsByCategoryService = async (
   if (!categoryExists) {
     throw new Error("Category not found");
   }
-  return await getProductsByCategoryRepository(categoryId, limit, offset);
+  const products = await getProductsByCategoryRepository(
+    categoryId,
+    limit,
+    offset
+  );
+  return await addCustomFields(products);
 };
 
 export const fetchHandpickedProducts = async (page: number, limit: number) => {
   const offset = (page - 1) * limit;
-  return await getHandpickedProducts(limit, offset);
+  const products = await getHandpickedProducts(limit, offset);
+
+  return await addCustomFields(products);
+};
+
+const addCustomFields = async (products: any[]) => {
+  const updatedProducts = await Promise.all(
+    products.map(async (product) => {
+      try {
+        const brand = await getBrandByIdService(product.dataValues.brandId);
+        const brandName = brand ? brand.dataValues.name : null;
+
+        const category = await getCategoryByIdService(
+          product.dataValues.categoryId
+        );
+        const categoryName = category ? category.dataValues.name : null;
+
+        const ratingAverage = await calculateRating(product.dataValues.id);
+        const ratingTotal = await countRatingsForProduct(product.dataValues.id);
+
+        const discount = await getDiscountByProductId(product.dataValues.id);
+        let finalPrice = product.dataValues.price;
+        if (discount) {
+          const discountTimeStatus = await getDiscountTimeRemainingById(
+            discount.dataValues.id
+          );
+
+          if (discountTimeStatus.remainingTime > 0) {
+            const discountAmount =
+              product.dataValues.price *
+              (discount.dataValues.discountPercentage / 100);
+            finalPrice = product.dataValues.price - discountAmount;
+          }
+        }
+        return {
+          ...product.dataValues,
+          brandName,
+          categoryName,
+          ratingAverage,
+          ratingTotal,
+          discountPercentage: discount
+            ? discount.dataValues.discountPercentage
+            : 0,
+          finalPrice,
+        };
+      } catch (error) {
+        throw error;
+      }
+    })
+  );
+  return updatedProducts;
 };

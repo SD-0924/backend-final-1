@@ -19,8 +19,10 @@ import {
   getProductImageUrlFromFirebase,
   deleteProductImageFromFirebase,
 } from "../utils/firebaseUtils";
-import { getDiscountByProductId } from "../services/discountService";
-import { getDiscountTimeRemainingById } from "../services/discountService";
+import {
+  getDiscountByProductId,
+  getDiscountTimeRemainingById,
+} from "../services/discountService";
 
 export const getAllProducts = async (req: Request, res: Response) => {
   try {
@@ -43,7 +45,11 @@ export const getAllProducts = async (req: Request, res: Response) => {
 
     const updatedProducts = await Promise.all(
       products.map(async (product) => {
-        if (product.imageUrl) {
+        if (
+          product.imageUrl &&
+          product.imageUrl !==
+            "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png"
+        ) {
           try {
             const updatedImageUrl = await getProductImageUrlFromFirebase(
               product.imageUrl

@@ -31,12 +31,6 @@ export const getAllProductsRepository = async (
       count: noFillterProducts.length,
     };
   }
-
-  const noFillterProducts =
-    brandId === "" && categoryId === ""
-      ? await Product.findAll({ limit, offset })
-      : [];
-
   const brandProducts = brandId
     ? await Product.findAll({
         where: { brandId },
