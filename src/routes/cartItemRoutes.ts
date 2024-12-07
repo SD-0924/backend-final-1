@@ -20,7 +20,7 @@ const router = Router();
 
 router.post(
     "/api/carts",
-    authenticateJWT,
+    //authenticateJWT,
     validateAddToCart,
     validateRequest,
     addToCartController
@@ -28,7 +28,7 @@ router.post(
 
 router.delete(
     "/api/carts/:cartId",
-    authenticateJWT,
+    //authenticateJWT,
     validatecartId,
     validateRequest,
     deleteCartItemController
@@ -36,7 +36,7 @@ router.delete(
 
 router.get(
     "/api/carts/:userId",
-    authenticateJWT,
+    //authenticateJWT,
     validateuserId,
     validateRequest,
     getCartItemsByUserId
@@ -44,7 +44,7 @@ router.get(
 
 router.put(
     "/api/carts/:cartId",
-    authenticateJWT,
+    //authenticateJWT,
     validateUpdateQuantity,
     validateRequest,
     updateCartItemQuantityController
