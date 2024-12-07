@@ -34,3 +34,23 @@ export const deleteCartItemById = async (cartId: string) => {
     }
     return await item.destroy(); 
 };
+
+// delete items for specific userId
+export const deleteCartItemsByUserId = async (userId: string) => {
+    const items = await CartItem.findAll({
+        where: { userId }
+    });
+
+    if (items.length === 0) {
+        throw new Error("No cart items found for this user.");
+    }
+
+    return await CartItem.destroy({
+        where: { userId }
+    });
+};
+
+// getting the items of specific user
+export const getCartItemsByUserId = async (userId: string) => {
+    return await CartItem.findAll({ where: { userId } });
+};

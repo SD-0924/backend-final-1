@@ -2,12 +2,16 @@ import { Router } from "express";
 import { authenticateJWT } from "../middlewares/authMiddleware";
 import { 
     validateAddToCart,
-    validatecartId
+    validatecartId,
+    validateuserId,
+    validateUpdateQuantity
 } from "../validations/cartItemValidation";
 import { validateRequest } from "../middlewares/validateRequest";
 import { 
     addToCartController,
-    deleteCartItemController
+    deleteCartItemController,
+    getCartItemsByUserId,
+    updateCartItemQuantityController
 } from "../controllers/cartItemController";
 
 
@@ -16,7 +20,7 @@ const router = Router();
 
 router.post(
     "/api/carts",
-    // authenticateJWT, will add it later
+    authenticateJWT,
     validateAddToCart,
     validateRequest,
     addToCartController
@@ -24,9 +28,25 @@ router.post(
 
 router.delete(
     "/api/carts/:cartId",
-    // authenticateJWT, will add it later
+    authenticateJWT,
     validatecartId,
     validateRequest,
     deleteCartItemController
+);
+
+router.get(
+    "/api/carts/:userId",
+    authenticateJWT,
+    validateuserId,
+    validateRequest,
+    getCartItemsByUserId
+)
+
+router.put(
+    "/api/carts/:cartId",
+    authenticateJWT,
+    validateUpdateQuantity,
+    validateRequest,
+    updateCartItemQuantityController
 )
 export default router;

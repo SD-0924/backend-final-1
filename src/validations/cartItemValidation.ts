@@ -15,3 +15,16 @@ export const validatecartId = [
     param('cartId')
         .isUUID().withMessage("Invalid cartId. It must be a valid UUID.")
 ];
+
+export const validateuserId = [
+    param('userId')
+        .isUUID().withMessage("Invalid userId. It must be a valid UUID.")
+]
+
+export const validateUpdateQuantity = [
+    param('cartId')
+        .isUUID().withMessage("Invalid userId. It must be a valid UUID."),
+    
+    body('quantity')
+        .isInt({ gt: 0 }).withMessage('Quantity is required and must be a positive integer')
+];
