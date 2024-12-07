@@ -290,3 +290,115 @@
  *                   type: string
  *                   example: "Failed to fetch cart items."
  */
+
+/**
+ * @swagger
+ * /api/carts/{cartId}:
+ *   put:
+ *     summary: Update the quantity of a cart item.
+ *     description: Updates the quantity of a specific cart item. Validates the cart ID and associated product, ensuring the quantity does not exceed available stock.
+ *     parameters:
+ *       - in: path
+ *         name: cartId
+ *         required: true
+ *         description: The unique identifier of the cart item.
+ *         schema:
+ *           type: string
+ *       - in: body
+ *         name: quantity
+ *         required: true
+ *         description: The new quantity for the cart item.
+ *         schema:
+ *           type: object
+ *           properties:
+ *             quantity:
+ *               type: integer
+ *               example: 3
+ *     responses:
+ *       200:
+ *         description: Cart item updated successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Quantity updated to 3."
+ *                 updatedCartItem:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                     userId:
+ *                       type: string
+ *                     productId:
+ *                       type: string
+ *                     quantity:
+ *                       type: integer
+ *                     priceBeforeDiscount:
+ *                       type: number
+ *                       format: float
+ *                     priceAfterDiscount:
+ *                       type: number
+ *                       format: float
+ *                     totalPriceBeforeDiscount:
+ *                       type: number
+ *                       format: float
+ *                     totalPriceAfterDiscount:
+ *                       type: number
+ *                       format: float
+ *                     itemDiscount:
+ *                       type: number
+ *                       format: float
+ *                     product:
+ *                       type: object
+ *                       properties:
+ *                         name:
+ *                           type: string
+ *                         price:
+ *                           type: number
+ *                           format: float
+ *                         finalPrice:
+ *                           type: number
+ *                           format: float
+ *                         stockQuantity:
+ *                           type: integer
+ *                         discountPercentage:
+ *                           type: number
+ *                           format: float
+ *                         ratingAverage:
+ *                           type: number
+ *                           format: float
+ *                         ratingTotal:
+ *                           type: integer
+ *                         brandName:
+ *                           type: string
+ *                         categoryName:
+ *                           type: string
+ *                         imageUrl:
+ *                           type: string
+ *                           format: url
+ *       404:
+ *         description: Cart item or associated product not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Cart item not found."
+ *       500:
+ *         description: Internal server error while updating the item quantity.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Error updating the item quantity."
+ */
+
+
