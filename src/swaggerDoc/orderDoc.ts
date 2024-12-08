@@ -99,4 +99,62 @@
  *                 error:
  *                   type: string
  *                   example: "Database connection failed"
+ *
+ * /place-order:
+ *   post:
+ *     summary: Place a new order
+ *     description: Create a new order for a user with default values for couponId and status.
+ *     operationId: placeOrder
+ *     tags:
+ *       - Orders
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: string
+ *                 description: ID of the user placing the order
+ *                 example: "6afd477d-e3cb-489a-ae09-3bb39fd6fde8"
+ *     responses:
+ *       201:
+ *         description: Order placed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Order placed successfully"
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     order:
+ *                       type: object
+ *                       properties:
+ *                         id:
+ *                           type: string
+ *                           example: "1dcab749-7cbc-4656-bdbc-4871181dfa45"
+ *                         status:
+ *                           type: string
+ *                           example: "processing"
+ *                         couponId:
+ *                           type: string
+ *                           example: "b62f3e21-8a4d-4db4-9182-d38fb314f657"
+ *       500:
+ *         description: Error placing the order
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Error placing order"
+ *                 error:
+ *                   type: string
+ *                   example: "Internal server error"
  */
