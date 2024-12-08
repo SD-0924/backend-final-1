@@ -156,7 +156,7 @@ export const fetchHandpickedProducts = async (page: number, limit: number) => {
   return await addCustomFields(products);
 };
 
-const addCustomFields = async (products: any[]) => {
+export const addCustomFields = async (products: any[]) => {
   const updatedProducts = await Promise.all(
     products.map(async (product) => {
       try {
