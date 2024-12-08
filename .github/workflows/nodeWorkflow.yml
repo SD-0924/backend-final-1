@@ -30,7 +30,7 @@ jobs:
           FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
         run: |
           echo "Running tests with service account JSON from environment variable"
-          npm test:health && test:models
+          npm run test:health && npm run test:models
         shell: bash
       - name: Run Full Test Suite on Merge
         if: ${{ github.event_name == 'push' }}
@@ -40,5 +40,5 @@ jobs:
           FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
         run: |
           echo "Running tests with service account JSON from environment variable"
-          npm test:all
+          npm run test:all
         shell: bash
