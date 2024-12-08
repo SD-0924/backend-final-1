@@ -102,6 +102,21 @@ export const deleteAllCartItemsForUserService = async (userId: string) => {
   }
 };
 
+// for calcualting the prices
+const calculatePricingDetails = (quantity: number, priceBeforeDiscount: number, priceAfterDiscount: number) => {
+  const totalPriceBeforeDiscount = quantity * priceBeforeDiscount;
+  const totalPriceAfterDiscount = quantity * priceAfterDiscount;
+  const itemDiscount = totalPriceBeforeDiscount - totalPriceAfterDiscount;
+
+  return {
+    priceBeforeDiscount,
+    priceAfterDiscount,
+    totalPriceBeforeDiscount,
+    totalPriceAfterDiscount,
+    itemDiscount,
+  };
+};
+
 export const getCartItemsWithProductDetailsService = async (userId: string) => {
 
   const user = await getUserById(userId);
