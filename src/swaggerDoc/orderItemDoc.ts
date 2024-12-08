@@ -14,7 +14,7 @@
  *         description: The ID of the order to retrieve items for.
  *         schema:
  *           type: string
- *           example: "e7374a3d-1762-42cc-81e8-672eae0d534a"
+ *           example: "1dcab749-7cbc-4656-bdbc-4871181dfa45"
  *     responses:
  *       200:
  *         description: Order items retrieved successfully.
@@ -28,14 +28,18 @@
  *                   properties:
  *                     orderId:
  *                       type: string
- *                       example: "e7374a3d-1762-42cc-81e8-672eae0d534a"
+ *                       example: "1dcab749-7cbc-4656-bdbc-4871181dfa45"
  *                     orderDate:
  *                       type: string
  *                       example: "December 7, 2024"
  *                     totalPrice:
  *                       type: number
  *                       format: float
- *                       example: 261.56
+ *                       example: 153.9
+ *                     totalPriceafterdiscount:
+ *                       type: number
+ *                       format: float
+ *                       example: 153.9
  *                     items:
  *                       type: array
  *                       items:
@@ -43,19 +47,23 @@
  *                         properties:
  *                           id:
  *                             type: string
- *                             example: "cbb7ed3d-e7ee-4501-aaf0-2258fac3abc8"
+ *                             example: "55e6c201-12cd-4f1a-81ca-9708a7986652"
  *                           productId:
  *                             type: string
- *                             example: "29b2c242-1b84-4ea8-84d0-aa12b08f7e90"
+ *                             example: "f674fc74-c65f-4bf0-89d3-71ee7b6481bb"
  *                           quantity:
  *                             type: integer
- *                             example: 2
+ *                             example: 5
+ *                           discountedprice:
+ *                             type: number
+ *                             format: float
+ *                             example: 30.78
  *                           product:
  *                             type: object
  *                             properties:
  *                               id:
  *                                 type: string
- *                                 example: "29b2c242-1b84-4ea8-84d0-aa12b08f7e90"
+ *                                 example: "f674fc74-c65f-4bf0-89d3-71ee7b6481bb"
  *                               name:
  *                                 type: string
  *                                 example: "Blazer"

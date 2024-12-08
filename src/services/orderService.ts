@@ -5,52 +5,63 @@ import { getProductByIdRepository, updateProductRepository } from '../reposetori
 import { deleteCartItemsByUserId, getCartItemsWithProductDetails } from '../reposetories/cartItemReposirtory';
 import { getOrderItemsService } from "../services/orderItemService";
 export const placeOrderService = async (userId: string, couponId: string, status: string) => {
-  // Step 1: Fetch cart items
-  const cartItems = await getCartItemsWithProductDetails(userId);
+  try {
+    // Step 1: Fetch cart items
+    const cartItems = await getCartItemsWithProductDetails(userId);
 
-  if (cartItems.length === 0) {
+    if (cartItems.length === 0) {
       throw new Error("Cart is empty");
-  }
+    }
 
-  // Step 2: Validate stock availability for all cart items
-  for (const cartItem of cartItems) {
-      const product = await getProductByIdRepository(cartItem.productId); // Fetch product details
-      if (!product) {
-          throw new Error(`Product not found for ID: ${cartItem.productId}`);
-      }
+    // Step 2: Validate stock availability for all cart items
+    const products = await Promise.all(
+      cartItems.map(async (cartItem) => {
+        try {
+          const product = await getProductByIdRepository(cartItem.productId); // Fetch product details
+          if (!product) {
+            throw new Error(`Product not found for ID: ${cartItem.productId}`);
+          }
 
-      if (product.stockQuantity < cartItem.quantity) {
-          throw new Error(
+          if (product.stockQuantity < cartItem.quantity) {
+            throw new Error(
               `Insufficient stock for product ID: ${cartItem.productId}. Available: ${product.stockQuantity}, Requested: ${cartItem.quantity}`
-          );
-      }
-  }
+            );
+          }
 
-  // Step 3: Create a new order
-  const order = await createOrder({
+          return product;
+        } catch (error) {
+          console.error("Error validating stock:", error);
+          throw error;
+        }
+      })
+    );
+
+    // Step 3: Create a new order
+    const order = await createOrder({
       userId,
       couponId,
       status,
-  });
+    });
 
-  // Step 4: Calculate price with discount, update stock, and create order items
-  const orderItems = await Promise.all(
+    // Step 4: Calculate price with discount, update stock, and create order items
+    const orderItems = await Promise.all(
       cartItems.map(async (cartItem) => {
+        try {
           const product = await getProductByIdRepository(cartItem.productId);
           if (!product) {
             throw new Error(`Product not found for ID: ${cartItem.productId}`);
-        }
+          }
           let price = product.price;
 
           // Fetch the discount for the product, if applicable
           try {
-              const discount = await getDiscountById(cartItem.productId);
-              if (discount) {
-                  const discountValue = discount.discountPercentage; // Assuming percentage discount
-                  price = price - (price * discountValue) / 100; // Apply the discount
-              }
+            const discount = await getDiscountById(cartItem.productId);
+            if (discount) {
+              const discountValue = discount.discountPercentage; // Assuming percentage discount
+              price = price - (price * discountValue) / 100; // Apply the discount
+            }
           } catch (error) {
-              console.warn(`No valid discount for product ${cartItem.productId}`);
+            console.warn(`No valid discount for product ${cartItem.productId}:`, error);
           }
 
           // Reduce stock quantity for the product using updateProductRepository
@@ -58,71 +69,99 @@ export const placeOrderService = async (userId: string, couponId: string, status
           await updateProductRepository(cartItem.productId, { stockQuantity: newStockQuantity });
 
           return {
-              orderId: order.id,
-              productId: cartItem.productId,
-              price: price, // Final price after discount
-              quantity: cartItem.quantity,
+            orderId: order.id,
+            productId: cartItem.productId,
+            price: price, // Final price after discount
+            quantity: cartItem.quantity,
           };
+        } catch (error) {
+          console.error("Error processing order items:", error);
+          throw error;
+        }
       })
-  );
+    );
 
-  // Save order items
-  await createOrderItems(orderItems);
+    // Save order items
+    await createOrderItems(orderItems);
 
-  // Step 5: Clear the cart for the user
-  await deleteCartItemsByUserId(userId);
+    // Step 5: Clear the cart for the user
+    await deleteCartItemsByUserId(userId);
 
-  return {
+    return {
       message: "Order placed successfully",
       order,
-  };
+    };
+  } catch (error) {
+    console.error("Error in placeOrderService:", error);
+    throw error;
+  }
 };
 
-
-
-
 export const getUserOrdersService = async (userId: string) => {
-  const completedOrders = await findOrdersByStatus(userId, "completed");
-  const processingOrders = await findOrdersByStatus(userId, "processing");
-  const canceledOrders = await findOrdersByStatus(userId, "canceled");
+  try {
+    const completedOrders = await findOrdersByStatus(userId, "completed");
+    const processingOrders = await findOrdersByStatus(userId, "processing");
+    const canceledOrders = await findOrdersByStatus(userId, "canceled");
 
-  // Fetch the order items and calculate the total price for each order
-  const completedOrdersWithTotalPrice = await Promise.all(
-    completedOrders.map(async (order) => {
-      const { totalPrice, orderDate } = await getOrderItemsService(order.id); // Only get total price and order date
-      return {
-        id: order.id,
-        orderDate,
-        totalPrice,
-      };
-    })
-  );
+    // Fetch the order items and calculate the total price for each order
+    const completedOrdersWithTotalPrice = await Promise.all(
+      completedOrders.map(async (order) => {
+        try {
+          const { totalPrice, orderDate, totalPriceafterdiscount } = await getOrderItemsService(order.id); // Only get total price and order date
+          return {
+            id: order.id,
+            orderDate,
+            totalPrice,
+            totalPriceafterdiscount,
+          };
+        } catch (error) {
+          console.error("Error processing completed orders:", error);
+          throw error;
+        }
+      })
+    );
 
-  const processingOrdersWithTotalPrice = await Promise.all(
-    processingOrders.map(async (order) => {
-      const { totalPrice, orderDate } = await getOrderItemsService(order.id); // Only get total price and order date
-      return {
-        id: order.id,
-        orderDate,
-        totalPrice,
-      };
-    })
-  );
+    const processingOrdersWithTotalPrice = await Promise.all(
+      processingOrders.map(async (order) => {
+        try {
+          const { totalPrice, orderDate, totalPriceafterdiscount } = await getOrderItemsService(order.id); // Only get total price and order date
+          return {
+            id: order.id,
+            orderDate,
+            totalPrice,
+            totalPriceafterdiscount,
+          };
+        } catch (error) {
+          console.error("Error processing processing orders:", error);
+          throw error;
+        }
+      })
+    );
 
-  const canceledOrdersWithTotalPrice = await Promise.all(
-    canceledOrders.map(async (order) => {
-      const { totalPrice, orderDate } = await getOrderItemsService(order.id); // Only get total price and order date
-      return {
-        id: order.id,
-        orderDate,
-        totalPrice,
-      };
-    })
-  );
+    const canceledOrdersWithTotalPrice = await Promise.all(
+      canceledOrders.map(async (order) => {
+        try {
+          const { totalPrice, orderDate, totalPriceafterdiscount } = await getOrderItemsService(order.id); // Only get total price and order date
+          return {
+            id: order.id,
+            orderDate,
+            totalPrice,
+            totalPriceafterdiscount,
+          };
+        } catch (error) {
+          console.error("Error processing canceled orders:", error);
+          throw error;
+        }
+      })
+    );
 
-  return {
-    completedOrders: completedOrdersWithTotalPrice,
-    processingOrders: processingOrdersWithTotalPrice,
-    canceledOrders: canceledOrdersWithTotalPrice,
-  };
+    return {
+      completedOrders: completedOrdersWithTotalPrice,
+      processingOrders: processingOrdersWithTotalPrice,
+      canceledOrders: canceledOrdersWithTotalPrice,
+    };
+  } catch (error) {
+    console.error("Error in getUserOrdersService:", error);
+    throw error;
+  }
 };
