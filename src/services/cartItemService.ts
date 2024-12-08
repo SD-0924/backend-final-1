@@ -102,156 +102,138 @@ export const deleteAllCartItemsForUserService = async (userId: string) => {
   }
 };
 
+// for calcualting the prices
+const calculatePricingDetails = (quantity: number, priceBeforeDiscount: number, priceAfterDiscount: number) => {
+  const totalPriceBeforeDiscount = quantity * priceBeforeDiscount;
+  const totalPriceAfterDiscount = quantity * priceAfterDiscount;
+  const itemDiscount = totalPriceBeforeDiscount - totalPriceAfterDiscount;
+
+  return {
+    priceBeforeDiscount,
+    priceAfterDiscount,
+    totalPriceBeforeDiscount,
+    totalPriceAfterDiscount,
+    itemDiscount,
+  };
+};
+
+// for enrching the product with additional details and calculate pricing
+const enrichProductDetails = async (product: any, quantity: number) => {
+  const [enrichedProduct] = await addCustomFields([product]);
+
+  const pricingDetails = calculatePricingDetails(
+    quantity,
+    product.price,
+    enrichedProduct.finalPrice
+  );
+
+  const productDetails = {
+    name: enrichedProduct.name,
+    price: product.price,
+    finalPrice: enrichedProduct.finalPrice,
+    stockQuantity: enrichedProduct.stockQuantity,
+    discountPercentage: enrichedProduct.discountPercentage,
+    ratingAverage: enrichedProduct.ratingAverage,
+    ratingTotal: enrichedProduct.ratingTotal,
+    brandName: enrichedProduct.brandName,
+    categoryName: enrichedProduct.categoryName,
+    imageUrl: enrichedProduct.imageUrl
+      ? await getProductImageUrlFromFirebase(enrichedProduct.imageUrl)
+      : "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png",
+  };
+
+  return { ...pricingDetails, productDetails };
+};
+
+// for getting the cart details for specific user
 export const getCartItemsWithProductDetailsService = async (userId: string) => {
-
   const user = await getUserById(userId);
-
-  if (!user) {
-    throw new Error("User not found")
-  }
+  if (!user) throw new Error("User not found");
 
   const cartItems = await getCartItemsByUserId(userId);
+  if (!cartItems || cartItems.length === 0) throw new Error("No cart items found for this user.");
 
-  if (!cartItems || cartItems.length === 0) {
-    throw new Error("No cart items found for this user.");
-  }
-
-  // Initialize summary values for *Order Summary*
   let subtotal = 0;
   let totalDiscount = 0;
   let grandTotal = 0;
 
-   // Enrich cart items
   const enrichedCartItems = await Promise.all(
     cartItems.map(async (cartItem) => {
-      // Fetching the product
       const product = await getProductByIdRepository(cartItem.productId);
-      if (!product) {
-        throw new Error(`Product with ID ${cartItem.productId} not found.`);
-      }
+      if (!product) throw new Error(`Product with ID ${cartItem.productId} not found.`);
 
-      // Add custom fields (including discount information)
-      const [enrichedProduct] = await addCustomFields([product]);
+      const { priceBeforeDiscount, priceAfterDiscount, totalPriceBeforeDiscount, totalPriceAfterDiscount, itemDiscount, productDetails } = await enrichProductDetails(
+        product,
+        cartItem.quantity
+      );
 
-      const priceBeforeDiscount = product.price; // Original price
-      const priceAfterDiscount = enrichedProduct.finalPrice; // Discounted price
-      const totalPriceBeforeDiscount = cartItem.quantity * priceBeforeDiscount; // Quantity * original price
-      const totalPriceAfterDiscount = cartItem.quantity * priceAfterDiscount; // Quantity * discounted price
-      const itemDiscount = totalPriceBeforeDiscount - totalPriceAfterDiscount; // Discount for this item
-
-      // Update summary values
       subtotal += totalPriceBeforeDiscount;
       totalDiscount += itemDiscount;
       grandTotal += totalPriceAfterDiscount;
 
-      // Return enriched cart item with detailed pricing information
       return {
         id: cartItem.id,
         userId: cartItem.userId,
         productId: cartItem.productId,
         quantity: cartItem.quantity,
-        priceBeforeDiscount, // Original price
-        priceAfterDiscount, // Discounted price
-        totalPriceBeforeDiscount, // Quantity * original price
-        totalPriceAfterDiscount, // Quantity * discounted price
-        itemDiscount, // Discount for this item
-        product: {
-          name: enrichedProduct.name,
-          price: priceBeforeDiscount, // Original price
-          finalPrice: priceAfterDiscount, // Discounted price
-          stockQuantity: enrichedProduct.stockQuantity,
-          discountPercentage: enrichedProduct.discountPercentage,
-          ratingAverage: enrichedProduct.ratingAverage,
-          ratingTotal: enrichedProduct.ratingTotal,
-          brandName: enrichedProduct.brandName,
-          categoryName: enrichedProduct.categoryName,
-          imageUrl: enrichedProduct.imageUrl
-            ? await getProductImageUrlFromFirebase(enrichedProduct.imageUrl)
-            : "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png",
-        },
+        priceBeforeDiscount,
+        priceAfterDiscount,
+        totalPriceBeforeDiscount,
+        totalPriceAfterDiscount,
+        itemDiscount,
+        product: productDetails,
       };
     })
   );
 
-  // Return enriched cart items and summary
   return {
     cartItems: enrichedCartItems,
     summary: {
-      subtotal: parseFloat(subtotal.toFixed(2)), // Total before discount
-      discount: parseFloat(totalDiscount.toFixed(2)), // Total discount applied
-      grandTotal: parseFloat(grandTotal.toFixed(2)), // Total after discount
+      subtotal: parseFloat(subtotal.toFixed(2)),
+      discount: parseFloat(totalDiscount.toFixed(2)),
+      grandTotal: parseFloat(grandTotal.toFixed(2)),
     },
   };
 };
 
-export const updateCartItemQuantityService = async( cartId: string, newQuantity: number) =>{
-
-  // validating the cartId
+export const updateCartItemQuantityService = async (cartId: string, newQuantity: number) => {
   const cartItem = await getCartByCartId(cartId);
-  if (!cartItem) {
-    throw new Error("Cart item not found.");
-  }
+  if (!cartItem) throw new Error("Cart item not found.");
 
-  // validating the productId
   const product = await getProductByIdRepository(cartItem.productId);
-  if (!product) {
-    throw new Error("Product not found.");
-  }
+  if (!product) throw new Error("Product not found.");
 
-  // if the new quantity exceeds available stock, set the quantity to the stock quantity
   const finalQuantity = newQuantity > product.stockQuantity ? product.stockQuantity : newQuantity;
-  
-  // message to return to the user about the updated quantity
-  let message = "Quantity updated successfully.";
-  if (newQuantity > product.stockQuantity) {
-    message = `Quantity set to the stock limit of ${product.stockQuantity}.`;
-  } else {
-    message = `Quantity updated to ${newQuantity}.`;
-  }
+
+  const message =
+    newQuantity > product.stockQuantity
+      ? `Quantity set to the stock limit of ${product.stockQuantity}.`
+      : `Quantity updated to ${newQuantity}.`;
+
   try {
-    // updating the cart item's quantity
     await updateCartItemQuantity(cartItem.id, finalQuantity);
 
-    // Fetch updated discount information
-    const [enrichedProduct] = await addCustomFields([product]);
+    const { priceBeforeDiscount, priceAfterDiscount, totalPriceBeforeDiscount, totalPriceAfterDiscount, itemDiscount, productDetails } = await enrichProductDetails(
+      product,
+      finalQuantity
+    );
 
-    // Pricing calculations
-    const priceBeforeDiscount = product.price; // Original price
-    const priceAfterDiscount = enrichedProduct.finalPrice; // Discounted price
-    const totalPriceBeforeDiscount = finalQuantity * priceBeforeDiscount; // Quantity * original price
-    const totalPriceAfterDiscount = finalQuantity * priceAfterDiscount; // Quantity * discounted price
-    const itemDiscount = totalPriceBeforeDiscount - totalPriceAfterDiscount; // Discount for this item
-
-    // Return detailed information about the updated cart item
     return {
-      message: message,
+      message,
       updatedCartItem: {
         id: cartItem.id,
         userId: cartItem.userId,
         productId: cartItem.productId,
         quantity: finalQuantity,
-        priceBeforeDiscount, // Original price
-        priceAfterDiscount, // Discounted price
-        totalPriceBeforeDiscount, // Quantity * original price
-        totalPriceAfterDiscount, // Quantity * discounted price
-        itemDiscount, // Discount for this item
-        product: {
-          name: enrichedProduct.name,
-          price: priceBeforeDiscount, // Original price
-          finalPrice: priceAfterDiscount, // Discounted price
-          stockQuantity: enrichedProduct.stockQuantity,
-          discountPercentage: enrichedProduct.discountPercentage,
-          ratingAverage: enrichedProduct.ratingAverage,
-          ratingTotal: enrichedProduct.ratingTotal,
-          brandName: enrichedProduct.brandName,
-          categoryName: enrichedProduct.categoryName,
-          imageUrl: enrichedProduct.imageUrl
-            ? await getProductImageUrlFromFirebase(enrichedProduct.imageUrl)
-            : "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png",
-        },
-      }
+        priceBeforeDiscount,
+        priceAfterDiscount,
+        totalPriceBeforeDiscount,
+        totalPriceAfterDiscount,
+        itemDiscount,
+        product: productDetails,
+      },
     };
-  }catch(error){
+  } catch (error) {
     throw new Error("Failed to update the cart item due to an unexpected error.");
   }
 };
