@@ -1,7 +1,7 @@
 import request from "supertest";
-import sequelize from "../config/mySQLConf";
+import sequelize from "../../config/mySQLConf";
 
-import app from "../app"; // Ensure app exports the Express instance
+import app from "../../app"; // Ensure app exports the Express instance
 
 describe("GET /health", () => {
   afterAll(async () => {
