@@ -8,6 +8,8 @@ interface OrderAttributes {
   userId: string;
   couponId: string;
   status: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 interface OrderCreationAttributes extends Optional<OrderAttributes, "id"> {}
@@ -20,6 +22,8 @@ class Order
   public userId!: string;
   public couponId!: string;
   public status!: string;
+  public createdAt!: Date;
+  public updatedAt!: Date;
 }
 
 Order.init(
@@ -48,6 +52,16 @@ Order.init(
     status: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    createdAt: {  // Explicitly define createdAt field
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW, // Set to current timestamp by default
+    },
+    updatedAt: {  // Explicitly define updatedAt field
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW, // Set to current timestamp by default
     },
   },
   {

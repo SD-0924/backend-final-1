@@ -5,7 +5,7 @@ export const findOrderItemsByOrderId = async (orderId: string) => {
   // Fetch all order items by orderId
   const orderItems = await OrderItems.findAll({
     where: { orderId },
-    attributes: ["id", "quantity", "productId"],
+    attributes: ["id", "quantity", "productId","price"],
   });
 
   // Retrieve product details for each order item
@@ -24,4 +24,8 @@ export const findOrderItemsByOrderId = async (orderId: string) => {
   );
 
   return orderItemsWithProducts;
+};
+
+export const createOrderItems = async (orderItems: any[]) => {
+    return await OrderItems.bulkCreate(orderItems);
 };

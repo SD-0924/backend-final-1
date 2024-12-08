@@ -21,7 +21,11 @@ export const getUserOrders = async (req: Request, res: Response) => {
 
 export const placeOrder = async (req: Request, res: Response)=> {
   try {
-    const { userId, couponId, status } = req.body;
+    const { userId } = req.body;
+
+    // Default values for couponId and status
+    const couponId = "b62f3e21-8a4d-4db4-9182-d38fb314f657";  
+    const status = "processing";  // Default status
 
    const order = await placeOrderService(userId, couponId, status);
 
