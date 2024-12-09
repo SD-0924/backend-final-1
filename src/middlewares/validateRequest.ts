@@ -5,7 +5,7 @@ export const validateRequest = (req: Request, res: Response, next: NextFunction)
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         // If validation errors exist, respond with status 400
-        res.status(400).json({ errors: errors.array() });
+        res.status(400).json({ error: "Validation error", errors: errors.array() });
         return; // Ensure no further processing happens
     }
 

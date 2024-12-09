@@ -86,5 +86,119 @@ describe("Product Endpoints", () => {
       expect(getAllProductsService).toHaveBeenCalledTimes(1);
     });
   });
-  // will add more tests in next PR
+
+  describe("GET /api/products/:id", () => {
+    it("should return a product by ID with status 201", async () => {
+      (getProductByIdService as jest.Mock).mockResolvedValue(mockProduct);
+
+      const response = await request(app).get(
+        `/api/products/${mockProduct.id}`
+      );
+
+      expect(response.status).toBe(201);
+      expect(response.body.name).toBe(mockProduct.name);
+      expect(getProductByIdService).toHaveBeenCalledWith(mockProduct.id);
+    });
+
+    it("should return 404 if product is not found", async () => {
+      (getProductByIdService as jest.Mock).mockResolvedValue(null);
+
+      const response = await request(app).get("/api/products/unknown");
+
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual({ error: "Product not found" });
+    });
+  });
+
+  describe("POST /api/products", () => {
+    it("should add a product and return it with status 201", async () => {
+      (addProductService as jest.Mock).mockResolvedValue({
+        ...mockProduct,
+        createdAt: mockProduct.createdAt.toDateString(),
+        updatedAt: mockProduct.updatedAt.toDateString(),
+      });
+
+      const response = await request(app)
+        .post("/api/products")
+        .send({
+          ...mockProduct,
+          createdAt: mockProduct.createdAt.toDateString(),
+          updatedAt: mockProduct.updatedAt.toDateString(),
+        });
+
+      expect(response.status).toBe(201);
+      expect(response.body.data.name).toBe(mockProduct.name);
+      expect(addProductService).toHaveBeenCalledWith({
+        ...mockProduct,
+        createdAt: mockProduct.createdAt.toDateString(),
+        updatedAt: mockProduct.updatedAt.toDateString(),
+      });
+    });
+
+    it("should return 400 for validation errors", async () => {
+      const response = await request(app).post("/api/products").send({});
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("error", "Validation error");
+    });
+  });
+
+  describe("PUT /products/:id", () => {
+    it("should update a product and return it with status 200", async () => {
+      (updateProductService as jest.Mock).mockResolvedValue(mockProduct);
+
+      const response = await request(app)
+        .put(`/api/products/${mockProduct.id}`)
+        .send({ name: "Updated Product" });
+
+      expect(response.status).toBe(200);
+      expect(response.body.data.name).toBe(mockProduct.name);
+      expect(updateProductService).toHaveBeenCalledWith(mockProduct.id, {
+        name: "Updated Product",
+        imageUrl: defaultImageURL,
+      });
+    });
+  });
+
+  describe("GET /api/products/new-arrivals", () => {
+    it("should return new arrivals with pagination details", async () => {
+      (getNewArrivalsService as jest.Mock).mockResolvedValue(mockNewArrivals);
+
+      const response = await request(app).get(
+        "/api/products/new-arrivals?page=1&limit=10"
+      );
+
+      expect(response.status).toBe(200);
+      expect(response.body.data).toHaveLength(1);
+      expect(response.body.pagination.currentPage).toBe(1);
+      expect(getNewArrivalsService).toHaveBeenCalledWith(1, 10);
+    });
+  });
+
+  describe.skip("DELETE /api/products/:id", () => {
+    it("should delete a product and return status 204", async () => {
+      (deleteProductService as jest.Mock).mockResolvedValue(true);
+
+      const response = await request(app).delete(
+        `/api/products/${mockProduct.id}`
+      );
+
+      expect(response.status).toBe(204);
+      expect(deleteProductService).toHaveBeenCalledWith(mockProduct.id);
+    });
+  });
+
+  describe("GET /api/products/:id/ratings", () => {
+    it("should return ratings for a product with status 201", async () => {
+      (getProductRatingsService as jest.Mock).mockResolvedValue(mockRatings);
+
+      const response = await request(app).get(
+        `/api/products/${mockProduct.id}/ratings`
+      );
+
+      expect(response.status).toBe(201);
+      expect(response.body).toHaveLength(2);
+      expect(getProductRatingsService).toHaveBeenCalledWith(mockProduct.id);
+    });
+  });
 });

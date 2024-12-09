@@ -142,7 +142,6 @@ describe("Product Model Test", () => {
     });
 
     MockProduct.addHook("beforeCreate", (product) => {
-      console.log(product);
       const productInstance = product as Product; // Cast to the Product type
       productInstance.isLimitedEdition = productInstance.stockQuantity < 20;
     });
