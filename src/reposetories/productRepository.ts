@@ -12,10 +12,6 @@ export const getAllProductsRepository = async (
   brandName?: any,
   categoryName?: any
 ) => {
-  const brand = await Brand.findOne({
-    where: { name: brandName },
-  });
-
   if (!categoryName && !brandName) {
     const noFillterProducts = await Product.findAll({ limit, offset });
     return {
@@ -23,6 +19,11 @@ export const getAllProductsRepository = async (
       count: noFillterProducts.length,
     };
   }
+
+  const brand = await Brand.findOne({
+    where: { name: brandName },
+  });
+
   const brandId = brand ? brand.dataValues.id : "";
 
   const category = await Category.findOne({
