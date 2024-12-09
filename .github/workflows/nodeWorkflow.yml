@@ -22,13 +22,23 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run tests
+      - name: Run Subset Tests for Pull Requests
+        if: ${{ github.event_name == 'pull_request' }}
         env:
           NODE_ENV: test
           SERVICE_ACCOUNT_JSON: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
         run: |
           echo "Running tests with service account JSON from environment variable"
-          echo "$SERVICE_ACCOUNT_JSON" | jq '.'  # Optional: Verify the content (remove in production)
-          npm test
+          npm run test:health && npm run test:models
+        shell: bash
+      - name: Run Full Test Suite on Merge
+        if: ${{ github.event_name == 'push' }}
+        env:
+          NODE_ENV: test
+          SERVICE_ACCOUNT_JSON: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+        run: |
+          echo "Running tests with service account JSON from environment variable"
+          npm run test:all
         shell: bash
