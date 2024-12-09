@@ -56,6 +56,7 @@
     "mysql2": "^3.11.5",
     "sequelize": "^6.37.5",
     "sequelize-mock": "^0.10.2",
+    "sqlite3": "^5.1.7",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   }
