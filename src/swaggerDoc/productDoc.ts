@@ -10,6 +10,13 @@
  *     security:
  *       - JWT: []
  *     parameters:
+ *      - name: productName
+ *         in: query
+ *         description: The product name.
+ *         required: false
+ *         schema:
+ *           type: string
+ *           default: ""
  *       - name: brandName
  *         in: query
  *         description: The brand name.
