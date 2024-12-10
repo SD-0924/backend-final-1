@@ -16,6 +16,7 @@ import orderRouter from "./routes/orderRoutes";
 import orderItemRouter from "./routes/orderItemRoutes";
 import cors from "cors";
 import ratingRouter from "./routes/ratingRoutes";
+import payRouter from "./routes/paymentRoutes"
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
 
 const app: Application = express();
@@ -46,7 +47,7 @@ app.use(cartRouts);
 app.use(ratingRouter);
 app.use(orderRouter);
 app.use(orderItemRouter);
-
+app.use(payRouter)
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(errorHandlingMiddleware);
