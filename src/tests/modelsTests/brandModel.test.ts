@@ -33,13 +33,18 @@ const MockBrand = sequelize.define(
 ) as typeof Brand;
 
 describe("Brand Model Test", () => {
+
+    // initializing the in-memory database and sync the model
     beforeAll(async () => {
         await sequelize.sync({ force: true });
     });
+
+    // closing the DB connection
     afterAll(async () => {
         await sequelize.close();
     });
 
+    // create a brand test - have to be succeed
     it("should create a new brand successfully", async () => {
     // creating a brand instance
     const brand = await MockBrand.create({
@@ -54,7 +59,7 @@ describe("Brand Model Test", () => {
 
     it("should not create a brand without a name", async () => {
 
-    // attempt to create a brand without a name
+    // create a brand without a name test
     await expect(
         MockBrand.create({
             logo: "test-logo.png",
@@ -63,7 +68,7 @@ describe("Brand Model Test", () => {
     });
 
     it("should not create a brand without a logo", async () => {
-    // Attempt to create a brand without a logo
+    // create a brand without a logo test
         await expect(
         MockBrand.create({
             name: "Brand Without Logo",
