@@ -30,12 +30,14 @@ export const getAllProducts = async (req: Request, res: Response) => {
     const limit = parseInt(req.query.limit as string) || 10;
     const brandName = req.query.brandName || "";
     const categoryName = req.query.categoryName || "";
+    const productName = req.query.productName || "";
 
     const { products, pagination } = await getAllProductsService(
       page,
       limit,
       brandName,
-      categoryName
+      categoryName,
+      productName
     );
 
     if (products.length === 0) {
