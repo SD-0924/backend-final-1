@@ -124,10 +124,21 @@ export const getProductsByBrandService = async (
   const offset = (page - 1) * limit;
   // check if the brand exists or not by brandId
   const brandExists = await fetchBrandByIdService(brandId);
+
   if (!brandExists) {
     throw new Error("Brand not found");
   }
-  return await getProductsByBrandRepository(brandId, limit, offset);
+  const { rows: products, count: totalProducts } =
+    await getProductsByBrandRepository(brandId, limit, offset);
+  const finalProducts = await addCustomFields(products);
+  return {
+    products: finalProducts,
+    pagination: {
+      currentPage: page,
+      totalProducts,
+      totalPages: Math.ceil(totalProducts / limit),
+    },
+  };
 };
 
 export const getProductsByCategoryService = async (
@@ -141,12 +152,17 @@ export const getProductsByCategoryService = async (
   if (!categoryExists) {
     throw new Error("Category not found");
   }
-  const products = await getProductsByCategoryRepository(
-    categoryId,
-    limit,
-    offset
-  );
-  return await addCustomFields(products);
+  const { rows: products, count: totalProducts } =
+    await getProductsByCategoryRepository(categoryId, limit, offset);
+  const finalProducts = await addCustomFields(products);
+  return {
+    products: finalProducts,
+    pagination: {
+      currentPage: page,
+      totalProducts,
+      totalPages: Math.ceil(totalProducts / limit),
+    },
+  };
 };
 
 export const fetchHandpickedProducts = async (page: number, limit: number) => {
