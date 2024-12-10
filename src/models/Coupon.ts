@@ -12,15 +12,9 @@ interface CouponAttributes {
   isActive: boolean;
 }
 
-interface CouponCreationAttributes
-  extends Optional<
-    CouponAttributes,
-    "id" | "minOrderValue" | "usageLimit" | "expiryDate"
-  > {}
+interface CouponCreationAttributes extends Optional<CouponAttributes,"id" | "minOrderValue" | "usageLimit" | "expiryDate"> {}
 
-class Coupon
-  extends Model<CouponAttributes, CouponCreationAttributes>
-  implements CouponAttributes
+class Coupon extends Model<CouponAttributes, CouponCreationAttributes> implements CouponAttributes
 {
   public id!: string;
   public code!: string;
