@@ -12,14 +12,10 @@ import {
   getProductsByCategoryService,
 } from "../../services/productService";
 
-// import { getProductPriceAfterDiscount } from "../../controllers/productController";
-
 const defaultImageURL =
   "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png";
 // Mock the service
 jest.mock("../../services/productService");
-
-// jest.mock("../../controllers/productController");
 
 describe("Product Endpoints", () => {
   const mockProducts = {
@@ -263,42 +259,4 @@ describe("Product Endpoints", () => {
       expect(getProductRatingsService).toHaveBeenCalledWith(mockProduct.id);
     });
   });
-
-  // describe.skip("GET /api/products/:id/price-after-discount", () => {
-  //   it("should return the price after discount with status 201", async () => {
-  //     const mockPriceResponse = { finalPrice: 90 };
-  //     (getProductPriceAfterDiscount as jest.Mock).mockResolvedValue(
-  //       mockPriceResponse
-  //     );
-
-  //     const productId = "123";
-  //     const response = await request(app)
-  //       .get(`/api/products/${productId}/price-after-discount`)
-  //       .set("Authorization", "Bearer valid-token");
-
-  //     expect(response.status).toBe(201);
-  //     expect(response.body.finalPrice).toBe(mockPriceResponse.finalPrice);
-  //     expect(getProductPriceAfterDiscount).toHaveBeenCalledWith(productId);
-  //   });
-
-  //   it("should return 401 if JWT is missing or invalid", async () => {
-  //     const response = await request(app).get(
-  //       `/api/products/123/price-after-discount`
-  //     );
-
-  //     expect(response.status).toBe(401);
-  //     expect(response.body).toEqual({ error: "Unauthorized" });
-  //   });
-
-  //   it("should return 404 if product is not found", async () => {
-  //     (getProductPriceAfterDiscount as jest.Mock).mockResolvedValue(null);
-
-  //     const response = await request(app)
-  //       .get(`/api/products/unknown/price-after-discount`)
-  //       .set("Authorization", "Bearer valid-token");
-
-  //     expect(response.status).toBe(404);
-  //     expect(response.body).toEqual({ error: "Product not found" });
-  //   });
-  // });
 });
