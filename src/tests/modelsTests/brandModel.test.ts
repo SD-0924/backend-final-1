@@ -14,17 +14,17 @@ const MockBrand = sequelize.define(
     "Brand",
     {
         id: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
-        primaryKey: true,
+            type: DataTypes.UUID,
+            defaultValue: DataTypes.UUIDV4,
+            primaryKey: true,
         },
         name: {
-        type: DataTypes.STRING,
-        allowNull: false,
+            type: DataTypes.STRING,
+            allowNull: false,
         },
         logo: {
-        type: DataTypes.STRING,
-        allowNull: false, // Required field
+            type: DataTypes.STRING,
+            allowNull: false, // Required field
         },
     },
     {
@@ -58,13 +58,12 @@ describe("Brand Model Test", () => {
     });
 
     it("should not create a brand without a name", async () => {
-
-    // create a brand without a name test
-    await expect(
-        MockBrand.create({
-            logo: "test-logo.png",
-        } as Brand)
-    ).rejects.toThrowError("notNull Violation: Brand.name cannot be null");
+        // create a brand without a name test
+        await expect(
+            MockBrand.create({
+                logo: "test-logo.png",
+            } as Brand)
+        ).rejects.toThrowError("notNull Violation: Brand.name cannot be null");
     });
 
     it("should not create a brand without a logo", async () => {
