@@ -1,12 +1,13 @@
 import { Sequelize, DataTypes } from "sequelize";
-import Discount from "../../models/Discount";
-import Product from "../../models/Product"; 
+import Rating from "../../models/Rating"; 
+import Product from "../../models/Product";
+import User from "../../models/User";
 import Brand from "../../models/Brand"; 
 import Category from "../../models/Category"; 
 
 const sequelize = new Sequelize({
     dialect: "sqlite",
-    storage: ":memory:",
+    storage: ":memory:", 
     define: {
         freezeTableName: true,
     },
@@ -58,6 +59,7 @@ const MockCategory = sequelize.define(
     }
 ) as typeof Category;
 
+// Product Model
 const MockProduct = sequelize.define(
     "Product",
     {
@@ -128,25 +130,58 @@ const MockProduct = sequelize.define(
     }
 ) as typeof Product;
 
-const MockDiscount = sequelize.define(
-    "Discount",
+// User Model
+const MockUser = sequelize.define(
+    "User",
     {
         id: {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4,
             primaryKey: true,
         },
-        discountPercentage: {
-            type: DataTypes.DECIMAL(5, 2),
+        email: {
+            type: DataTypes.STRING,
             allowNull: false,
         },
-        startDate: {
-            type: DataTypes.DATE,
+        first: {
+            type: DataTypes.STRING,
             allowNull: false,
         },
-        endDate: {
-            type: DataTypes.DATE,
+        last: {
+            type: DataTypes.STRING,
             allowNull: false,
+        },
+        passwordHash: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        mobileNum: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        address: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
+        role: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            defaultValue: "User",
+        },
+    },
+    {
+        tableName: "users",
+    }
+) as typeof User;
+
+// Rating Model
+const MockRating = sequelize.define(
+    "Rating",
+    {
+        id: {
+            type: DataTypes.UUID,
+            defaultValue: DataTypes.UUIDV4,
+            primaryKey: true,
         },
         productId: {
             type: DataTypes.UUID,
@@ -156,32 +191,49 @@ const MockDiscount = sequelize.define(
                 key: "id",
             },
         },
+        userId: {
+            type: DataTypes.UUID,
+            allowNull: false,
+            references: {
+                model: User,
+                key: "id",
+            },
+        },
+        ratingValue: {
+            type: DataTypes.FLOAT,
+            allowNull: false,
+        },
+        review: {
+            type: DataTypes.TEXT,
+            allowNull: true,
+        },
     },
     {
-        tableName: "discounts",
+        tableName: "ratings",
     }
-) as typeof Discount;
+) as typeof Rating;
 
-describe("Discount Model Test", () => {
+describe("Rating Model Test", () => {
 
     let product: Product;
+    let user: User;
 
     beforeAll(async () => {
         await sequelize.sync({ force: true });
 
-        // inserting mock Brand and Category
+        // Creating Brand
         const brand = await MockBrand.create({
-            id: "a84c591a-6a2b-4800-997f-32d343094a",
-            name: "Brand A",
-            logo: "brand-image.png",
+            name: "Test Brand",
+            logo: "test-logo.png",
         } as Brand);
-
+        
+        // Mock Category
         const category = await MockCategory.create({
-            id: "bc4fbd6e-37a1-403948e-86ba-695a56ee",
-            name: "Category A",
+            name: "Test Category",
+            description: "A sample category for testing.",
         } as Category);
 
-        // creating a mock product
+        // Mock Product
         product = await MockProduct.create({
             name: "Product with Discount",
             description: "Product description",
@@ -191,30 +243,39 @@ describe("Discount Model Test", () => {
             brandId: brand.id,
             categoryId: category.id,
         } as Product);
-        
-        // adding beforeCreate hook for Product
+
         MockProduct.addHook("beforeCreate", (product) => {
             const productInstance = product as Product;
             productInstance.isLimitedEdition = productInstance.stockQuantity < 20;
         });
+
+        // Mock User
+        user = await MockUser.create({
+            email: "testuser@example.com",
+            first: "Test",
+            last: "User",
+            passwordHash: "hashedPassword123",
+        } as User);
     });
 
     afterAll(async () => {
         await sequelize.close();
     });
 
-    it("should create a discount for the product", async () => {
+    it("should create a rating for a product", async () => {
 
-        // creating a discount for the product
-        const discount = await MockDiscount.create({
-            discountPercentage: 10,
+        // creating a ratign for a product by user 
+        const rating = await MockRating.create({
             productId: product.id,
-            startDate: new Date(),
-            endDate: new Date(),
-        } as Discount);
+            userId: user.id,
+            ratingValue: 4.5,
+            review: "Great product!",
+        } as Rating);
 
-        // checking if the discount was created
-        expect(discount.discountPercentage).toBe(10);
-        expect(discount.productId).toBe(product.id);
+        // checking if the rating was created successfully
+        expect(rating.ratingValue).toBe(4.5);
+        expect(rating.review).toBe("Great product!");
+        expect(rating.productId).toBe(product.id);
+        expect(rating.userId).toBe(user.id);
     });
 });
