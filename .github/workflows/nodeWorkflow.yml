@@ -28,6 +28,7 @@ jobs:
           NODE_ENV: test
           SERVICE_ACCOUNT_JSON: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
         run: |
           echo "Running tests with service account JSON from environment variable"
           npm run test:health && npm run test:models
