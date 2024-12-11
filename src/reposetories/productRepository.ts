@@ -10,15 +10,24 @@ export const getAllProductsRepository = async (
   limit: number,
   offset: number,
   brandName?: any,
-  categoryName?: any
+  categoryName?: any,
+  productName?: any
 ) => {
-  if (!categoryName && !brandName) {
+  if (!categoryName && !brandName && !productName) {
     const noFillterProducts = await Product.findAll({ limit, offset });
     return {
       rows: noFillterProducts,
       count: noFillterProducts.length,
     };
   }
+
+  const nameProducts = await Product.findAll({
+    where: {
+      name: {
+        [Op.like]: `%${productName}%`, // % is a wildcard for zero or more characters
+      },
+    },
+  });
 
   const brand = await Brand.findOne({
     where: { name: brandName },
@@ -51,7 +60,7 @@ export const getAllProductsRepository = async (
 
   // Step 3: Combine the products and remove duplicates by product ID
 
-  const allProducts = [...brandProducts, ...categoryProducts];
+  const allProducts = [...nameProducts, ...brandProducts, ...categoryProducts];
 
   const uniqueProducts = Array.from(
     new Map(

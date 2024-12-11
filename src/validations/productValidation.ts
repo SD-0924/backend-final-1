@@ -22,6 +22,11 @@ export const validatGetAllProducts = [
     .isString()
     .isLength({ min: 3, max: 100 })
     .withMessage("Category name must be a string between 3 and 100 characters"),
+  query("productName")
+    .optional()
+    .isString()
+    .isLength({ min: 3, max: 100 })
+    .withMessage("Product name must be a string between 3 and 100 characters"),
 ];
 
 export const validateGetProductById = [

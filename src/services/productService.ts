@@ -28,11 +28,18 @@ export const getAllProductsService = async (
   page: number,
   limit: number,
   brandName?: any,
-  categoryName?: any
+  categoryName?: any,
+  productName?: any
 ) => {
   const offset = (page - 1) * limit;
   const { rows: products, count: totalProducts } =
-    await getAllProductsRepository(limit, offset, brandName, categoryName);
+    await getAllProductsRepository(
+      limit,
+      offset,
+      brandName,
+      categoryName,
+      productName
+    );
 
   const finalProducts = await addCustomFields(products);
   return {
