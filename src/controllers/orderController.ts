@@ -16,7 +16,7 @@ export const getUserOrders = async (req: Request, res: Response) => {
       data: orders,
     });
   } catch (error: unknown) {
-    res.status(500).json({
+    res.status(STATUS_CODES.SERVER_ERROR).json({
       message: "Error fetching user orders",
       error: error instanceof Error ? error.message : error,
     });
@@ -38,7 +38,7 @@ export const placeOrder = async (req: Request, res: Response) => {
       data: order,
     });
   } catch (error: unknown) {
-    res.status(500).json({
+    res.status(STATUS_CODES.SERVER_ERROR).json({
       message: "Error placing order",
       error: error instanceof Error ? error.message : error,
     });

@@ -34,7 +34,7 @@ export const createBrand = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error in Creating Brand.");
 
-    res.status(500).json({
+    res.status(STATUS_CODES.SERVER_ERROR).json({
       success: false,
       message: "Error creating brand",
     });
@@ -53,7 +53,9 @@ export const getBrandById = async (req: Request, res: Response) => {
       res.status(STATUS_CODES.CREATED).json(brand);
     }
   } catch (error) {
-    res.status(500).json({ message: "Internal server error." });
+    res
+      .status(STATUS_CODES.SERVER_ERROR)
+      .json({ message: "Internal server error." });
   }
 };
 
@@ -65,7 +67,9 @@ export const getAllBrands = async (req: Request, res: Response) => {
     const brands = await getAllBrandsService();
     res.status(STATUS_CODES.CREATED).json(brands);
   } catch (error) {
-    res.status(500).json({ message: ERROR_MESSAGES.SERVER_ERROR });
+    res
+      .status(STATUS_CODES.SERVER_ERROR)
+      .json({ message: ERROR_MESSAGES.SERVER_ERROR });
   }
 };
 
@@ -80,7 +84,9 @@ export const deleteBrandById = async (req: Request, res: Response) => {
     if (error.message === "Brand not found") {
       res.status(404).json({ message: "Brand not found" });
     } else {
-      res.status(500).json({ message: ERROR_MESSAGES.SERVER_ERROR });
+      res
+        .status(STATUS_CODES.SERVER_ERROR)
+        .json({ message: ERROR_MESSAGES.SERVER_ERROR });
     }
   }
 };
@@ -99,7 +105,7 @@ export const updateBrandController = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     res
-      .status(500)
+      .status(STATUS_CODES.SERVER_ERROR)
       .json({ message: ERROR_MESSAGES.SERVER_ERROR, error: error.message });
   }
 };

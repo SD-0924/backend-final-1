@@ -8,9 +8,11 @@ export const getAllDiscounts = async (req: Request, res: Response) => {
     res.status(STATUS_CODES.CREATED).json(discounts);
   } catch (error: unknown) {
     if (error instanceof Error) {
-      res.status(500).json({ error: error.message });
+      res.status(STATUS_CODES.SERVER_ERROR).json({ error: error.message });
     } else {
-      res.status(500).json({ error: "An unknown error occurred" });
+      res
+        .status(STATUS_CODES.SERVER_ERROR)
+        .json({ error: "An unknown error occurred" });
     }
   }
 };
@@ -26,9 +28,11 @@ export const getDiscountById = async (req: Request, res: Response) => {
     res.status(STATUS_CODES.CREATED).json(discount);
   } catch (error: unknown) {
     if (error instanceof Error) {
-      res.status(500).json({ error: error.message });
+      res.status(STATUS_CODES.SERVER_ERROR).json({ error: error.message });
     } else {
-      res.status(500).json({ error: "An unknown error occurred" });
+      res
+        .status(STATUS_CODES.SERVER_ERROR)
+        .json({ error: "An unknown error occurred" });
     }
   }
 };
@@ -40,9 +44,11 @@ export const createDiscount = async (req: Request, res: Response) => {
     res.status(201).json(discount);
   } catch (error: unknown) {
     if (error instanceof Error) {
-      res.status(500).json({ error: error.message });
+      res.status(STATUS_CODES.SERVER_ERROR).json({ error: error.message });
     } else {
-      res.status(500).json({ error: "An unknown error occurred" });
+      res
+        .status(STATUS_CODES.SERVER_ERROR)
+        .json({ error: "An unknown error occurred" });
     }
   }
 };
@@ -58,10 +64,12 @@ export const updateDiscount = async (req: Request, res: Response) => {
       if (error.message === "Discount not found") {
         res.status(404).json({ message: error.message });
       } else {
-        res.status(500).json({ error: error.message });
+        res.status(STATUS_CODES.SERVER_ERROR).json({ error: error.message });
       }
     } else {
-      res.status(500).json({ error: "An unknown error occurred" });
+      res
+        .status(STATUS_CODES.SERVER_ERROR)
+        .json({ error: "An unknown error occurred" });
     }
   }
 };
@@ -76,10 +84,12 @@ export const deleteDiscount = async (req: Request, res: Response) => {
       if (error.message === "Discount not found") {
         res.status(404).json({ message: error.message });
       } else {
-        res.status(500).json({ error: error.message });
+        res.status(STATUS_CODES.SERVER_ERROR).json({ error: error.message });
       }
     } else {
-      res.status(500).json({ error: "An unknown error occurred" });
+      res
+        .status(STATUS_CODES.SERVER_ERROR)
+        .json({ error: "An unknown error occurred" });
     }
   }
 };
@@ -131,7 +141,9 @@ export const getDiscountTimeRemainingById = async (
     return;
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    res
+      .status(STATUS_CODES.SERVER_ERROR)
+      .json({ message: "Internal server error" });
     return;
   }
 };

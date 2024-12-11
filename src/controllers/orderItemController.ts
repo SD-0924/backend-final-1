@@ -18,7 +18,7 @@ export const getOrderItems = async (req: Request, res: Response) => {
     res.status(STATUS_CODES.CREATED).json({ orderItems });
   } catch (error) {
     res
-      .status(500)
+      .status(STATUS_CODES.SERVER_ERROR)
       .json({ error: error instanceof Error ? error.message : error });
   }
 };

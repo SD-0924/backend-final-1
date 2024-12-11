@@ -35,7 +35,7 @@ export const processOrderPayment = async (req: Request, res: Response) => {
       return;
     }
   } catch (error: unknown) {
-    res.status(500).json({
+    res.status(STATUS_CODES.SERVER_ERROR).json({
       message: "Error processing payment",
       error: error instanceof Error ? error.message : error,
     });

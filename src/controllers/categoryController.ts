@@ -16,7 +16,9 @@ export const getAllCategories = async (req: Request, res: Response) => {
     const categories = await getAllCategoriesService(limit, offset);
     res.status(STATUS_CODES.CREATED).json(categories);
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch categories" });
+    res
+      .status(STATUS_CODES.SERVER_ERROR)
+      .json({ error: "Failed to fetch categories" });
   }
 };
 
@@ -30,7 +32,9 @@ export const getCategoryById = async (req: Request, res: Response) => {
       res.status(STATUS_CODES.CREATED).json(category);
     }
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch category" });
+    res
+      .status(STATUS_CODES.SERVER_ERROR)
+      .json({ error: "Failed to fetch category" });
   }
 };
 
@@ -44,7 +48,7 @@ export const createCategory = async (req: Request, res: Response) => {
       data: newCategory,
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(STATUS_CODES.SERVER_ERROR).json({
       success: false,
       message: "Failed to create category",
     });
@@ -69,7 +73,7 @@ export const updateCategory = async (req: Request, res: Response) => {
     if (error.message === "Category not found") {
       res.status(404).json({ message: "Category not found" });
     } else {
-      res.status(500).json({
+      res.status(STATUS_CODES.SERVER_ERROR).json({
         success: false,
         message: "Failed to update category",
       });
@@ -89,7 +93,7 @@ export const deleteCategory = async (req: Request, res: Response) => {
     if (error.message === "Category not found") {
       res.status(404).json({ message: "Category not found" });
     } else {
-      res.status(500).json({
+      res.status(STATUS_CODES.SERVER_ERROR).json({
         success: false,
         message: "Failed to delete category",
       });
@@ -103,6 +107,8 @@ export const getProductsByCategoryId = async (req: Request, res: Response) => {
     const products = await getProductsByCategoryIdService(categoryId);
     res.status(STATUS_CODES.CREATED).json(products);
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch products" });
+    res
+      .status(STATUS_CODES.SERVER_ERROR)
+      .json({ error: "Failed to fetch products" });
   }
 };

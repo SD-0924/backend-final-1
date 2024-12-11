@@ -38,7 +38,7 @@ export const addToCartController = async (req: Request, res: Response) => {
       res.status(404).json({ message: "Product not found" });
     } else {
       res
-        .status(500)
+        .status(STATUS_CODES.SERVER_ERROR)
         .json({ message: "An error occurred while adding to the cart" });
     }
   }
@@ -56,7 +56,7 @@ export const deleteCartItemController = async (req: Request, res: Response) => {
       res.status(404).json({ message: "cartItem not found" });
     } else {
       res
-        .status(500)
+        .status(STATUS_CODES.SERVER_ERROR)
         .json({ message: "An error occurred while deleting the cart item" });
     }
   }
@@ -76,7 +76,7 @@ export const deleteAllCartItems = async (req: Request, res: Response) => {
     } else if (error.message === "No cart items found for this user.") {
       res.status(404).json({ message: "No cart items found for this user." });
     } else {
-      res.status(500).json({
+      res.status(STATUS_CODES.SERVER_ERROR).json({
         message:
           "An error occurred while deleting the cart items. Please try again later.",
       });
@@ -99,7 +99,9 @@ export const getCartItemsByUserId = async (req: Request, res: Response) => {
     } else if (error.message.includes("Product with ID")) {
       res.status(404).json({ error: error.message });
     } else {
-      res.status(500).json({ error: "Failed to fetch cart items." });
+      res
+        .status(STATUS_CODES.SERVER_ERROR)
+        .json({ error: "Failed to fetch cart items." });
     }
   }
 };
@@ -124,7 +126,9 @@ export const updateCartItemQuantityController = async (
     } else if (error.message === "Product not found.") {
       res.status(404).json({ error: "Product not found." });
     } else {
-      res.status(500).json({ error: "Error updating the item quantity." });
+      res
+        .status(STATUS_CODES.SERVER_ERROR)
+        .json({ error: "Error updating the item quantity." });
     }
   }
 };

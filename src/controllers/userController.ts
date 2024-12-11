@@ -32,10 +32,12 @@ export const handleRegister = async (
   } catch (error: unknown) {
     if (error instanceof Error) {
       res
-        .status(500)
+        .status(STATUS_CODES.SERVER_ERROR)
         .json({ message: ERROR_MESSAGES.SERVER_ERROR, error: error.message });
     } else {
-      res.status(500).json({ message: "An unknown error occurred" });
+      res
+        .status(STATUS_CODES.SERVER_ERROR)
+        .json({ message: "An unknown error occurred" });
     }
   }
 };
@@ -102,10 +104,12 @@ export const handleUpdateUser = async (
         error.message === "All password fields are required" ||
         error.message === "New password and confirm password do not match"
           ? STATUS_CODES.BAD_REQUEST
-          : 500;
+          : STATUS_CODES.SERVER_ERROR;
       res.status(statusCode).json({ message: error.message });
     } else {
-      res.status(500).json({ message: ERROR_MESSAGES.SERVER_ERROR });
+      res
+        .status(STATUS_CODES.SERVER_ERROR)
+        .json({ message: ERROR_MESSAGES.SERVER_ERROR });
     }
   }
 };
@@ -143,7 +147,7 @@ export const handleUpdateUseradress = async (
       .status(STATUS_CODES.CREATED)
       .json({ message: "User updated successfully", user: updatedUser });
   } catch (error: unknown) {
-    res.status(500).json({
+    res.status(STATUS_CODES.SERVER_ERROR).json({
       message: "Internal server error",
       error: error instanceof Error ? error.message : error,
     });
@@ -168,7 +172,7 @@ export const handleDeleteUser = async (
       .status(STATUS_CODES.CREATED)
       .json({ message: "User deleted successfully" });
   } catch (error: unknown) {
-    res.status(500).json({
+    res.status(STATUS_CODES.SERVER_ERROR).json({
       message: "Internal server error",
       error: error instanceof Error ? error.message : error,
     });
@@ -182,7 +186,7 @@ export const handleGetAllUsers = async (
     const users = await getAllUsers();
     res.status(STATUS_CODES.CREATED).json(users);
   } catch (error: unknown) {
-    res.status(500).json({
+    res.status(STATUS_CODES.SERVER_ERROR).json({
       message: "Internal server error",
       error: (error as Error).message,
     });
@@ -202,6 +206,8 @@ export const getUserByIdController = async (
     }
     res.status(STATUS_CODES.CREATED).json(user);
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch user", error });
+    res
+      .status(STATUS_CODES.SERVER_ERROR)
+      .json({ message: "Failed to fetch user", error });
   }
 };

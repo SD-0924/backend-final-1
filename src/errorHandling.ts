@@ -1,4 +1,6 @@
 import { ERROR_MESSAGES } from "./constants/errorMessages";
+import { STATUS_CODES } from "./constants/statusCodes";
+
 
 import { Request, Response, NextFunction } from "express";
 
@@ -8,7 +10,7 @@ const errorHandlingMiddleware = (
   res: Response,
   next: NextFunction
 ): void => {
-  const status = err.status || 500;
+  const status = err.status || STATUS_CODES.SERVER_ERROR;
   const message = err.message || ERROR_MESSAGES.SERVER_ERROR;
 
   // Specific error handling
@@ -20,8 +22,6 @@ const errorHandlingMiddleware = (
     // Default error handling
     res.status(status).json({ message });
   }
-
-
 };
 
 export default errorHandlingMiddleware;
