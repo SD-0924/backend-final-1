@@ -24,6 +24,9 @@ import {
   getDiscountTimeRemainingById,
 } from "../services/discountService";
 
+const defaultImageURL =
+  "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png";
+
 export const getAllProducts = async (req: Request, res: Response) => {
   try {
     const page = parseInt(req.query.page as string) || 1;
@@ -47,11 +50,7 @@ export const getAllProducts = async (req: Request, res: Response) => {
 
     const updatedProducts = await Promise.all(
       products.map(async (product) => {
-        if (
-          product.imageUrl &&
-          product.imageUrl !==
-            "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png"
-        ) {
+        if (product.imageUrl && product.imageUrl !== defaultImageURL) {
           try {
             const updatedImageUrl = await getProductImageUrlFromFirebase(
               product.imageUrl
@@ -69,8 +68,7 @@ export const getAllProducts = async (req: Request, res: Response) => {
             return product;
           }
         } else {
-          product.imageUrl =
-            "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png";
+          product.imageUrl = defaultImageURL;
         }
         return product;
       })
@@ -99,7 +97,7 @@ export const getProductById = async (
       return;
     }
 
-    if (product.imageUrl) {
+    if (product.imageUrl && product.imageUrl !== defaultImageURL) {
       try {
         const updatedImageUrl = await getProductImageUrlFromFirebase(
           product.imageUrl
@@ -109,8 +107,7 @@ export const getProductById = async (
         console.error(`Error fetching image for product ${productId}:`, error);
       }
     } else {
-      product.imageUrl =
-        "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png";
+      product.imageUrl = defaultImageURL;
     }
 
     res.status(201).json(product);
@@ -131,8 +128,7 @@ export const addProduct = async (req: Request, res: Response) => {
       );
       productData.imageUrl = imageUrl;
     } else {
-      productData.imageUrl =
-        "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png";
+      productData.imageUrl = defaultImageURL;
     }
 
     const newProduct = await addProductService(productData);
@@ -163,8 +159,7 @@ export const updateProduct = async (req: Request, res: Response) => {
       );
       updatedData.imageUrl = imageUrl;
     } else {
-      updatedData.imageUrl =
-        "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png";
+      updatedData.imageUrl = defaultImageURL;
     }
 
     const updatedProduct = await updateProductService(productId, updatedData);
@@ -251,8 +246,7 @@ export const getLimitedEdition = async (req: Request, res: Response) => {
             return product;
           }
         } else {
-          product.imageUrl =
-            "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png";
+          product.imageUrl = defaultImageURL;
         }
         return product;
       })
@@ -295,8 +289,7 @@ export const getDiscountedProducts = async (req: Request, res: Response) => {
             return product;
           }
         } else {
-          product.imageUrl =
-            "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png";
+          product.imageUrl = defaultImageURL;
         }
         return product;
       })
@@ -339,8 +332,7 @@ export const getPopularProducts = async (req: Request, res: Response) => {
             return product;
           }
         } else {
-          product.imageUrl =
-            "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png";
+          product.imageUrl = defaultImageURL;
         }
         return product;
       })
@@ -365,7 +357,7 @@ export const getNewArrivals = async (
 
     const updatedProducts = await Promise.all(
       products.map(async (product) => {
-        if (product.imageUrl) {
+        if (product.imageUrl && product.imageUrl !== defaultImageURL) {
           try {
             const updatedImageUrl = await getProductImageUrlFromFirebase(
               product.imageUrl
@@ -383,8 +375,7 @@ export const getNewArrivals = async (
             return product;
           }
         } else {
-          product.imageUrl =
-            "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png";
+          product.imageUrl = defaultImageURL;
         }
         return product;
       })
@@ -434,8 +425,7 @@ export const getHandpicked = async (req: Request, res: Response) => {
             return product;
           }
         } else {
-          product.imageUrl =
-            "https://shop.songprinting.com/global/images/PublicShop/ProductSearch/prodgr_default_300.png";
+          product.imageUrl = defaultImageURL;
         }
         return product;
       })
@@ -455,32 +445,48 @@ export const getProductsByBrand = async (
   try {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
-    const products = await getProductsByBrandService(brandId, page, limit);
+    const { products, pagination } = await getProductsByBrandService(
+      brandId,
+      page,
+      limit
+    );
     if (products.length === 0) {
-      res
-        .status(404)
-        .json({ message: "No products found for the specified brand." });
-    } else {
-      const updatedProducts = await Promise.all(
-        products.map(async (product) => {
-          const updatedImageUrl = await getProductImageUrlFromFirebase(
-            product.imageUrl
-          );
-          return {
-            ...product.toJSON(),
-            logoUrl: updatedImageUrl,
-          };
-        })
-      );
-      res.status(200).json({ products: updatedProducts });
+      res.status(404).json({ message: "No products found." });
+      return;
     }
-  } catch (error: any) {
-    console.error("Error fetching products by brand:", error.message);
-    if (error.message === "Brand not found") {
-      res.status(404).json({ message: "Brand not found" });
-    } else {
-      res.status(500).json({ message: "Server error" });
-    }
+
+    const updatedProducts = await Promise.all(
+      products.map(async (product) => {
+        if (product.imageUrl && product.imageUrl !== defaultImageURL) {
+          try {
+            const updatedImageUrl = await getProductImageUrlFromFirebase(
+              product.imageUrl
+            );
+            console.log(
+              `Updated image URL for product ${product.id}:`,
+              updatedImageUrl
+            );
+            return { ...product, imageUrl: updatedImageUrl };
+          } catch (error) {
+            console.error(
+              `Error fetching image for product ${product.id}:`,
+              error
+            );
+            return product;
+          }
+        } else {
+          product.imageUrl = defaultImageURL;
+        }
+        return product;
+      })
+    );
+    res.status(201).json({
+      success: true,
+      data: updatedProducts,
+      pagination,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error });
   }
 };
 
@@ -492,29 +498,46 @@ export const getProductsByCategory = async (
   try {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
-    const products = await getProductsByCategoryService(
+    const { products, pagination } = await getProductsByCategoryService(
       categoryId,
       page,
       limit
     );
     if (products.length === 0) {
-      res
-        .status(404)
-        .json({ message: "No products found for the specified category." });
-    } else {
-      const updatedProducts = await Promise.all(
-        products.map(async (product) => {
-          const updatedImageUrl = await getProductImageUrlFromFirebase(
-            product.imageUrl
-          );
-          return {
-            ...product.toJSON(),
-            logoUrl: updatedImageUrl,
-          };
-        })
-      );
-      res.status(200).json({ products: updatedProducts });
+      res.status(404).json({ message: "No products found." });
+      return;
     }
+
+    const updatedProducts = await Promise.all(
+      products.map(async (product) => {
+        if (product.imageUrl && product.imageUrl !== defaultImageURL) {
+          try {
+            const updatedImageUrl = await getProductImageUrlFromFirebase(
+              product.imageUrl
+            );
+            console.log(
+              `Updated image URL for product ${product.id}:`,
+              updatedImageUrl
+            );
+            return { ...product, imageUrl: updatedImageUrl };
+          } catch (error) {
+            console.error(
+              `Error fetching image for product ${product.id}:`,
+              error
+            );
+            return product;
+          }
+        } else {
+          product.imageUrl = defaultImageURL;
+        }
+        return product;
+      })
+    );
+    res.status(201).json({
+      success: true,
+      data: updatedProducts,
+      pagination,
+    });
   } catch (error: any) {
     console.error("Error fetching products by category:", error.message);
     if (error.message === "Category not found") {

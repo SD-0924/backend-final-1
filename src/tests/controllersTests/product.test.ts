@@ -6,9 +6,10 @@ import {
   getProductByIdService,
   addProductService,
   updateProductService,
-  deleteProductService,
   getProductRatingsService,
   getNewArrivalsService,
+  getProductsByBrandService,
+  getProductsByCategoryService,
 } from "../../services/productService";
 
 const defaultImageURL =
@@ -71,8 +72,76 @@ describe("Product Endpoints", () => {
     },
   };
 
+  const mockProductByBrand = {
+    products: [mockProducts.products[0]],
+    pagination: {
+      currentPage: 1,
+      totalProducts: 1,
+      totalPages: 1,
+    },
+  };
+
+  const mockProductByCategory = {
+    products: [mockProducts.products[1]],
+    pagination: {
+      currentPage: 1,
+      totalProducts: 1,
+      totalPages: 1,
+    },
+  };
+
+  const mockBrand = { id: "brand123", name: "Mock Brand", logo: "logo.png" };
+  const mockCategory = {
+    id: "category123",
+    name: "Mock Category",
+    description: "Mock Category Description",
+  };
+
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  describe("GET /api/products/by-brand/:brandId", () => {
+    it("should return products by brand with status 201", async () => {
+      (getProductsByBrandService as jest.Mock).mockResolvedValue(
+        mockProductByBrand
+      );
+
+      const brandId = "brand123";
+      const response = await request(app).get(
+        `/api/products/by-brand/${brandId}`
+      );
+      expect(response.status).toBe(201);
+      expect(response.body.data).toHaveLength(1);
+      expect(response.body.data[0].id).toEqual(
+        mockProductByBrand.products[0].id
+      );
+      expect(getProductsByBrandService).toHaveBeenCalledWith(brandId, 1, 10);
+    });
+  });
+
+  describe("GET /api/products/by-category/:categoryId", () => {
+    it("should return products by category with status 201", async () => {
+      (getProductsByCategoryService as jest.Mock).mockResolvedValue(
+        mockProductByCategory
+      );
+
+      const categoryId = "category456";
+      const response = await request(app).get(
+        `/api/products/by-category/${categoryId}`
+      );
+
+      expect(response.status).toBe(201);
+      expect(response.body.data).toHaveLength(1);
+      expect(response.body.data[0].id).toEqual(
+        mockProductByCategory.products[0].id
+      );
+      expect(getProductsByCategoryService).toHaveBeenCalledWith(
+        categoryId,
+        1,
+        10
+      );
+    });
   });
 
   describe("GET /api/products", () => {
@@ -175,19 +244,6 @@ describe("Product Endpoints", () => {
     });
   });
 
-  describe.skip("DELETE /api/products/:id", () => {
-    it("should delete a product and return status 204", async () => {
-      (deleteProductService as jest.Mock).mockResolvedValue(true);
-
-      const response = await request(app).delete(
-        `/api/products/${mockProduct.id}`
-      );
-
-      expect(response.status).toBe(204);
-      expect(deleteProductService).toHaveBeenCalledWith(mockProduct.id);
-    });
-  });
-
   describe("GET /api/products/:id/ratings", () => {
     it("should return ratings for a product with status 201", async () => {
       (getProductRatingsService as jest.Mock).mockResolvedValue(mockRatings);
@@ -198,6 +254,8 @@ describe("Product Endpoints", () => {
 
       expect(response.status).toBe(201);
       expect(response.body).toHaveLength(2);
+      expect(response.body[1].comment).toEqual(mockRatings[1].comment);
+
       expect(getProductRatingsService).toHaveBeenCalledWith(mockProduct.id);
     });
   });

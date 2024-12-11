@@ -190,7 +190,7 @@ export const getProductsByBrandRepository = async (
   limit: number,
   offset: number
 ) => {
-  return await Product.findAll({ where: { brandId }, limit, offset });
+  return await Product.findAndCountAll({ where: { brandId }, limit, offset });
 };
 
 export const getProductsByCategoryRepository = async (
@@ -198,7 +198,11 @@ export const getProductsByCategoryRepository = async (
   limit: number,
   offset: number
 ) => {
-  return await Product.findAll({ where: { categoryId }, limit, offset });
+  return await Product.findAndCountAll({
+    where: { categoryId },
+    limit,
+    offset,
+  });
 };
 
 export const getHandpickedProducts = async (limit: number, offset: number) => {
