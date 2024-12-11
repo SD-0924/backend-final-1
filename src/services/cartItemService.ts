@@ -31,7 +31,7 @@ export const addToCartService = async (
   // 2. checking if the priduct id exists or not
   const product = await getProductByIdRepository(productId);
   if (!product) {
-    throw new Error("Product not found");
+    throw new Error(ERROR_MESSAGES.PRODUCT_NOT_FOUND);
   }
 
   // 3. checking if the product already in the cart for the same user
@@ -207,7 +207,7 @@ export const updateCartItemQuantityService = async (
   if (!cartItem) throw new Error("Cart item not found.");
 
   const product = await getProductByIdRepository(cartItem.productId);
-  if (!product) throw new Error("Product not found.");
+  if (!product) throw new Error(ERROR_MESSAGES.PRODUCT_NOT_FOUND);
 
   const finalQuantity =
     newQuantity > product.stockQuantity ? product.stockQuantity : newQuantity;

@@ -1,4 +1,6 @@
 import { STATUS_CODES } from "../../constants/statusCodes";
+import { ERROR_MESSAGES } from "../../constants/errorMessages";
+
 import request from "supertest";
 
 import app from "../../app";
@@ -176,7 +178,9 @@ describe("Product Endpoints", () => {
       const response = await request(app).get("/api/products/unknown");
 
       expect(response.status).toBe(STATUS_CODES.NOT_FOUND);
-      expect(response.body).toEqual({ error: "Product not found" });
+      expect(response.body).toEqual({
+        error: ERROR_MESSAGES.PRODUCT_NOT_FOUND,
+      });
     });
   });
 

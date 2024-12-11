@@ -99,7 +99,9 @@ export const getProductById = async (
 
     const product = await getProductByIdService(productId);
     if (!product) {
-      res.status(STATUS_CODES.NOT_FOUND).json({ error: "Product not found" });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ error: ERROR_MESSAGES.PRODUCT_NOT_FOUND });
       return;
     }
 
@@ -179,8 +181,10 @@ export const updateProduct = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     console.error("Error updating product:", error);
-    if (error.message === "Product not found") {
-      res.status(STATUS_CODES.NOT_FOUND).json({ message: "Product not found" });
+    if (error.message === ERROR_MESSAGES.PRODUCT_NOT_FOUND) {
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: ERROR_MESSAGES.PRODUCT_NOT_FOUND });
     } else {
       res.status(STATUS_CODES.SERVER_ERROR).json({
         success: false,
@@ -591,7 +595,9 @@ export const getProductPriceAfterDiscount = async (
   try {
     const product = await getProductByIdService(id);
     if (!product) {
-      res.status(STATUS_CODES.NOT_FOUND).json({ message: "Product not found" });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: ERROR_MESSAGES.PRODUCT_NOT_FOUND });
       return;
     }
     const discount = await getDiscountByProductId(id);

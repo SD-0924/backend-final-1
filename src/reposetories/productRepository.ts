@@ -5,6 +5,7 @@ import Rating from "../models/Rating";
 import Category from "../models/Category";
 import Brand from "../models/Brand";
 import Discount from "../models/Discount";
+import { ERROR_MESSAGES } from "../constants/errorMessages";
 
 export const getAllProductsRepository = async (
   limit: number,
@@ -88,7 +89,7 @@ export const updateProductRepository = async (
 ) => {
   const product = await Product.findByPk(productId);
   if (!product) {
-    throw new Error("Product not found");
+    throw new Error(ERROR_MESSAGES.PRODUCT_NOT_FOUND);
   }
   return await product.update(updatedData);
 };
@@ -96,7 +97,7 @@ export const updateProductRepository = async (
 export const deleteProductRepository = async (productId: string) => {
   const product = await Product.findByPk(productId);
   if (!product) {
-    throw new Error("Product not found");
+    throw new Error(ERROR_MESSAGES.PRODUCT_NOT_FOUND);
   }
   return await product.destroy();
 };

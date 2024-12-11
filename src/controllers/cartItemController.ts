@@ -37,8 +37,10 @@ export const addToCartController = async (req: Request, res: Response) => {
       res
         .status(STATUS_CODES.NOT_FOUND)
         .json({ message: ERROR_MESSAGES.USER_NOT_FOUND });
-    } else if (error.message === "Product not found") {
-      res.status(STATUS_CODES.NOT_FOUND).json({ message: "Product not found" });
+    } else if (error.message === ERROR_MESSAGES.PRODUCT_NOT_FOUND) {
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: ERROR_MESSAGES.PRODUCT_NOT_FOUND });
     } else {
       res
         .status(STATUS_CODES.SERVER_ERROR)
@@ -136,8 +138,10 @@ export const updateCartItemQuantityController = async (
       res
         .status(STATUS_CODES.NOT_FOUND)
         .json({ error: "Cart item not found." });
-    } else if (error.message === "Product not found.") {
-      res.status(STATUS_CODES.NOT_FOUND).json({ error: "Product not found." });
+    } else if (error.message === ERROR_MESSAGES.PRODUCT_NOT_FOUND) {
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ error: ERROR_MESSAGES.PRODUCT_NOT_FOUND });
     } else {
       res
         .status(STATUS_CODES.SERVER_ERROR)
