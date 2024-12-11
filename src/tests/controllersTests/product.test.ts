@@ -214,14 +214,14 @@ describe("Product Endpoints", () => {
   });
 
   describe("PUT /products/:id", () => {
-    it("should update a product and return it with status 200", async () => {
+    it("should update a product and return it with status STATUS_CODES.CREATED", async () => {
       (updateProductService as jest.Mock).mockResolvedValue(mockProduct);
 
       const response = await request(app)
         .put(`/api/products/${mockProduct.id}`)
         .send({ name: "Updated Product" });
 
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(STATUS_CODES.CREATED);
       expect(response.body.data.name).toBe(mockProduct.name);
       expect(updateProductService).toHaveBeenCalledWith(mockProduct.id, {
         name: "Updated Product",
@@ -238,7 +238,7 @@ describe("Product Endpoints", () => {
         "/api/products/new-arrivals?page=1&limit=10"
       );
 
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(STATUS_CODES.CREATED);
       expect(response.body.data).toHaveLength(1);
       expect(response.body.pagination.currentPage).toBe(1);
       expect(getNewArrivalsService).toHaveBeenCalledWith(1, 10);

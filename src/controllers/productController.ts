@@ -1,3 +1,4 @@
+import { STATUS_CODES } from "../constants/statusCodes";
 import { ERROR_MESSAGES } from "../constants/errorMessages";
 import { Request, RequestHandler, Response } from "express";
 import { getNewArrivalsService } from "../services/productService";
@@ -165,7 +166,7 @@ export const updateProduct = async (req: Request, res: Response) => {
 
     const updatedProduct = await updateProductService(productId, updatedData);
 
-    res.status(200).json({
+    res.status(STATUS_CODES.CREATED).json({
       success: true,
       message: "Product updated successfully!",
       data: updatedProduct,
@@ -253,7 +254,7 @@ export const getLimitedEdition = async (req: Request, res: Response) => {
       })
     );
 
-    res.status(200).json(updatedProducts);
+    res.status(STATUS_CODES.CREATED).json(updatedProducts);
   } catch (error) {
     res.status(500).json({ message: ERROR_MESSAGES.SERVER_ERROR, error });
   }
@@ -296,7 +297,7 @@ export const getDiscountedProducts = async (req: Request, res: Response) => {
       })
     );
 
-    res.status(200).json(updatedProducts);
+    res.status(STATUS_CODES.CREATED).json(updatedProducts);
   } catch (error) {
     res.status(500).json({ message: ERROR_MESSAGES.SERVER_ERROR, error });
   }
@@ -339,7 +340,7 @@ export const getPopularProducts = async (req: Request, res: Response) => {
       })
     );
 
-    res.status(200).json(updatedProducts);
+    res.status(STATUS_CODES.CREATED).json(updatedProducts);
   } catch (error) {
     res.status(500).json({ message: ERROR_MESSAGES.SERVER_ERROR, error });
   }
@@ -382,7 +383,7 @@ export const getNewArrivals = async (
       })
     );
 
-    res.status(200).json({
+    res.status(STATUS_CODES.CREATED).json({
       success: true,
       data: updatedProducts,
       pagination,
@@ -432,7 +433,7 @@ export const getHandpicked = async (req: Request, res: Response) => {
       })
     );
 
-    res.status(200).json(updatedProducts);
+    res.status(STATUS_CODES.CREATED).json(updatedProducts);
   } catch (error) {
     res.status(500).json({ message: ERROR_MESSAGES.SERVER_ERROR, error });
   }

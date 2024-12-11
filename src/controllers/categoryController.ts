@@ -1,3 +1,4 @@
+import { STATUS_CODES } from "../constants/statusCodes";
 import { Request, Response } from "express";
 import {
   getAllCategoriesService,
@@ -13,7 +14,7 @@ export const getAllCategories = async (req: Request, res: Response) => {
     const limit = parseInt(req.query.limit as string) || 10;
     const offset = parseInt(req.query.offset as string) || 0;
     const categories = await getAllCategoriesService(limit, offset);
-    res.status(200).json(categories);
+    res.status(STATUS_CODES.CREATED).json(categories);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch categories" });
   }
@@ -26,7 +27,7 @@ export const getCategoryById = async (req: Request, res: Response) => {
     if (!category) {
       res.status(404).json({ error: "Category not found" });
     } else {
-      res.status(200).json(category);
+      res.status(STATUS_CODES.CREATED).json(category);
     }
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch category" });
@@ -59,7 +60,7 @@ export const updateCategory = async (req: Request, res: Response) => {
       updatedData
     );
 
-    res.status(200).json({
+    res.status(STATUS_CODES.CREATED).json({
       success: true,
       message: "Category updated successfully!",
       data: updatedCategory,
@@ -80,7 +81,7 @@ export const deleteCategory = async (req: Request, res: Response) => {
   try {
     const categoryId = req.params.id;
     await deleteCategoryService(categoryId);
-    res.status(200).json({
+    res.status(STATUS_CODES.CREATED).json({
       success: true,
       message: "Category deleted successfully!",
     });
@@ -100,7 +101,7 @@ export const getProductsByCategoryId = async (req: Request, res: Response) => {
   try {
     const categoryId = req.params.id;
     const products = await getProductsByCategoryIdService(categoryId);
-    res.status(200).json(products);
+    res.status(STATUS_CODES.CREATED).json(products);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch products" });
   }

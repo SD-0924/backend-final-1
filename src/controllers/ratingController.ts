@@ -31,7 +31,7 @@ export const editRatingController = async (
     const { ratingId } = req.params;
     const updatedData = req.body;
     const updatedRating = await editRating(ratingId, updatedData);
-    res.status(200).json(updatedRating);
+    res.status(STATUS_CODES.CREATED).json(updatedRating);
   } catch (error: any) {
     res.status(STATUS_CODES.BAD_REQUEST).json({ error: error.message });
   }
@@ -57,7 +57,7 @@ export const getRatingsByUserIdController = async (
   try {
     const { userId } = req.params;
     const ratings = await getRatingsByUserId(userId);
-    res.status(200).json(ratings);
+    res.status(STATUS_CODES.CREATED).json(ratings);
   } catch (error: any) {
     res.status(STATUS_CODES.BAD_REQUEST).json({ error: error.message });
   }
@@ -70,7 +70,7 @@ export const getRatingsByProductIdController = async (
   try {
     const { productId } = req.params;
     const ratings = await getRatingsByProductId(productId);
-    res.status(200).json(ratings);
+    res.status(STATUS_CODES.CREATED).json(ratings);
   } catch (error: any) {
     res.status(STATUS_CODES.BAD_REQUEST).json({ error: error.message });
   }
@@ -83,7 +83,7 @@ export const calculateRatingController = async (
   try {
     const { productId } = req.params;
     const averageRating = await calculateRating(productId);
-    res.status(200).json({ averageRating });
+    res.status(STATUS_CODES.CREATED).json({ averageRating });
   } catch (error: any) {
     res.status(STATUS_CODES.BAD_REQUEST).json({ error: error.message });
   }
@@ -96,7 +96,7 @@ export const countRatingsController = async (
   try {
     const { productId } = req.params;
     const count = await countRatingsForProduct(productId);
-    res.status(200).json({ count });
+    res.status(STATUS_CODES.CREATED).json({ count });
   } catch (error: any) {
     res.status(STATUS_CODES.BAD_REQUEST).json({ error: error.message });
   }

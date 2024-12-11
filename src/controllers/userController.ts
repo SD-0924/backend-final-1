@@ -61,15 +61,13 @@ export const handleLogin = async (
       secure: process.env.NODE_ENV === "production",
     });
 
-    res
-      .status(200)
-      .json({
-        message: "Login successful",
-        id: user.id,
-        token,
-        firstName: user.first,
-        lastName: user.last,
-      });
+    res.status(STATUS_CODES.CREATED).json({
+      message: "Login successful",
+      id: user.id,
+      token,
+      firstName: user.first,
+      lastName: user.last,
+    });
   } catch (error: unknown) {
     res.status(401).json({
       message: error instanceof Error ? error.message : "Unauthorized",
@@ -94,7 +92,7 @@ export const handleUpdateUser = async (
     });
 
     res
-      .status(200)
+      .status(STATUS_CODES.CREATED)
       .json({ message: "User updated successfully", user: updatedUser });
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -142,15 +140,13 @@ export const handleUpdateUseradress = async (
     }
 
     res
-      .status(200)
+      .status(STATUS_CODES.CREATED)
       .json({ message: "User updated successfully", user: updatedUser });
   } catch (error: unknown) {
-    res
-      .status(500)
-      .json({
-        message: "Internal server error",
-        error: error instanceof Error ? error.message : error,
-      });
+    res.status(500).json({
+      message: "Internal server error",
+      error: error instanceof Error ? error.message : error,
+    });
   }
 };
 
@@ -168,14 +164,14 @@ export const handleDeleteUser = async (
       return;
     }
 
-    res.status(200).json({ message: "User deleted successfully" });
-  } catch (error: unknown) {
     res
-      .status(500)
-      .json({
-        message: "Internal server error",
-        error: error instanceof Error ? error.message : error,
-      });
+      .status(STATUS_CODES.CREATED)
+      .json({ message: "User deleted successfully" });
+  } catch (error: unknown) {
+    res.status(500).json({
+      message: "Internal server error",
+      error: error instanceof Error ? error.message : error,
+    });
   }
 };
 export const handleGetAllUsers = async (
@@ -184,14 +180,12 @@ export const handleGetAllUsers = async (
 ): Promise<void> => {
   try {
     const users = await getAllUsers();
-    res.status(200).json(users);
+    res.status(STATUS_CODES.CREATED).json(users);
   } catch (error: unknown) {
-    res
-      .status(500)
-      .json({
-        message: "Internal server error",
-        error: (error as Error).message,
-      });
+    res.status(500).json({
+      message: "Internal server error",
+      error: (error as Error).message,
+    });
   }
 };
 
@@ -206,7 +200,7 @@ export const getUserByIdController = async (
     if (!user) {
       res.status(404).json({ message: "User not found" });
     }
-    res.status(200).json(user);
+    res.status(STATUS_CODES.CREATED).json(user);
   } catch (error) {
     res.status(500).json({ message: "Failed to fetch user", error });
   }
