@@ -135,4 +135,22 @@ describe("Order Model Test", () => {
         expect(order.couponId).toBe(coupon.id);
         expect(order.status).toBe("processing");
     });
+
+    it("should throw an error when userId is missing", async () => {
+    await expect(
+        MockOrder.create({
+            couponId: coupon.id,
+            status: "processing",
+        } as Order)
+        ).rejects.toThrowError("notNull Violation");
+    });
+
+    it("should throw an error when couponId is missing", async () => {
+    await expect(
+        MockOrder.create({
+            userId: user.id,
+            status: "processing",
+        }as Order)
+        ).rejects.toThrowError("notNull Violation");
+    });
 });
