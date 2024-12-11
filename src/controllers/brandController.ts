@@ -48,7 +48,7 @@ export const getBrandById = async (req: Request, res: Response) => {
     const brand = await fetchBrandByIdService(id);
 
     if (!brand) {
-      res.status(404).json({ message: "Brand not found." });
+      res.status(STATUS_CODES.NOT_FOUND).json({ message: "Brand not found." });
     } else {
       res.status(STATUS_CODES.CREATED).json(brand);
     }
@@ -82,7 +82,7 @@ export const deleteBrandById = async (req: Request, res: Response) => {
       .json({ message: `Brand with ID ${id} deleted successfully.` });
   } catch (error: any) {
     if (error.message === "Brand not found") {
-      res.status(404).json({ message: "Brand not found" });
+      res.status(STATUS_CODES.NOT_FOUND).json({ message: "Brand not found" });
     } else {
       res
         .status(STATUS_CODES.SERVER_ERROR)

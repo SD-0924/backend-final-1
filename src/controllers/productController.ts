@@ -46,7 +46,9 @@ export const getAllProducts = async (req: Request, res: Response) => {
     );
 
     if (products.length === 0) {
-      res.status(404).json({ message: "No products found." });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: "No products found." });
       return;
     }
 
@@ -97,7 +99,7 @@ export const getProductById = async (
 
     const product = await getProductByIdService(productId);
     if (!product) {
-      res.status(404).json({ error: "Product not found" });
+      res.status(STATUS_CODES.NOT_FOUND).json({ error: "Product not found" });
       return;
     }
 
@@ -178,7 +180,7 @@ export const updateProduct = async (req: Request, res: Response) => {
   } catch (error: any) {
     console.error("Error updating product:", error);
     if (error.message === "Product not found") {
-      res.status(404).json({ message: "Product not found" });
+      res.status(STATUS_CODES.NOT_FOUND).json({ message: "Product not found" });
     } else {
       res.status(STATUS_CODES.SERVER_ERROR).json({
         success: false,
@@ -230,7 +232,9 @@ export const getLimitedEdition = async (req: Request, res: Response) => {
     const limit = parseInt(req.query.limit as string) || 10;
     const products = await getLimitedEditionService(page, limit);
     if (products.length === 0) {
-      res.status(404).json({ message: "No limited edition products found." });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: "No limited edition products found." });
       return;
     }
 
@@ -275,7 +279,9 @@ export const getDiscountedProducts = async (req: Request, res: Response) => {
     const products = await getDiscountedProductsService(page, limit);
 
     if (products.length === 0) {
-      res.status(404).json({ message: "No discounted products found." });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: "No discounted products found." });
       return;
     }
 
@@ -320,7 +326,9 @@ export const getPopularProducts = async (req: Request, res: Response) => {
     const products = await getPopularProductsService(page, limit);
 
     if (products.length === 0) {
-      res.status(404).json({ message: "No popular products found." });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: "No popular products found." });
       return;
     }
 
@@ -415,7 +423,9 @@ export const getHandpicked = async (req: Request, res: Response) => {
     const limit = parseInt(req.query.limit as string) || 10;
     const products = await fetchHandpickedProducts(page, limit);
     if (products.length === 0) {
-      res.status(404).json({ message: "No handpicked products found." });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: "No handpicked products found." });
       return;
     }
 
@@ -467,7 +477,9 @@ export const getProductsByBrand = async (
       limit
     );
     if (products.length === 0) {
-      res.status(404).json({ message: "No products found." });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: "No products found." });
       return;
     }
 
@@ -522,7 +534,9 @@ export const getProductsByCategory = async (
       limit
     );
     if (products.length === 0) {
-      res.status(404).json({ message: "No products found." });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: "No products found." });
       return;
     }
 
@@ -559,7 +573,9 @@ export const getProductsByCategory = async (
   } catch (error: any) {
     console.error("Error fetching products by category:", error.message);
     if (error.message === "Category not found") {
-      res.status(404).json({ message: "Category not found" });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: "Category not found" });
     } else {
       res.status(STATUS_CODES.SERVER_ERROR).json({ message: "Server error" });
     }
@@ -575,7 +591,7 @@ export const getProductPriceAfterDiscount = async (
   try {
     const product = await getProductByIdService(id);
     if (!product) {
-      res.status(404).json({ message: "Product not found" });
+      res.status(STATUS_CODES.NOT_FOUND).json({ message: "Product not found" });
       return;
     }
     const discount = await getDiscountByProductId(id);

@@ -22,7 +22,9 @@ export const getDiscountById = async (req: Request, res: Response) => {
     const { id } = req.params;
     const discount = await discountService.getDiscountById(id);
     if (!discount) {
-      res.status(404).json({ message: "Discount not found" });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: "Discount not found" });
       return;
     }
     res.status(STATUS_CODES.CREATED).json(discount);
@@ -62,7 +64,7 @@ export const updateDiscount = async (req: Request, res: Response) => {
   } catch (error: unknown) {
     if (error instanceof Error) {
       if (error.message === "Discount not found") {
-        res.status(404).json({ message: error.message });
+        res.status(STATUS_CODES.NOT_FOUND).json({ message: error.message });
       } else {
         res.status(STATUS_CODES.SERVER_ERROR).json({ error: error.message });
       }
@@ -82,7 +84,7 @@ export const deleteDiscount = async (req: Request, res: Response) => {
   } catch (error: unknown) {
     if (error instanceof Error) {
       if (error.message === "Discount not found") {
-        res.status(404).json({ message: error.message });
+        res.status(STATUS_CODES.NOT_FOUND).json({ message: error.message });
       } else {
         res.status(STATUS_CODES.SERVER_ERROR).json({ error: error.message });
       }
@@ -113,7 +115,9 @@ export const getDiscountTimeRemainingById = async (
     const discount = await discountService.getDiscountById(discountId);
 
     if (!discount) {
-      res.status(404).json({ message: "Discount not found" });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: "Discount not found" });
       return;
     }
 

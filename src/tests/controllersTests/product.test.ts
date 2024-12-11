@@ -170,12 +170,12 @@ describe("Product Endpoints", () => {
       expect(getProductByIdService).toHaveBeenCalledWith(mockProduct.id);
     });
 
-    it("should return 404 if product is not found", async () => {
+    it("should return STATUS_CODES.NOT_FOUND if product is not found", async () => {
       (getProductByIdService as jest.Mock).mockResolvedValue(null);
 
       const response = await request(app).get("/api/products/unknown");
 
-      expect(response.status).toBe(404);
+      expect(response.status).toBe(STATUS_CODES.NOT_FOUND);
       expect(response.body).toEqual({ error: "Product not found" });
     });
   });

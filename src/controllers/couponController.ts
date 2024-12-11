@@ -24,7 +24,7 @@ export const getCouponById = async (req: Request, res: Response) => {
   try {
     const coupon = await fetchCouponById(req.params.id);
     if (!coupon) {
-      res.status(404).json({ error: "Coupon not found" });
+      res.status(STATUS_CODES.NOT_FOUND).json({ error: "Coupon not found" });
     } else {
       res.json(coupon);
     }
@@ -51,7 +51,7 @@ export const updateCoupon = async (req: Request, res: Response) => {
   try {
     const coupon = await modifyCoupon(req.params.id, req.body);
     if (!coupon) {
-      res.status(404).json({ error: "Coupon not found" });
+      res.status(STATUS_CODES.NOT_FOUND).json({ error: "Coupon not found" });
     } else {
       res.status(201).json(coupon);
     }
@@ -66,7 +66,7 @@ export const deleteCoupon = async (req: Request, res: Response) => {
   try {
     const success = await removeCoupon(req.params.id);
     if (!success) {
-      res.status(404).json({ error: "Coupon not found" });
+      res.status(STATUS_CODES.NOT_FOUND).json({ error: "Coupon not found" });
     } else {
       res.status(204).send();
     }

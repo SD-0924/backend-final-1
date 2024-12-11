@@ -33,9 +33,9 @@ export const addToCartController = async (req: Request, res: Response) => {
     }
   } catch (error: any) {
     if (error.message === "User not found") {
-      res.status(404).json({ message: "User not found" });
+      res.status(STATUS_CODES.NOT_FOUND).json({ message: "User not found" });
     } else if (error.message === "Product not found") {
-      res.status(404).json({ message: "Product not found" });
+      res.status(STATUS_CODES.NOT_FOUND).json({ message: "Product not found" });
     } else {
       res
         .status(STATUS_CODES.SERVER_ERROR)
@@ -53,7 +53,9 @@ export const deleteCartItemController = async (req: Request, res: Response) => {
       .json({ message: `cart item with id ${cartId} deleted successfully.` });
   } catch (error: any) {
     if (error.message === "cartId not found") {
-      res.status(404).json({ message: "cartItem not found" });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: "cartItem not found" });
     } else {
       res
         .status(STATUS_CODES.SERVER_ERROR)
@@ -72,9 +74,11 @@ export const deleteAllCartItems = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     if (error.message === "User not found") {
-      res.status(404).json({ message: "User not found" });
+      res.status(STATUS_CODES.NOT_FOUND).json({ message: "User not found" });
     } else if (error.message === "No cart items found for this user.") {
-      res.status(404).json({ message: "No cart items found for this user." });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: "No cart items found for this user." });
     } else {
       res.status(STATUS_CODES.SERVER_ERROR).json({
         message:
@@ -93,11 +97,11 @@ export const getCartItemsByUserId = async (req: Request, res: Response) => {
     res.status(STATUS_CODES.CREATED).json(cartItems);
   } catch (error: any) {
     if (error.message === "User not found") {
-      res.status(404).json({ error: "User not found" });
+      res.status(STATUS_CODES.NOT_FOUND).json({ error: "User not found" });
     } else if (error.message === "No cart items found for this user.") {
-      res.status(404).json({ error: error.message });
+      res.status(STATUS_CODES.NOT_FOUND).json({ error: error.message });
     } else if (error.message.includes("Product with ID")) {
-      res.status(404).json({ error: error.message });
+      res.status(STATUS_CODES.NOT_FOUND).json({ error: error.message });
     } else {
       res
         .status(STATUS_CODES.SERVER_ERROR)
@@ -122,9 +126,11 @@ export const updateCartItemQuantityController = async (
     });
   } catch (error: any) {
     if (error.message === "Cart item not found.") {
-      res.status(404).json({ error: "Cart item not found." });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ error: "Cart item not found." });
     } else if (error.message === "Product not found.") {
-      res.status(404).json({ error: "Product not found." });
+      res.status(STATUS_CODES.NOT_FOUND).json({ error: "Product not found." });
     } else {
       res
         .status(STATUS_CODES.SERVER_ERROR)

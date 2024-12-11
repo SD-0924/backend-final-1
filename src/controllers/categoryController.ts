@@ -27,7 +27,7 @@ export const getCategoryById = async (req: Request, res: Response) => {
     const categoryId = req.params.id;
     const category = await getCategoryByIdService(categoryId);
     if (!category) {
-      res.status(404).json({ error: "Category not found" });
+      res.status(STATUS_CODES.NOT_FOUND).json({ error: "Category not found" });
     } else {
       res.status(STATUS_CODES.CREATED).json(category);
     }
@@ -71,7 +71,9 @@ export const updateCategory = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     if (error.message === "Category not found") {
-      res.status(404).json({ message: "Category not found" });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: "Category not found" });
     } else {
       res.status(STATUS_CODES.SERVER_ERROR).json({
         success: false,
@@ -91,7 +93,9 @@ export const deleteCategory = async (req: Request, res: Response) => {
     });
   } catch (error: any) {
     if (error.message === "Category not found") {
-      res.status(404).json({ message: "Category not found" });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: "Category not found" });
     } else {
       res.status(STATUS_CODES.SERVER_ERROR).json({
         success: false,

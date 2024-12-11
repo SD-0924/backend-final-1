@@ -17,6 +17,8 @@ import orderItemRouter from "./routes/orderItemRoutes";
 import cors from "cors";
 import ratingRouter from "./routes/ratingRoutes";
 import payRouter from "./routes/paymentRoutes";
+import { STATUS_CODES } from "./constants/statusCodes";
+
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
 
 const app: Application = express();
@@ -57,7 +59,7 @@ app.get("/health", (req, res) => {
 });
 
 app.all("*", (req, res) => {
-  res.status(404).send("Request not supported");
+  res.status(STATUS_CODES.NOT_FOUND).send("Request not supported");
 });
 
 export default app;

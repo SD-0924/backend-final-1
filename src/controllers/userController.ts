@@ -139,7 +139,7 @@ export const handleUpdateUseradress = async (
     const updatedUser = await updateUserService1(id, updates);
 
     if (!updatedUser) {
-      res.status(404).json({ message: "User not found" });
+      res.status(STATUS_CODES.NOT_FOUND).json({ message: "User not found" });
       return;
     }
 
@@ -164,7 +164,7 @@ export const handleDeleteUser = async (
     const deleted = await deleteUserService(id);
 
     if (!deleted) {
-      res.status(404).json({ message: "User not found" });
+      res.status(STATUS_CODES.NOT_FOUND).json({ message: "User not found" });
       return;
     }
 
@@ -202,7 +202,7 @@ export const getUserByIdController = async (
     const { id } = req.params;
     const user = await getUserByIdService(id);
     if (!user) {
-      res.status(404).json({ message: "User not found" });
+      res.status(STATUS_CODES.NOT_FOUND).json({ message: "User not found" });
     }
     res.status(STATUS_CODES.CREATED).json(user);
   } catch (error) {
