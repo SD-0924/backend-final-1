@@ -5,7 +5,7 @@ import User from "../../models/User"
 import Order from "../../models/Order";
 import sequelize from "./mockDataHelper";
 
-// Mocl Coupon
+// Mock Coupon
 const MockCoupon = sequelize.define(
     "Coupon",
     {
