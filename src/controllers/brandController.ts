@@ -55,7 +55,7 @@ export const getBrandById = async (req: Request, res: Response) => {
   } catch (error) {
     res
       .status(STATUS_CODES.SERVER_ERROR)
-      .json({ message: "Internal server error." });
+      .json({ message: ERROR_MESSAGES.SERVER_ERROR });
   }
 };
 

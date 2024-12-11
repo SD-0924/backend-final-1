@@ -1,4 +1,5 @@
 import { STATUS_CODES } from "../constants/statusCodes";
+import { ERROR_MESSAGES } from "../constants/errorMessages";
 import { Request, Response } from "express";
 import * as discountService from "../services/discountService";
 
@@ -147,7 +148,7 @@ export const getDiscountTimeRemainingById = async (
     console.error(error);
     res
       .status(STATUS_CODES.SERVER_ERROR)
-      .json({ message: "Internal server error" });
+      .json({ message: ERROR_MESSAGES.SERVER_ERROR });
     return;
   }
 };

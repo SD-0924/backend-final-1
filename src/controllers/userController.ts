@@ -150,7 +150,7 @@ export const handleUpdateUseradress = async (
       .json({ message: "User updated successfully", user: updatedUser });
   } catch (error: unknown) {
     res.status(STATUS_CODES.SERVER_ERROR).json({
-      message: "Internal server error",
+      message: ERROR_MESSAGES.SERVER_ERROR,
       error: error instanceof Error ? error.message : error,
     });
   }
@@ -177,7 +177,7 @@ export const handleDeleteUser = async (
       .json({ message: "User deleted successfully" });
   } catch (error: unknown) {
     res.status(STATUS_CODES.SERVER_ERROR).json({
-      message: "Internal server error",
+      message: ERROR_MESSAGES.SERVER_ERROR,
       error: error instanceof Error ? error.message : error,
     });
   }
@@ -191,7 +191,7 @@ export const handleGetAllUsers = async (
     res.status(STATUS_CODES.SUCCESS).json(users);
   } catch (error: unknown) {
     res.status(STATUS_CODES.SERVER_ERROR).json({
-      message: "Internal server error",
+      message: ERROR_MESSAGES.SERVER_ERROR,
       error: (error as Error).message,
     });
   }
