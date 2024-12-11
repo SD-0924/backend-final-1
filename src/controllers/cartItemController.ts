@@ -1,4 +1,5 @@
 import { STATUS_CODES } from "../constants/statusCodes";
+import { ERROR_MESSAGES } from "../constants/errorMessages";
 import { Request, Response } from "express";
 import {
   addToCartService,
@@ -32,8 +33,10 @@ export const addToCartController = async (req: Request, res: Response) => {
       });
     }
   } catch (error: any) {
-    if (error.message === "User not found") {
-      res.status(STATUS_CODES.NOT_FOUND).json({ message: "User not found" });
+    if (error.message === ERROR_MESSAGES.USER_NOT_FOUND) {
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: ERROR_MESSAGES.USER_NOT_FOUND });
     } else if (error.message === "Product not found") {
       res.status(STATUS_CODES.NOT_FOUND).json({ message: "Product not found" });
     } else {
@@ -73,8 +76,10 @@ export const deleteAllCartItems = async (req: Request, res: Response) => {
       message: `All cart items have been deleted successfully for the user with id ${userId}.`,
     });
   } catch (error: any) {
-    if (error.message === "User not found") {
-      res.status(STATUS_CODES.NOT_FOUND).json({ message: "User not found" });
+    if (error.message === ERROR_MESSAGES.USER_NOT_FOUND) {
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: ERROR_MESSAGES.USER_NOT_FOUND });
     } else if (error.message === "No cart items found for this user.") {
       res
         .status(STATUS_CODES.NOT_FOUND)
@@ -96,8 +101,10 @@ export const getCartItemsByUserId = async (req: Request, res: Response) => {
 
     res.status(STATUS_CODES.CREATED).json(cartItems);
   } catch (error: any) {
-    if (error.message === "User not found") {
-      res.status(STATUS_CODES.NOT_FOUND).json({ error: "User not found" });
+    if (error.message === ERROR_MESSAGES.USER_NOT_FOUND) {
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ error: ERROR_MESSAGES.USER_NOT_FOUND });
     } else if (error.message === "No cart items found for this user.") {
       res.status(STATUS_CODES.NOT_FOUND).json({ error: error.message });
     } else if (error.message.includes("Product with ID")) {

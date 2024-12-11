@@ -99,7 +99,7 @@ export const handleUpdateUser = async (
   } catch (error: unknown) {
     if (error instanceof Error) {
       const statusCode =
-        error.message === "User not found" ||
+        error.message === ERROR_MESSAGES.USER_NOT_FOUND ||
         error.message === "Old password is incorrect" ||
         error.message === "All password fields are required" ||
         error.message === "New password and confirm password do not match"
@@ -139,7 +139,9 @@ export const handleUpdateUseradress = async (
     const updatedUser = await updateUserService1(id, updates);
 
     if (!updatedUser) {
-      res.status(STATUS_CODES.NOT_FOUND).json({ message: "User not found" });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: ERROR_MESSAGES.USER_NOT_FOUND });
       return;
     }
 
@@ -164,7 +166,9 @@ export const handleDeleteUser = async (
     const deleted = await deleteUserService(id);
 
     if (!deleted) {
-      res.status(STATUS_CODES.NOT_FOUND).json({ message: "User not found" });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: ERROR_MESSAGES.USER_NOT_FOUND });
       return;
     }
 
@@ -202,7 +206,9 @@ export const getUserByIdController = async (
     const { id } = req.params;
     const user = await getUserByIdService(id);
     if (!user) {
-      res.status(STATUS_CODES.NOT_FOUND).json({ message: "User not found" });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: ERROR_MESSAGES.USER_NOT_FOUND });
     }
     res.status(STATUS_CODES.CREATED).json(user);
   } catch (error) {
