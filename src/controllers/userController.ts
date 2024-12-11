@@ -51,7 +51,7 @@ export const handleLogin = async (
 
     const user = await verifyPassword(email, password);
     if (!user) {
-      res.status(401).json({ message: "Invalid email or password" });
+      res.status(STATUS_CODES.UNAUTHORIZED).json({ message: "Invalid email or password" });
     }
 
     const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, {
@@ -71,7 +71,7 @@ export const handleLogin = async (
       lastName: user.last,
     });
   } catch (error: unknown) {
-    res.status(401).json({
+    res.status(STATUS_CODES.UNAUTHORIZED).json({
       message: error instanceof Error ? error.message : "Unauthorized",
     });
   }

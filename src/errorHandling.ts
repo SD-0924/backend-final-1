@@ -15,9 +15,9 @@ const errorHandlingMiddleware = (
 
   // Specific error handling
   if (err.name === "JsonWebTokenError") {
-    res.status(401).json({ message: "Invalid token." });
+    res.status(STATUS_CODES.UNAUTHORIZED).json({ message: "Invalid token." });
   } else if (err.name === "TokenExpiredError") {
-    res.status(401).json({ message: "Token expired." });
+    res.status(STATUS_CODES.UNAUTHORIZED).json({ message: "Token expired." });
   } else {
     // Default error handling
     res.status(status).json({ message });
