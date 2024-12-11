@@ -13,39 +13,39 @@ const MockCoupon = sequelize.define(
     "Coupon",
     {
         id: {
-        type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIDV4,
-        primaryKey: true,
+            type: DataTypes.UUID,
+            defaultValue: DataTypes.UUIDV4,
+            primaryKey: true,
         },
         code: {
-        type: DataTypes.STRING,
-        allowNull: false,
+            type: DataTypes.STRING,
+            allowNull: false,
         },
         discountType: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        defaultValue: "amount",
+            type: DataTypes.STRING,
+            allowNull: false,
+            defaultValue: "amount",
         },
         discountValue: {
-        type: DataTypes.FLOAT,
-        allowNull: false,
+            type: DataTypes.FLOAT,
+            allowNull: false,
         },
         minOrderValue: {
-        type: DataTypes.FLOAT,
-        allowNull: true,
+            type: DataTypes.FLOAT,
+            allowNull: true,
         },
         usageLimit: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        defaultValue: 1,
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            defaultValue: 1,
         },
         expiryDate: {
-        type: DataTypes.DATE,
-        allowNull: true,
+            type: DataTypes.DATE,
+            allowNull: true,
         },
         isActive: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true,
+            type: DataTypes.BOOLEAN,
+            defaultValue: true,
         },
     },
     {
