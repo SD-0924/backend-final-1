@@ -55,7 +55,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(errorHandlingMiddleware);
 
 app.get("/health", (req, res) => {
-  res.status(STATUS_CODES.CREATED).json({ status: "OK" });
+  res.status(STATUS_CODES.SUCCESS).json({ status: "OK" });
 });
 
 app.all("*", (req, res) => {

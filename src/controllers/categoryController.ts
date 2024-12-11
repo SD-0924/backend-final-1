@@ -14,7 +14,7 @@ export const getAllCategories = async (req: Request, res: Response) => {
     const limit = parseInt(req.query.limit as string) || 10;
     const offset = parseInt(req.query.offset as string) || 0;
     const categories = await getAllCategoriesService(limit, offset);
-    res.status(STATUS_CODES.CREATED).json(categories);
+    res.status(STATUS_CODES.SUCCESS).json(categories);
   } catch (error) {
     res
       .status(STATUS_CODES.SERVER_ERROR)
@@ -29,7 +29,7 @@ export const getCategoryById = async (req: Request, res: Response) => {
     if (!category) {
       res.status(STATUS_CODES.NOT_FOUND).json({ error: "Category not found" });
     } else {
-      res.status(STATUS_CODES.CREATED).json(category);
+      res.status(STATUS_CODES.SUCCESS).json(category);
     }
   } catch (error) {
     res
@@ -64,7 +64,7 @@ export const updateCategory = async (req: Request, res: Response) => {
       updatedData
     );
 
-    res.status(STATUS_CODES.CREATED).json({
+    res.status(STATUS_CODES.SUCCESS).json({
       success: true,
       message: "Category updated successfully!",
       data: updatedCategory,
@@ -87,7 +87,7 @@ export const deleteCategory = async (req: Request, res: Response) => {
   try {
     const categoryId = req.params.id;
     await deleteCategoryService(categoryId);
-    res.status(STATUS_CODES.CREATED).json({
+    res.status(STATUS_CODES.SUCCESS).json({
       success: true,
       message: "Category deleted successfully!",
     });
@@ -109,7 +109,7 @@ export const getProductsByCategoryId = async (req: Request, res: Response) => {
   try {
     const categoryId = req.params.id;
     const products = await getProductsByCategoryIdService(categoryId);
-    res.status(STATUS_CODES.CREATED).json(products);
+    res.status(STATUS_CODES.SUCCESS).json(products);
   } catch (error) {
     res
       .status(STATUS_CODES.SERVER_ERROR)

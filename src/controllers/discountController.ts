@@ -5,7 +5,7 @@ import * as discountService from "../services/discountService";
 export const getAllDiscounts = async (req: Request, res: Response) => {
   try {
     const discounts = await discountService.getAllDiscounts();
-    res.status(STATUS_CODES.CREATED).json(discounts);
+    res.status(STATUS_CODES.SUCCESS).json(discounts);
   } catch (error: unknown) {
     if (error instanceof Error) {
       res.status(STATUS_CODES.SERVER_ERROR).json({ error: error.message });
@@ -27,7 +27,7 @@ export const getDiscountById = async (req: Request, res: Response) => {
         .json({ message: "Discount not found" });
       return;
     }
-    res.status(STATUS_CODES.CREATED).json(discount);
+    res.status(STATUS_CODES.SUCCESS).json(discount);
   } catch (error: unknown) {
     if (error instanceof Error) {
       res.status(STATUS_CODES.SERVER_ERROR).json({ error: error.message });
@@ -60,7 +60,7 @@ export const updateDiscount = async (req: Request, res: Response) => {
     const { id } = req.params;
     const data = req.body;
     const updatedDiscount = await discountService.updateDiscount(id, data);
-    res.status(STATUS_CODES.CREATED).json(updatedDiscount);
+    res.status(STATUS_CODES.SUCCESS).json(updatedDiscount);
   } catch (error: unknown) {
     if (error instanceof Error) {
       if (error.message === "Discount not found") {
@@ -127,7 +127,7 @@ export const getDiscountTimeRemainingById = async (
     const remainingTime = discountEndTime.getTime() - currentTime.getTime();
 
     if (remainingTime <= 0) {
-      res.status(STATUS_CODES.CREATED).json({
+      res.status(STATUS_CODES.SUCCESS).json({
         remainingTime: 0,
         message: "Discount has expired",
         formattedTime: "0 days, 0 hours, 0 minutes",
@@ -137,7 +137,7 @@ export const getDiscountTimeRemainingById = async (
 
     const formattedTime = formatTime(remainingTime);
 
-    res.status(STATUS_CODES.CREATED).json({
+    res.status(STATUS_CODES.SUCCESS).json({
       remainingTime,
       message: "Discount is still active",
       formattedTime,

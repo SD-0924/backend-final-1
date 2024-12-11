@@ -25,7 +25,7 @@ export const createBrand = async (req: Request, res: Response) => {
 
     const newBrand = await createBrandService(name, file!);
 
-    res.status(STATUS_CODES.CREATED).json({
+    res.status(STATUS_CODES.SUCCESS).json({
       success: true,
       message: "Brand created successfully",
       data: newBrand,
@@ -50,7 +50,7 @@ export const getBrandById = async (req: Request, res: Response) => {
     if (!brand) {
       res.status(STATUS_CODES.NOT_FOUND).json({ message: "Brand not found." });
     } else {
-      res.status(STATUS_CODES.CREATED).json(brand);
+      res.status(STATUS_CODES.SUCCESS).json(brand);
     }
   } catch (error) {
     res
@@ -65,7 +65,7 @@ export const getAllBrands = async (req: Request, res: Response) => {
     // const limit = parseInt(req.query.limit as string) || 10;
     // const offset = parseInt(req.query.offset as string) || 0;
     const brands = await getAllBrandsService();
-    res.status(STATUS_CODES.CREATED).json(brands);
+    res.status(STATUS_CODES.SUCCESS).json(brands);
   } catch (error) {
     res
       .status(STATUS_CODES.SERVER_ERROR)
@@ -78,7 +78,7 @@ export const deleteBrandById = async (req: Request, res: Response) => {
   try {
     await deleteBrandByIdService(id);
     res
-      .status(STATUS_CODES.CREATED)
+      .status(STATUS_CODES.SUCCESS)
       .json({ message: `Brand with ID ${id} deleted successfully.` });
   } catch (error: any) {
     if (error.message === "Brand not found") {
@@ -99,7 +99,7 @@ export const updateBrandController = async (req: Request, res: Response) => {
 
     const updatedBrand = await updateBrandService(id, name, file);
 
-    res.status(STATUS_CODES.CREATED).json({
+    res.status(STATUS_CODES.SUCCESS).json({
       message: "Brand updated successfully",
       brand: updatedBrand,
     });

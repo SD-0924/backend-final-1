@@ -21,7 +21,7 @@ export const processOrderPayment = async (req: Request, res: Response) => {
     const paymentIntent = await processPayment(amount, paymentMethodId);
 
     if (paymentIntent.status === "succeeded") {
-      res.status(STATUS_CODES.CREATED).json({
+      res.status(STATUS_CODES.SUCCESS).json({
         message: "Payment successful",
         paymentStatus: paymentIntent.status,
         paymentIntent,

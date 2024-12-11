@@ -20,13 +20,13 @@ export const addToCartController = async (req: Request, res: Response) => {
     );
 
     if (updatedCartItem) {
-      res.status(STATUS_CODES.CREATED).json({
+      res.status(STATUS_CODES.SUCCESS).json({
         success: "Product Added to cart.",
         message,
         cartItem: updatedCartItem,
       });
     } else {
-      res.status(STATUS_CODES.CREATED).json({
+      res.status(STATUS_CODES.SUCCESS).json({
         success: "Product Added to cart.",
         message,
         cartItem: newCartItem,
@@ -54,7 +54,7 @@ export const deleteCartItemController = async (req: Request, res: Response) => {
     const { cartId } = req.params;
     await deleteCartItemService(cartId);
     res
-      .status(STATUS_CODES.CREATED)
+      .status(STATUS_CODES.SUCCESS)
       .json({ message: `cart item with id ${cartId} deleted successfully.` });
   } catch (error: any) {
     if (error.message === "cartId not found") {
@@ -74,7 +74,7 @@ export const deleteAllCartItems = async (req: Request, res: Response) => {
     const { userId } = req.params;
     await deleteAllCartItemsForUserService(userId);
 
-    res.status(STATUS_CODES.CREATED).json({
+    res.status(STATUS_CODES.SUCCESS).json({
       message: `All cart items have been deleted successfully for the user with id ${userId}.`,
     });
   } catch (error: any) {
@@ -101,7 +101,7 @@ export const getCartItemsByUserId = async (req: Request, res: Response) => {
     // fetching the cart items for the user
     const cartItems = await getCartItemsWithProductDetailsService(userId);
 
-    res.status(STATUS_CODES.CREATED).json(cartItems);
+    res.status(STATUS_CODES.SUCCESS).json(cartItems);
   } catch (error: any) {
     if (error.message === ERROR_MESSAGES.USER_NOT_FOUND) {
       res
@@ -129,7 +129,7 @@ export const updateCartItemQuantityController = async (
 
     const result = await updateCartItemQuantityService(cartId, quantity);
 
-    res.status(STATUS_CODES.CREATED).json({
+    res.status(STATUS_CODES.SUCCESS).json({
       message: result.message,
       updatedCartItem: result.updatedCartItem,
     });

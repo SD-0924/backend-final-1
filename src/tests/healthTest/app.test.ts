@@ -8,9 +8,9 @@ describe("GET /health", () => {
   afterAll(async () => {
     await sequelize.close(); // Close Sequelize connection
   });
-  it("should return STATUS_CODES.CREATED OK", async () => {
+  it("should return STATUS_CODES.SUCCESS OK", async () => {
     const response = await request(app).get("/health");
-    expect(response.status).toBe(STATUS_CODES.CREATED);
+    expect(response.status).toBe(STATUS_CODES.SUCCESS);
     expect(response.body).toEqual({ status: "OK" });
   });
 });

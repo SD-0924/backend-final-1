@@ -11,7 +11,7 @@ export const getUserOrders = async (req: Request, res: Response) => {
 
     const orders = await getUserOrdersService(userId);
 
-    res.status(STATUS_CODES.CREATED).json({
+    res.status(STATUS_CODES.SUCCESS).json({
       message: "Orders fetched successfully",
       data: orders,
     });

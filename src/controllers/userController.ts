@@ -63,7 +63,7 @@ export const handleLogin = async (
       secure: process.env.NODE_ENV === "production",
     });
 
-    res.status(STATUS_CODES.CREATED).json({
+    res.status(STATUS_CODES.SUCCESS).json({
       message: "Login successful",
       id: user.id,
       token,
@@ -94,7 +94,7 @@ export const handleUpdateUser = async (
     });
 
     res
-      .status(STATUS_CODES.CREATED)
+      .status(STATUS_CODES.SUCCESS)
       .json({ message: "User updated successfully", user: updatedUser });
   } catch (error: unknown) {
     if (error instanceof Error) {
@@ -146,7 +146,7 @@ export const handleUpdateUseradress = async (
     }
 
     res
-      .status(STATUS_CODES.CREATED)
+      .status(STATUS_CODES.SUCCESS)
       .json({ message: "User updated successfully", user: updatedUser });
   } catch (error: unknown) {
     res.status(STATUS_CODES.SERVER_ERROR).json({
@@ -173,7 +173,7 @@ export const handleDeleteUser = async (
     }
 
     res
-      .status(STATUS_CODES.CREATED)
+      .status(STATUS_CODES.SUCCESS)
       .json({ message: "User deleted successfully" });
   } catch (error: unknown) {
     res.status(STATUS_CODES.SERVER_ERROR).json({
@@ -188,7 +188,7 @@ export const handleGetAllUsers = async (
 ): Promise<void> => {
   try {
     const users = await getAllUsers();
-    res.status(STATUS_CODES.CREATED).json(users);
+    res.status(STATUS_CODES.SUCCESS).json(users);
   } catch (error: unknown) {
     res.status(STATUS_CODES.SERVER_ERROR).json({
       message: "Internal server error",
@@ -210,7 +210,7 @@ export const getUserByIdController = async (
         .status(STATUS_CODES.NOT_FOUND)
         .json({ message: ERROR_MESSAGES.USER_NOT_FOUND });
     }
-    res.status(STATUS_CODES.CREATED).json(user);
+    res.status(STATUS_CODES.SUCCESS).json(user);
   } catch (error) {
     res
       .status(STATUS_CODES.SERVER_ERROR)

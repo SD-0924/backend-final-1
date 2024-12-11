@@ -174,7 +174,7 @@ export const updateProduct = async (req: Request, res: Response) => {
 
     const updatedProduct = await updateProductService(productId, updatedData);
 
-    res.status(STATUS_CODES.CREATED).json({
+    res.status(STATUS_CODES.SUCCESS).json({
       success: true,
       message: "Product updated successfully!",
       data: updatedProduct,
@@ -268,7 +268,7 @@ export const getLimitedEdition = async (req: Request, res: Response) => {
       })
     );
 
-    res.status(STATUS_CODES.CREATED).json(updatedProducts);
+    res.status(STATUS_CODES.SUCCESS).json(updatedProducts);
   } catch (error) {
     res
       .status(STATUS_CODES.SERVER_ERROR)
@@ -315,7 +315,7 @@ export const getDiscountedProducts = async (req: Request, res: Response) => {
       })
     );
 
-    res.status(STATUS_CODES.CREATED).json(updatedProducts);
+    res.status(STATUS_CODES.SUCCESS).json(updatedProducts);
   } catch (error) {
     res
       .status(STATUS_CODES.SERVER_ERROR)
@@ -362,7 +362,7 @@ export const getPopularProducts = async (req: Request, res: Response) => {
       })
     );
 
-    res.status(STATUS_CODES.CREATED).json(updatedProducts);
+    res.status(STATUS_CODES.SUCCESS).json(updatedProducts);
   } catch (error) {
     res
       .status(STATUS_CODES.SERVER_ERROR)
@@ -407,7 +407,7 @@ export const getNewArrivals = async (
       })
     );
 
-    res.status(STATUS_CODES.CREATED).json({
+    res.status(STATUS_CODES.SUCCESS).json({
       success: true,
       data: updatedProducts,
       pagination,
@@ -459,7 +459,7 @@ export const getHandpicked = async (req: Request, res: Response) => {
       })
     );
 
-    res.status(STATUS_CODES.CREATED).json(updatedProducts);
+    res.status(STATUS_CODES.SUCCESS).json(updatedProducts);
   } catch (error) {
     res
       .status(STATUS_CODES.SERVER_ERROR)
