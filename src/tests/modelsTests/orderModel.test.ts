@@ -97,8 +97,8 @@ const MockOrder = sequelize.define(
 ) as typeof Order;
 
 describe("Order Model Test", () => {
-    let user: any;
-    let coupon: any;
+    let user: User;
+    let coupon: Coupon;
 
     beforeAll(async () => {
         await sequelize.sync({ force: true });
