@@ -1,3 +1,4 @@
+import { ERROR_MESSAGES } from "../constants/errorMessages";
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import { registerUser } from "../services/userService";
@@ -29,7 +30,7 @@ export const handleRegister = async (
     if (error instanceof Error) {
       res
         .status(500)
-        .json({ message: "Internal server error", error: error.message });
+        .json({ message: ERROR_MESSAGES.SERVER_ERROR, error: error.message });
     } else {
       res.status(500).json({ message: "An unknown error occurred" });
     }
@@ -84,7 +85,7 @@ export const handleUpdateUser = async (req: Request, res: Response): Promise<voi
           : 500;
       res.status(statusCode).json({ message: error.message });
     } else {
-      res.status(500).json({ message: "Internal server error" });
+      res.status(500).json({ message: ERROR_MESSAGES.SERVER_ERROR });
     }
   }
 };

@@ -1,3 +1,4 @@
+import { ERROR_MESSAGES } from "../constants/errorMessages";
 import { Request, RequestHandler, Response } from "express";
 import { getNewArrivalsService } from "../services/productService";
 import {
@@ -80,7 +81,7 @@ export const getAllProducts = async (req: Request, res: Response) => {
       pagination,
     });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error });
+    res.status(500).json({ message: ERROR_MESSAGES.SERVER_ERROR, error });
   }
 };
 
@@ -254,7 +255,7 @@ export const getLimitedEdition = async (req: Request, res: Response) => {
 
     res.status(200).json(updatedProducts);
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error });
+    res.status(500).json({ message: ERROR_MESSAGES.SERVER_ERROR, error });
   }
 };
 
@@ -297,7 +298,7 @@ export const getDiscountedProducts = async (req: Request, res: Response) => {
 
     res.status(200).json(updatedProducts);
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error });
+    res.status(500).json({ message: ERROR_MESSAGES.SERVER_ERROR, error });
   }
 };
 
@@ -340,7 +341,7 @@ export const getPopularProducts = async (req: Request, res: Response) => {
 
     res.status(200).json(updatedProducts);
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error });
+    res.status(500).json({ message: ERROR_MESSAGES.SERVER_ERROR, error });
   }
 };
 
@@ -433,7 +434,7 @@ export const getHandpicked = async (req: Request, res: Response) => {
 
     res.status(200).json(updatedProducts);
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error });
+    res.status(500).json({ message: ERROR_MESSAGES.SERVER_ERROR, error });
   }
 };
 
@@ -486,7 +487,7 @@ export const getProductsByBrand = async (
       pagination,
     });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error });
+    res.status(500).json({ message: ERROR_MESSAGES.SERVER_ERROR, error });
   }
 };
 
@@ -601,7 +602,7 @@ export const getProductPriceAfterDiscount = async (
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: ERROR_MESSAGES.SERVER_ERROR });
     return;
   }
 };

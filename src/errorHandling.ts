@@ -1,3 +1,5 @@
+import { ERROR_MESSAGES } from "./constants/errorMessages";
+
 import { Request, Response, NextFunction } from "express";
 
 const errorHandlingMiddleware = (
@@ -7,7 +9,7 @@ const errorHandlingMiddleware = (
   next: NextFunction
 ): void => {
   const status = err.status || 500;
-  const message = err.message || "Internal Server Error";
+  const message = err.message || ERROR_MESSAGES.SERVER_ERROR;
 
   // Specific error handling
   if (err.name === "JsonWebTokenError") {
