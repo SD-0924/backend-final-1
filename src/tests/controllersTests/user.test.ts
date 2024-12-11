@@ -1,8 +1,10 @@
 import request from "supertest";
 import app from "../../app"; // Adjust to your app's location
 import * as userService from "../../services/userService"; // Mock service
+import jwt from "jsonwebtoken"; // Import jwt
 
 jest.mock("../../services/userService.ts");
+jest.mock("jsonwebtoken"); // Mock jsonwebtoken
 
 describe("User Controller", () => {
   const testUser = {
@@ -54,21 +56,26 @@ describe("User Controller", () => {
 
   describe("POST /login", () => {
     it("should login a user successfully", async () => {
-      const mockServiceResponse = { id: "123", token: "mocked-jwt-token" };
+      const mockServiceResponse = { id: "123", first: "John", last: "Doe" };
       (userService.verifyPassword as jest.Mock).mockResolvedValue(mockServiceResponse);
-    
+      
+      // Mock the jwt.sign function
+      (jwt.sign as jest.Mock).mockReturnValue("mocked-jwt-token");
+
       const response = await request(app)
         .post("/login")
         .send({ email: testUser.email, password: testUser.password });
-    
+
       console.log("Response status:", response.status);
       console.log("Response body:", response.body);
-    
+
       expect(response.status).toBe(200);
       expect(response.body).toEqual({
         message: "Login successful",
         id: "123",
-        token: expect.any(String),
+        token:  expect.any(String), // Expect mocked token
+        firstName: "John",
+        lastName: "Doe",
       });
       expect(userService.verifyPassword).toHaveBeenCalledWith(testUser.email, testUser.password);
     });
