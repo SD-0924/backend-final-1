@@ -10,7 +10,7 @@
  *     security:
  *       - JWT: []
  *     parameters:
- *      - name: productName
+ *       - name: productName
  *         in: query
  *         description: The product name.
  *         required: false

@@ -15,9 +15,10 @@ export const getAllProductsRepository = async (
 ) => {
   if (!categoryName && !brandName && !productName) {
     const noFillterProducts = await Product.findAll({ limit, offset });
+    const totalProducts = await Product.count();
     return {
       rows: noFillterProducts,
-      count: noFillterProducts.length,
+      count: totalProducts,
     };
   }
 
@@ -44,8 +45,6 @@ export const getAllProductsRepository = async (
   const brandProducts = brandId
     ? await Product.findAll({
         where: { brandId },
-        limit,
-        offset,
       })
     : [];
 
@@ -53,8 +52,6 @@ export const getAllProductsRepository = async (
   const categoryProducts = categoryId
     ? await Product.findAll({
         where: { categoryId },
-        limit,
-        offset,
       })
     : [];
 
@@ -68,9 +65,11 @@ export const getAllProductsRepository = async (
     ).values()
   );
 
+  const paginatedProducts = uniqueProducts.slice(offset, offset + limit);
+
   // Step 4: Return the unique products and the total count
   return {
-    rows: uniqueProducts,
+    rows: paginatedProducts,
     count: uniqueProducts.length,
   };
 };
