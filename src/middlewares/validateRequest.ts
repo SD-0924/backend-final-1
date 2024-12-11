@@ -1,6 +1,7 @@
 import { STATUS_CODES } from "../constants/statusCodes";
 import { Request, Response, NextFunction } from "express";
 import { validationResult } from "express-validator";
+import { ERROR_MESSAGES } from "../constants/errorMessages";
 
 export const validateRequest = (
   req: Request,
@@ -12,7 +13,7 @@ export const validateRequest = (
     // If validation errors exist, respond with status 400
     res
       .status(STATUS_CODES.BAD_REQUEST)
-      .json({ error: "Validation error", errors: errors.array() });
+      .json({ error: ERROR_MESSAGES.VALIDATION_ERROR, errors: errors.array() });
     return; // Ensure no further processing happens
   }
 

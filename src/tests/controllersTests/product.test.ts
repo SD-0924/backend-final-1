@@ -213,7 +213,7 @@ describe("Product Endpoints", () => {
       const response = await request(app).post("/api/products").send({});
 
       expect(response.status).toBe(STATUS_CODES.BAD_REQUEST);
-      expect(response.body).toHaveProperty("error", "Validation error");
+      expect(response.body).toHaveProperty("error", ERROR_MESSAGES.VALIDATION_ERROR);
     });
   });
 
