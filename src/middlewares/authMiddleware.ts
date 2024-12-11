@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 import { JWT_SECRET } from '../server';
-
+import {STATUS_CODES} from "../constants/statusCodes";
 export const authenticateJWT = (req: Request, res: Response, next: NextFunction): void => {
   const environment = process.env.NODE_ENV || "development";
   if (environment.toString().trim() === "test") {
@@ -9,13 +9,13 @@ export const authenticateJWT = (req: Request, res: Response, next: NextFunction)
   }
   const token = req.cookies.token || req.header('Authorization')?.replace('Bearer ', '');
   if (!token) {
-     res.status(403).json({ message: 'Access denied. No token provided.' });
+     res.status(STATUS_CODES.FORBIDDEN).json({ message: 'Access denied. No token provided.' });
      return
   }
 
   jwt.verify(token, JWT_SECRET, (err: any, user: any) => {
     if (err) {
-      return res.status(403).json({ message: 'Invalid or expired token' });
+      return res.status(STATUS_CODES.FORBIDDEN).json({ message: 'Invalid or expired token' });
     }
 
     (req as any).user = user;
@@ -34,7 +34,7 @@ export const isAdmin = (req: Request, res: Response, next: NextFunction): void =
     return next(); // Skip authentication during tests
   }
   if ((req as any).userRole !== 'Admin') {
-     res.status(403).json({ message: 'Access denied. Admins only.' });
+     res.status(STATUS_CODES.FORBIDDEN).json({ message: 'Access denied. Admins only.' });
      return
   }
   next();
