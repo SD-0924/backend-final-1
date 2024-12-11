@@ -1,4 +1,5 @@
 import { ERROR_MESSAGES } from "../constants/errorMessages";
+import { STATUS_CODES } from "../constants/statusCodes";
 import { Request, Response } from "express";
 import {
     createBrandService,
@@ -15,7 +16,7 @@ export const createBrand = async (req: Request, res: Response) => {
         const file = req.file;
 
         if (!req.file) {
-        res.status(400).json({
+        res.status(STATUS_CODES.BAD_REQUEST).json({
             success: false,
             message: "A logo file is required for brand creation.",
         });

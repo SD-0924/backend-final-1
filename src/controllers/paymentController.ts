@@ -1,34 +1,38 @@
 // controllers/orderController.ts
+import { STATUS_CODES } from "../constants/statusCodes";
 import { Request, Response } from "express";
-import { getUserOrdersService, placeOrderService } from "../services/orderService";
-import { processPayment } from "../services/paymentService"; 
+import {
+  getUserOrdersService,
+  placeOrderService,
+} from "../services/orderService";
+import { processPayment } from "../services/paymentService";
 
 export const processOrderPayment = async (req: Request, res: Response) => {
   try {
-    const { amount, paymentMethodId } = req.body;  
+    const { amount, paymentMethodId } = req.body;
 
     if (!amount || !paymentMethodId) {
-       res.status(400).json({
+      res.status(STATUS_CODES.BAD_REQUEST).json({
         message: "Amount and paymentMethodId are required",
       });
-      return
+      return;
     }
 
     const paymentIntent = await processPayment(amount, paymentMethodId);
 
     if (paymentIntent.status === "succeeded") {
-       res.status(200).json({
+      res.status(200).json({
         message: "Payment successful",
         paymentStatus: paymentIntent.status,
         paymentIntent,
       });
-      return
+      return;
     } else {
-       res.status(400).json({
+      res.status(STATUS_CODES.BAD_REQUEST).json({
         message: "Payment failed",
         paymentStatus: paymentIntent.status,
       });
-      return
+      return;
     }
   } catch (error: unknown) {
     res.status(500).json({

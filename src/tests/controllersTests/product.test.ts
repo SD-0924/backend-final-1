@@ -1,3 +1,4 @@
+import { STATUS_CODES } from "../../constants/statusCodes";
 import request from "supertest";
 
 import app from "../../app";
@@ -207,7 +208,7 @@ describe("Product Endpoints", () => {
     it("should return 400 for validation errors", async () => {
       const response = await request(app).post("/api/products").send({});
 
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(STATUS_CODES.BAD_REQUEST);
       expect(response.body).toHaveProperty("error", "Validation error");
     });
   });
