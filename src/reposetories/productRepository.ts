@@ -10,15 +10,25 @@ export const getAllProductsRepository = async (
   limit: number,
   offset: number,
   brandName?: any,
-  categoryName?: any
+  categoryName?: any,
+  productName?: any
 ) => {
-  if (!categoryName && !brandName) {
+  if (!categoryName && !brandName && !productName) {
     const noFillterProducts = await Product.findAll({ limit, offset });
+    const totalProducts = await Product.count();
     return {
       rows: noFillterProducts,
-      count: noFillterProducts.length,
+      count: totalProducts,
     };
   }
+
+  const nameProducts = await Product.findAll({
+    where: {
+      name: {
+        [Op.like]: `%${productName}%`, // % is a wildcard for zero or more characters
+      },
+    },
+  });
 
   const brand = await Brand.findOne({
     where: { name: brandName },
@@ -35,8 +45,6 @@ export const getAllProductsRepository = async (
   const brandProducts = brandId
     ? await Product.findAll({
         where: { brandId },
-        limit,
-        offset,
       })
     : [];
 
@@ -44,14 +52,12 @@ export const getAllProductsRepository = async (
   const categoryProducts = categoryId
     ? await Product.findAll({
         where: { categoryId },
-        limit,
-        offset,
       })
     : [];
 
   // Step 3: Combine the products and remove duplicates by product ID
 
-  const allProducts = [...brandProducts, ...categoryProducts];
+  const allProducts = [...nameProducts, ...brandProducts, ...categoryProducts];
 
   const uniqueProducts = Array.from(
     new Map(
@@ -59,9 +65,11 @@ export const getAllProductsRepository = async (
     ).values()
   );
 
+  const paginatedProducts = uniqueProducts.slice(offset, offset + limit);
+
   // Step 4: Return the unique products and the total count
   return {
-    rows: uniqueProducts,
+    rows: paginatedProducts,
     count: uniqueProducts.length,
   };
 };
@@ -181,7 +189,7 @@ export const getProductsByBrandRepository = async (
   limit: number,
   offset: number
 ) => {
-  return await Product.findAll({ where: { brandId }, limit, offset });
+  return await Product.findAndCountAll({ where: { brandId }, limit, offset });
 };
 
 export const getProductsByCategoryRepository = async (
@@ -189,7 +197,11 @@ export const getProductsByCategoryRepository = async (
   limit: number,
   offset: number
 ) => {
-  return await Product.findAll({ where: { categoryId }, limit, offset });
+  return await Product.findAndCountAll({
+    where: { categoryId },
+    limit,
+    offset,
+  });
 };
 
 export const getHandpickedProducts = async (limit: number, offset: number) => {

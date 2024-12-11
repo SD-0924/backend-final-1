@@ -14,9 +14,7 @@ interface OrderItemAttributes {
 interface OrderItemCreationAttributes
   extends Optional<OrderItemAttributes, "id"> {}
 
-class OrderItem
-  extends Model<OrderItemAttributes, OrderItemCreationAttributes>
-  implements OrderItemAttributes
+class OrderItem extends Model<OrderItemAttributes, OrderItemCreationAttributes> implements OrderItemAttributes
 {
   public id!: string;
   public orderId!: string;

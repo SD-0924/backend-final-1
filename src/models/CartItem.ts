@@ -12,9 +12,7 @@ interface CartItemAttributes {
 
 interface CartItemCreationAttributes extends Optional<CartItemAttributes, "id"> {}
 
-class CartItem
-  extends Model<CartItemAttributes, CartItemCreationAttributes>
-  implements CartItemAttributes
+class CartItem extends Model<CartItemAttributes, CartItemCreationAttributes> implements CartItemAttributes
 {
   public id!: string;
   public userId!: string;
