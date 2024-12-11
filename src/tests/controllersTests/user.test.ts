@@ -56,11 +56,14 @@ describe("User Controller", () => {
     it("should login a user successfully", async () => {
       const mockServiceResponse = { id: "123", token: "mocked-jwt-token" };
       (userService.verifyPassword as jest.Mock).mockResolvedValue(mockServiceResponse);
-
+    
       const response = await request(app)
         .post("/login")
         .send({ email: testUser.email, password: testUser.password });
-
+    
+      console.log("Response status:", response.status);
+      console.log("Response body:", response.body);
+    
       expect(response.status).toBe(200);
       expect(response.body).toEqual({
         message: "Login successful",
@@ -69,6 +72,7 @@ describe("User Controller", () => {
       });
       expect(userService.verifyPassword).toHaveBeenCalledWith(testUser.email, testUser.password);
     });
+    
 
     it("should return 401 for invalid credentials", async () => {
       (userService.verifyPassword as jest.Mock).mockRejectedValue(new Error("Invalid password"));
