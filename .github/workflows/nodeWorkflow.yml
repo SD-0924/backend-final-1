@@ -40,7 +40,7 @@ jobs:
           SERVICE_ACCOUNT_JSON: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
-          JWT_SECRET: "af44eb058bc02fafcab3b069f7a9af2f04a9f0164e8a8c161c6c0fa5dc3d5ed15da851fb7279a1db84ec6ec1948069afcf2f07b124cbeebf46ec6957f1f9d05c"
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: |
           echo "Running tests with service account JSON from environment variable"
           npm run test:all
