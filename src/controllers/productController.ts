@@ -78,7 +78,7 @@ export const getAllProducts = async (req: Request, res: Response) => {
       })
     );
 
-    res.status(201).json({
+    res.status(STATUS_CODES.CREATED).json({
       success: true,
       data: updatedProducts,
       pagination,
@@ -118,7 +118,7 @@ export const getProductById = async (
       product.imageUrl = defaultImageURL;
     }
 
-    res.status(201).json(product);
+    res.status(STATUS_CODES.CREATED).json(product);
   } catch (error) {
     console.error("Failed to fetch product:", error);
     res
@@ -143,7 +143,7 @@ export const addProduct = async (req: Request, res: Response) => {
 
     const newProduct = await addProductService(productData);
 
-    res.status(201).json({
+    res.status(STATUS_CODES.CREATED).json({
       success: true,
       message: "Product added successfully!",
       data: newProduct,
@@ -222,7 +222,7 @@ export const getProductRatings = async (req: Request, res: Response) => {
   try {
     const productId = req.params.id;
     const ratings = await getProductRatingsService(productId);
-    res.status(201).json(ratings);
+    res.status(STATUS_CODES.CREATED).json(ratings);
   } catch (error) {
     res
       .status(STATUS_CODES.SERVER_ERROR)
@@ -512,7 +512,7 @@ export const getProductsByBrand = async (
         return product;
       })
     );
-    res.status(201).json({
+    res.status(STATUS_CODES.CREATED).json({
       success: true,
       data: updatedProducts,
       pagination,
@@ -569,7 +569,7 @@ export const getProductsByCategory = async (
         return product;
       })
     );
-    res.status(201).json({
+    res.status(STATUS_CODES.CREATED).json({
       success: true,
       data: updatedProducts,
       pagination,

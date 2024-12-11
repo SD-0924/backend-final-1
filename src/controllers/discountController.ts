@@ -43,7 +43,7 @@ export const createDiscount = async (req: Request, res: Response) => {
   try {
     const data = req.body;
     const discount = await discountService.createDiscount(data);
-    res.status(201).json(discount);
+    res.status(STATUS_CODES.CREATED).json(discount);
   } catch (error: unknown) {
     if (error instanceof Error) {
       res.status(STATUS_CODES.SERVER_ERROR).json({ error: error.message });

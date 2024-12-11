@@ -33,7 +33,7 @@ export const placeOrder = async (req: Request, res: Response) => {
 
     const order = await placeOrderService(userId, couponId, status);
 
-    res.status(201).json({
+    res.status(STATUS_CODES.CREATED).json({
       message: "Order placed successfully",
       data: order,
     });

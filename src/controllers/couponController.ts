@@ -39,7 +39,7 @@ export const getCouponById = async (req: Request, res: Response) => {
 export const createCoupon = async (req: Request, res: Response) => {
   try {
     const coupon = await addCoupon(req.body);
-    res.status(201).json(coupon);
+    res.status(STATUS_CODES.CREATED).json(coupon);
   } catch (error) {
     res
       .status(STATUS_CODES.SERVER_ERROR)
@@ -53,7 +53,7 @@ export const updateCoupon = async (req: Request, res: Response) => {
     if (!coupon) {
       res.status(STATUS_CODES.NOT_FOUND).json({ error: "Coupon not found" });
     } else {
-      res.status(201).json(coupon);
+      res.status(STATUS_CODES.CREATED).json(coupon);
     }
   } catch (error) {
     res
@@ -80,7 +80,7 @@ export const deleteCoupon = async (req: Request, res: Response) => {
 export const getCouponOrders = async (req: Request, res: Response) => {
   try {
     const orders = await fetchCouponOrders(req.params.id);
-    res.status(201).json(orders);
+    res.status(STATUS_CODES.CREATED).json(orders);
   } catch (error) {
     res
       .status(STATUS_CODES.SERVER_ERROR)

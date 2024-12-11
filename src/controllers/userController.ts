@@ -27,7 +27,7 @@ export const handleRegister = async (
       password,
     });
     res
-      .status(201)
+      .status(STATUS_CODES.CREATED)
       .json({ message: "User registered successfully", user: newUser });
   } catch (error: unknown) {
     if (error instanceof Error) {

@@ -17,7 +17,7 @@ export const addRatingController = async (
   try {
     const ratingData = req.body;
     const newRating = await addRating(ratingData);
-    res.status(201).json(newRating);
+    res.status(STATUS_CODES.CREATED).json(newRating);
   } catch (error: any) {
     res.status(STATUS_CODES.BAD_REQUEST).json({ error });
   }

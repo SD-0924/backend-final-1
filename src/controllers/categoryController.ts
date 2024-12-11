@@ -42,7 +42,7 @@ export const createCategory = async (req: Request, res: Response) => {
   try {
     const categoryData = req.body;
     const newCategory = await createCategoryService(categoryData);
-    res.status(201).json({
+    res.status(STATUS_CODES.CREATED).json({
       success: true,
       message: "Category created successfully!",
       data: newCategory,
