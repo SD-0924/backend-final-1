@@ -8,6 +8,7 @@ dotenv.config();
 const PORT = process.env.PORT || 3000;
 export const JWT_SECRET = process.env.JWT_SECRET!;
 const environment = process.env.NODE_ENV || "development";
+import logger from "./logger";
 
 const startServer = async () => {
   try {
@@ -15,19 +16,19 @@ const startServer = async () => {
 
     if (environment.toString().trim() !== "test") {
       app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
-        console.log("API Docs available at http://localhost:3000/api-docs");
+        logger.info(`Server is running on port ${PORT}`);
+        logger.info("API Docs available at http://localhost:3000/api-docs");
       });
     }
   } catch (error) {
-    console.error("Error starting server:", error);
+    logger.error("Error starting server:", error);
     process.exit(1);
   }
 
   process.on("SIGINT", async () => {
-    console.log("Gracefully shutting down...");
+    logger.info("Gracefully shutting down...");
     await sequelize.close();
-    console.log("Database connection closed.");
+    logger.info("Database connection closed.");
     process.exit(0);
   });
 };

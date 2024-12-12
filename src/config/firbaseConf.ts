@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { initializeApp as adminInitializeApp, cert } from "firebase-admin/app";
 import * as admin from "firebase-admin";
+import logger from "../logger";
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -26,9 +27,11 @@ let serviceAccount;
 try {
   // Parse the service account JSON from the environment variable
   serviceAccount = JSON.parse(serviceAccountConfig);
-  console.log("Service account successfully parsed.");
+  logger.info("Service account successfully parsed.");
 } catch (error: any) {
-  throw new Error(`Failed to parse service account JSON. Error: ${error.message}`);
+  throw new Error(
+    `Failed to parse service account JSON. Error: ${error.message}`
+  );
 }
 
 // Admin SDK initialization
@@ -40,6 +43,6 @@ const adminApp = adminInitializeApp({
 // Access Firebase storage using the admin SDK
 const bucket = admin.storage().bucket();
 
-console.log("Firebase has been initialized successfully!!!");
+logger.info("Firebase has been initialized successfully!!!");
 
 export { app, adminApp, admin, bucket };

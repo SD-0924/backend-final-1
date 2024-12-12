@@ -51,7 +51,9 @@ export const handleLogin = async (
 
     const user = await verifyPassword(email, password);
     if (!user) {
-      res.status(STATUS_CODES.UNAUTHORIZED).json({ message: "Invalid email or password" });
+      res
+        .status(STATUS_CODES.UNAUTHORIZED)
+        .json({ message: "Invalid email or password" });
     }
 
     const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, {
@@ -135,7 +137,6 @@ export const handleUpdateUseradress = async (
     if (mobileNum) {
       updates.mobileNum = mobileNum;
     }
-    console.log(updates);
     const updatedUser = await updateUserService1(id, updates);
 
     if (!updatedUser) {
