@@ -15,12 +15,7 @@ export const getAllProductsRepository = async (
   productName?: any
 ) => {
   if (!categoryName && !brandName && !productName) {
-    const noFillterProducts = await Product.findAll({ limit, offset });
-    const totalProducts = await Product.count();
-    return {
-      rows: noFillterProducts,
-      count: totalProducts,
-    };
+    return await Product.findAndCountAll({ limit, offset });
   }
 
   const nameProducts = await Product.findAll({
@@ -33,12 +28,14 @@ export const getAllProductsRepository = async (
 
   const brand = await Brand.findOne({
     where: { name: brandName },
+    attributes:["id"]
   });
 
   const brandId = brand ? brand.dataValues.id : "";
 
   const category = await Category.findOne({
     where: { name: categoryName },
+    attributes:["id"]
   });
 
   const categoryId = category ? category.dataValues.id : "";
@@ -75,6 +72,8 @@ export const getAllProductsRepository = async (
   };
 };
 
+
+
 export const getProductByIdRepository = async (productId: string) => {
   return await Product.findByPk(productId);
 };
@@ -87,19 +86,19 @@ export const updateProductRepository = async (
   productId: string,
   updatedData: Partial<Product>
 ) => {
-  const product = await Product.findByPk(productId);
+  const product = await Product.update(updatedData, {where: {id:productId}});
   if (!product) {
     throw new Error(ERROR_MESSAGES.PRODUCT_NOT_FOUND);
   }
-  return await product.update(updatedData);
+  return product;
 };
 
 export const deleteProductRepository = async (productId: string) => {
-  const product = await Product.findByPk(productId);
+  const product = await Product.destroy({where:{id:productId}});
   if (!product) {
     throw new Error(ERROR_MESSAGES.PRODUCT_NOT_FOUND);
   }
-  return await product.destroy();
+  return product;
 };
 
 export const getProductRatingsRepository = async (productId: string) => {
@@ -130,9 +129,9 @@ export const getDiscountedProductsRepository = async (
         SELECT 1
         FROM discounts
         WHERE discounts.productId = Product.id
-          AND discounts.discountPercentage >= 15 -- Ensure discount is 15% or more
-          AND discounts.startDate <= '${currentDate.toISOString()}' -- Active discount
-          AND discounts.endDate >= '${currentDate.toISOString()}' -- Active discount
+          AND discounts.discountPercentage >= 15 
+          AND discounts.startDate <= '${currentDate.toISOString()}'
+          AND discounts.endDate >= '${currentDate.toISOString()}' 
       )
     `),
     limit,
@@ -146,16 +145,15 @@ export const getPopularProductsRepository = async (
   limit: number,
   offset: number
 ) => {
-  const currentDate = new Date();
   const products = await Product.findAll({
     where: sequelize.literal(`
       EXISTS (
         SELECT 1
         FROM ratings
-        WHERE ratings.productId = Product.id -- Link ratings to products
+        WHERE ratings.productId = Product.id 
           AND ratings.ratingValue IS NOT NULL
         GROUP BY ratings.productId
-        HAVING AVG(ratings.ratingValue) >= 4.5 -- Popular products with average rating >= 4.5
+        HAVING AVG(ratings.ratingValue) >= 4.5 
       )
     `),
     limit,
@@ -214,7 +212,7 @@ export const getHandpickedProducts = async (limit: number, offset: number) => {
       SELECT 1
       FROM ratings
       WHERE ratings.ratingValue IS NOT NULL
-        AND ratings.productId = Product.id -- Use correct alias here
+        AND ratings.productId = Product.id 
       GROUP BY ratings.productId
       HAVING AVG(ratings.ratingValue) > 4.5
     )
@@ -223,7 +221,7 @@ export const getHandpickedProducts = async (limit: number, offset: number) => {
         Product.price * (
           SELECT discountPercentage / 100
           FROM discounts
-          WHERE discounts.productId = Product.id -- Use correct alias here
+          WHERE discounts.productId = Product.id 
             AND discounts.startDate <= '${currentDate.toISOString()}'
             AND discounts.endDate >= '${currentDate.toISOString()}'
           LIMIT 1
