@@ -8,10 +8,10 @@
   },
   "type": "commonjs",
   "scripts": {
-    "test:health": "set NODE_ENV=test && jest tests/healthTest --detectOpenHandles",
-    "test:models": "set NODE_ENV=test && jest tests/modelsTests --detectOpenHandles",
-    "test:controllers": "set NODE_ENV=test && jest tests/controllersTests --detectOpenHandles",
-    "test:all": "set NODE_ENV=test && jest --detectOpenHandles --coverage",
+    "test:health": "set NODE_ENV=test && jest tests/healthTest",
+    "test:models": "set NODE_ENV=test && jest tests/modelsTests",
+    "test:controllers": "set NODE_ENV=test && jest tests/controllersTests",
+    "test:all": "set NODE_ENV=test && jest --coverage",
     "start": "set NODE_ENV=production && nodemon --exec ts-node src/server.ts",
     "build": "tsc",
     "dev": "set NODE_ENV=development && nodemon --exec ts-node src/server.ts "
