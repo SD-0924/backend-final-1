@@ -18,16 +18,15 @@ export const createCouponRepo = async (couponData: any) => {
 
 // Update a coupon
 export const updateCouponRepo = async (couponId: string, couponData: any) => {
-  const coupon = await Coupon.findByPk(couponId);
+  const coupon = await Coupon.update(couponData,{where:{id: couponId}});
   if (!coupon) return null;
-  return await coupon.update(couponData);
+  return coupon;
 };
 
 // Delete a coupon
 export const deleteCouponRepo = async (couponId: string) => {
-  const coupon = await Coupon.findByPk(couponId);
+  const coupon = await Coupon.destroy({where:{id: couponId}});
   if (!coupon) return false;
-  await coupon.destroy();
   return true;
 };
 
