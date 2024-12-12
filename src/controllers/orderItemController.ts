@@ -1,3 +1,4 @@
+import { STATUS_CODES } from "../constants/statusCodes";
 import { Request, Response } from "express";
 import { getOrderItemsService } from "../services/orderItemService";
 
@@ -6,14 +7,18 @@ export const getOrderItems = async (req: Request, res: Response) => {
     const { orderId } = req.params;
 
     if (!orderId) {
-      res.status(400).json({ error: "Order ID is required" });
+      res
+        .status(STATUS_CODES.BAD_REQUEST)
+        .json({ error: "Order ID is required" });
       return;
     }
 
     const orderItems = await getOrderItemsService(orderId);
 
-    res.status(200).json({ orderItems });
+    res.status(STATUS_CODES.SUCCESS).json({ orderItems });
   } catch (error) {
-    res.status(500).json({ error: error instanceof Error ? error.message : error });
+    res
+      .status(STATUS_CODES.SERVER_ERROR)
+      .json({ error: error instanceof Error ? error.message : error });
   }
 };

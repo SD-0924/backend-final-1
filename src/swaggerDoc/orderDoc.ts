@@ -156,5 +156,5 @@
  *                   example: "Error placing order"
  *                 error:
  *                   type: string
- *                   example: "Internal server error"
+ *                   example: "Internal server error."
  */

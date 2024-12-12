@@ -1,3 +1,5 @@
+import { STATUS_CODES } from "../constants/statusCodes";
+import { ERROR_MESSAGES } from "../constants/errorMessages";
 import { Request, RequestHandler, Response } from "express";
 import { getNewArrivalsService } from "../services/productService";
 import {
@@ -44,7 +46,9 @@ export const getAllProducts = async (req: Request, res: Response) => {
     );
 
     if (products.length === 0) {
-      res.status(404).json({ message: "No products found." });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: "No products found." });
       return;
     }
 
@@ -74,13 +78,15 @@ export const getAllProducts = async (req: Request, res: Response) => {
       })
     );
 
-    res.status(201).json({
+    res.status(STATUS_CODES.CREATED).json({
       success: true,
       data: updatedProducts,
       pagination,
     });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error });
+    res
+      .status(STATUS_CODES.SERVER_ERROR)
+      .json({ message: ERROR_MESSAGES.SERVER_ERROR, error });
   }
 };
 
@@ -93,7 +99,9 @@ export const getProductById = async (
 
     const product = await getProductByIdService(productId);
     if (!product) {
-      res.status(404).json({ error: "Product not found" });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ error: ERROR_MESSAGES.PRODUCT_NOT_FOUND });
       return;
     }
 
@@ -110,10 +118,12 @@ export const getProductById = async (
       product.imageUrl = defaultImageURL;
     }
 
-    res.status(201).json(product);
+    res.status(STATUS_CODES.CREATED).json(product);
   } catch (error) {
     console.error("Failed to fetch product:", error);
-    res.status(500).json({ error: "Failed to fetch product" });
+    res
+      .status(STATUS_CODES.SERVER_ERROR)
+      .json({ error: "Failed to fetch product" });
   }
 };
 
@@ -133,14 +143,14 @@ export const addProduct = async (req: Request, res: Response) => {
 
     const newProduct = await addProductService(productData);
 
-    res.status(201).json({
+    res.status(STATUS_CODES.CREATED).json({
       success: true,
       message: "Product added successfully!",
       data: newProduct,
     });
   } catch (error) {
     console.error("Error adding product:", error);
-    res.status(500).json({
+    res.status(STATUS_CODES.SERVER_ERROR).json({
       success: false,
       message: "Failed to add product. Please try again later.",
     });
@@ -164,17 +174,19 @@ export const updateProduct = async (req: Request, res: Response) => {
 
     const updatedProduct = await updateProductService(productId, updatedData);
 
-    res.status(200).json({
+    res.status(STATUS_CODES.SUCCESS).json({
       success: true,
       message: "Product updated successfully!",
       data: updatedProduct,
     });
   } catch (error: any) {
     console.error("Error updating product:", error);
-    if (error.message === "Product not found") {
-      res.status(404).json({ message: "Product not found" });
+    if (error.message === ERROR_MESSAGES.PRODUCT_NOT_FOUND) {
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: ERROR_MESSAGES.PRODUCT_NOT_FOUND });
     } else {
-      res.status(500).json({
+      res.status(STATUS_CODES.SERVER_ERROR).json({
         success: false,
         message: "Failed to update product. Please try again later.",
       });
@@ -199,7 +211,7 @@ export const deleteProduct = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error("Error deleting product:", error);
-    res.status(500).json({
+    res.status(STATUS_CODES.SERVER_ERROR).json({
       success: false,
       message: "Failed to delete product. Please try again later.",
     });
@@ -210,9 +222,11 @@ export const getProductRatings = async (req: Request, res: Response) => {
   try {
     const productId = req.params.id;
     const ratings = await getProductRatingsService(productId);
-    res.status(201).json(ratings);
+    res.status(STATUS_CODES.CREATED).json(ratings);
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch ratings" });
+    res
+      .status(STATUS_CODES.SERVER_ERROR)
+      .json({ error: "Failed to fetch ratings" });
   }
 };
 
@@ -222,7 +236,9 @@ export const getLimitedEdition = async (req: Request, res: Response) => {
     const limit = parseInt(req.query.limit as string) || 10;
     const products = await getLimitedEditionService(page, limit);
     if (products.length === 0) {
-      res.status(404).json({ message: "No limited edition products found." });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: "No limited edition products found." });
       return;
     }
 
@@ -252,9 +268,11 @@ export const getLimitedEdition = async (req: Request, res: Response) => {
       })
     );
 
-    res.status(200).json(updatedProducts);
+    res.status(STATUS_CODES.SUCCESS).json(updatedProducts);
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error });
+    res
+      .status(STATUS_CODES.SERVER_ERROR)
+      .json({ message: ERROR_MESSAGES.SERVER_ERROR, error });
   }
 };
 
@@ -265,7 +283,9 @@ export const getDiscountedProducts = async (req: Request, res: Response) => {
     const products = await getDiscountedProductsService(page, limit);
 
     if (products.length === 0) {
-      res.status(404).json({ message: "No discounted products found." });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: "No discounted products found." });
       return;
     }
 
@@ -295,9 +315,11 @@ export const getDiscountedProducts = async (req: Request, res: Response) => {
       })
     );
 
-    res.status(200).json(updatedProducts);
+    res.status(STATUS_CODES.SUCCESS).json(updatedProducts);
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error });
+    res
+      .status(STATUS_CODES.SERVER_ERROR)
+      .json({ message: ERROR_MESSAGES.SERVER_ERROR, error });
   }
 };
 
@@ -308,7 +330,9 @@ export const getPopularProducts = async (req: Request, res: Response) => {
     const products = await getPopularProductsService(page, limit);
 
     if (products.length === 0) {
-      res.status(404).json({ message: "No popular products found." });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: "No popular products found." });
       return;
     }
 
@@ -338,9 +362,11 @@ export const getPopularProducts = async (req: Request, res: Response) => {
       })
     );
 
-    res.status(200).json(updatedProducts);
+    res.status(STATUS_CODES.SUCCESS).json(updatedProducts);
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error });
+    res
+      .status(STATUS_CODES.SERVER_ERROR)
+      .json({ message: ERROR_MESSAGES.SERVER_ERROR, error });
   }
 };
 
@@ -381,14 +407,14 @@ export const getNewArrivals = async (
       })
     );
 
-    res.status(200).json({
+    res.status(STATUS_CODES.SUCCESS).json({
       success: true,
       data: updatedProducts,
       pagination,
     });
   } catch (error) {
     console.error("Error fetching new arrivals:", error);
-    res.status(500).json({
+    res.status(STATUS_CODES.SERVER_ERROR).json({
       success: false,
       message: "Failed to fetch new arrivals. Please try again later.",
     });
@@ -401,7 +427,9 @@ export const getHandpicked = async (req: Request, res: Response) => {
     const limit = parseInt(req.query.limit as string) || 10;
     const products = await fetchHandpickedProducts(page, limit);
     if (products.length === 0) {
-      res.status(404).json({ message: "No handpicked products found." });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: "No handpicked products found." });
       return;
     }
 
@@ -431,9 +459,11 @@ export const getHandpicked = async (req: Request, res: Response) => {
       })
     );
 
-    res.status(200).json(updatedProducts);
+    res.status(STATUS_CODES.SUCCESS).json(updatedProducts);
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error });
+    res
+      .status(STATUS_CODES.SERVER_ERROR)
+      .json({ message: ERROR_MESSAGES.SERVER_ERROR, error });
   }
 };
 
@@ -451,7 +481,9 @@ export const getProductsByBrand = async (
       limit
     );
     if (products.length === 0) {
-      res.status(404).json({ message: "No products found." });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: "No products found." });
       return;
     }
 
@@ -480,13 +512,15 @@ export const getProductsByBrand = async (
         return product;
       })
     );
-    res.status(201).json({
+    res.status(STATUS_CODES.CREATED).json({
       success: true,
       data: updatedProducts,
       pagination,
     });
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error });
+    res
+      .status(STATUS_CODES.SERVER_ERROR)
+      .json({ message: ERROR_MESSAGES.SERVER_ERROR, error });
   }
 };
 
@@ -504,7 +538,9 @@ export const getProductsByCategory = async (
       limit
     );
     if (products.length === 0) {
-      res.status(404).json({ message: "No products found." });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: "No products found." });
       return;
     }
 
@@ -533,7 +569,7 @@ export const getProductsByCategory = async (
         return product;
       })
     );
-    res.status(201).json({
+    res.status(STATUS_CODES.CREATED).json({
       success: true,
       data: updatedProducts,
       pagination,
@@ -541,9 +577,11 @@ export const getProductsByCategory = async (
   } catch (error: any) {
     console.error("Error fetching products by category:", error.message);
     if (error.message === "Category not found") {
-      res.status(404).json({ message: "Category not found" });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: "Category not found" });
     } else {
-      res.status(500).json({ message: "Server error" });
+      res.status(STATUS_CODES.SERVER_ERROR).json({ message: "Server error" });
     }
   }
 };
@@ -557,7 +595,9 @@ export const getProductPriceAfterDiscount = async (
   try {
     const product = await getProductByIdService(id);
     if (!product) {
-      res.status(404).json({ message: "Product not found" });
+      res
+        .status(STATUS_CODES.NOT_FOUND)
+        .json({ message: ERROR_MESSAGES.PRODUCT_NOT_FOUND });
       return;
     }
     const discount = await getDiscountByProductId(id);
@@ -601,7 +641,9 @@ export const getProductPriceAfterDiscount = async (
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    res
+      .status(STATUS_CODES.SERVER_ERROR)
+      .json({ message: ERROR_MESSAGES.SERVER_ERROR });
     return;
   }
 };
