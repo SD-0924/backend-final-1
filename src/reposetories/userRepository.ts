@@ -14,15 +14,14 @@ export const getUserById = async (id: string) => {
   
   
   export const updateUser = async (id: string, updates: any) => {
-    const user = await User.findByPk(id);
+    const user = await User.update(updates, {where:{id}});
     if (!user) return null;
-    return await user.update(updates);
+    return user;
   };
   
   export const deleteUser = async (id: string) => {
-    const user = await User.findByPk(id);
+    const user = await User.destroy({where:{id}});
     if (!user) return false;
-    await user.destroy();
     return true;
   };
 
