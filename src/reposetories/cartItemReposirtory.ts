@@ -1,4 +1,5 @@
 import CartItem from "../models/CartItem";
+import Product from "../models/Product";
 import { getProductByIdRepository } from "../reposetories/productRepository";
 
 
@@ -14,42 +15,38 @@ export const getCartItemByUserAndProduct = async(userId: string, productId: stri
 
 // updating the cart Quantity of specific product for specific user
 export const updateCartItemQuantity = async (cartItemId: string, quantity: number) => {
-    return await CartItem.update(
+    const [updatedRows] = await CartItem.update(
         { quantity },
-        {where: { id: cartItemId },}
+        { where: { id: cartItemId } }
     );
+    if (updatedRows === 0) {
+        throw new Error("CartItem not found or quantity unchanged");
+    }
+    return updatedRows;
 };
 
 // get cart by id
 export const getCartByCartId = async (cartId: string) => {
-    return CartItem.findOne({
-        where: { id: cartId },
+    return await CartItem.findByPk(cartId, {
         attributes: ['id', 'userId', 'productId', 'quantity'],
     });
 };
 
 // delete item from cartItem table
 export const deleteCartItemById = async (cartId: string) => {
-    const item = await CartItem.findByPk(cartId);
-    if (!item) {
-        throw new Error("cartId not found");
+    const deletedRows = await CartItem.destroy({ where: { id: cartId } });
+    if (deletedRows === 0) {
+        throw new Error("CartItem not found");
     }
-    return await item.destroy(); 
+    return deletedRows;
 };
 
 // delete items for specific userId
 export const deleteCartItemsByUserId = async (userId: string) => {
-    const items = await CartItem.findAll({
-        where: { userId }
-    });
-
-    if (items.length === 0) {
+    const deletedRows = await CartItem.destroy({ where: { userId } });
+    if (deletedRows === 0) {
         throw new Error("No cart items found for this user.");
     }
-
-    return await CartItem.destroy({
-        where: { userId }
-    });
 };
 
 // getting the items of specific user
@@ -71,4 +68,13 @@ export const getCartItemsWithProductDetails = async (userId: string) => {
   );
 
   return cartItemsWithDetails;
+
+// return await CartItem.findAll({ //optmization
+//     where: { userId },
+//     include: [
+//         {
+//             model: Product
+//         },
+//     ],
+// });
 };
