@@ -163,7 +163,7 @@ export const updateBrandService = async (id: string, name?: string, file?: Expre
             }
         }
         }
-        const updatedBrand = await updateBrandRepository(id, updatedData);
+        const updatedBrand = await updateBrandRepository(updatedData, brand);
         let logoUrl = await getBrandImageUrlFromFirebase(updatedBrand.logo);
         return {
             id: updatedBrand.id,
