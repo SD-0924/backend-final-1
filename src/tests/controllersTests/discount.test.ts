@@ -2,8 +2,9 @@ import request from 'supertest';
 import app from '../../app';
 import * as discountService from '../../services/discountService';
 import { validateRequest } from '../../middlewares/validateRequest';
+import { ERROR_MESSAGES } from "../../constants/errorMessages";
 
-// محاكاة الخدمة (mock service)
+import { STATUS_CODES } from "../../constants/statusCodes";
 jest.mock('../../services/discountService');
 jest.mock('../../middlewares/validateRequest', () => ({
     validateRequest: jest.fn().mockImplementation((req, res, next) => next()),  // Mock to bypass validation
@@ -29,7 +30,7 @@ describe("Discount Endpoints", () => {
             const response = await request(app).get('/api/discounts');
             console.log(response.body);  // Debugging line
 
-            expect(response.status).toBe(200);
+            expect(response.status).toBe(STATUS_CODES.SUCCESS);
             expect(response.body).toEqual([mockDiscount]);
             expect(discountService.getAllDiscounts).toHaveBeenCalled();
         });
@@ -42,7 +43,7 @@ describe("Discount Endpoints", () => {
             const response = await request(app).get(`/api/discounts/${mockDiscount.id}`);
             console.log(response.body);  // Debugging line
 
-            expect(response.status).toBe(200);
+            expect(response.status).toBe(STATUS_CODES.SUCCESS);
             expect(response.body).toEqual(mockDiscount);
             expect(discountService.getDiscountById).toHaveBeenCalledWith(mockDiscount.id);
         });
@@ -53,8 +54,8 @@ describe("Discount Endpoints", () => {
             const response = await request(app).get(`/api/discounts/nonexistentId`);
             console.log(response.body);  // Debugging line
 
-            expect(response.status).toBe(404);
-            expect(response.body).toEqual({ message: 'Discount not found' });
+            expect(response.status).toBe(STATUS_CODES.NOT_FOUND);
+            expect(response.body).toEqual({ message: ERROR_MESSAGES.DISCOUNT_NOT_FOUND });
         });
     });
 
@@ -65,7 +66,7 @@ describe("Discount Endpoints", () => {
             const response = await request(app).post('/api/discounts').send(mockDiscount);
             console.log(response.body);  // Debugging line
 
-            expect(response.status).toBe(201);
+            expect(response.status).toBe(STATUS_CODES.CREATED);
             expect(response.body).toEqual(mockDiscount);
             expect(discountService.createDiscount).toHaveBeenCalledWith(mockDiscount);
         });
@@ -78,7 +79,7 @@ describe("Discount Endpoints", () => {
             const response = await request(app).put(`/api/discounts/${mockDiscount.id}`).send({ discountPercentage: 20 });
             console.log(response.body);  // Debugging line
 
-            expect(response.status).toBe(200);
+            expect(response.status).toBe(STATUS_CODES.SUCCESS);
             expect(response.body).toEqual(mockDiscount);
             expect(discountService.updateDiscount).toHaveBeenCalledWith(mockDiscount.id, { discountPercentage: 20 });
         });
@@ -89,8 +90,8 @@ describe("Discount Endpoints", () => {
             const response = await request(app).put(`/api/discounts/nonexistentId`).send({ discountPercentage: 20 });
             console.log(response.body);  // Debugging line
 
-            expect(response.status).toBe(404);
-            expect(response.body).toEqual({ message: 'Discount not found' });
+            expect(response.status).toBe(STATUS_CODES.NOT_FOUND);
+            expect(response.body).toEqual({ message: ERROR_MESSAGES.DISCOUNT_NOT_FOUND  });
         });
     });
 
@@ -101,7 +102,7 @@ describe("Discount Endpoints", () => {
             const response = await request(app).delete(`/api/discounts/${mockDiscount.id}`);
             console.log(response.body);  // Debugging line
 
-            expect(response.status).toBe(204);
+            expect(response.status).toBe(STATUS_CODES.NO_CONTENT);
             expect(discountService.deleteDiscount).toHaveBeenCalledWith(mockDiscount.id);
         });
 
@@ -111,8 +112,8 @@ describe("Discount Endpoints", () => {
             const response = await request(app).delete(`/api/discounts/nonexistentId`);
             console.log(response.body);  // Debugging line
 
-            expect(response.status).toBe(404);
-            expect(response.body).toEqual({ message: 'Discount not found' });
+            expect(response.status).toBe(STATUS_CODES.NOT_FOUND);
+            expect(response.body).toEqual({ message: ERROR_MESSAGES.DISCOUNT_NOT_FOUND });
         });
     });
 
@@ -123,7 +124,7 @@ describe("Discount Endpoints", () => {
             const response = await request(app).get(`/api/discounts/${mockDiscount.id}/time-remaining`);
             console.log(response.body);  // Debugging line
 
-            expect(response.status).toBe(200);
+            expect(response.status).toBe(STATUS_CODES.SUCCESS);
             expect(response.body).toHaveProperty('remainingTime');
             expect(response.body).toHaveProperty('formattedTime');
         });
@@ -134,7 +135,7 @@ describe("Discount Endpoints", () => {
             const response = await request(app).get(`/api/discounts/nonexistentId/time-remaining`);
             console.log(response.body);  // Debugging line
 
-            expect(response.status).toBe(404);
+            expect(response.status).toBe(STATUS_CODES.NOT_FOUND);
             expect(response.body).toEqual({ message: 'Discount not found' });
         });
     });
