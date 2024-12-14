@@ -1,3 +1,6 @@
+import { STATUS_CODES } from "../../constants/statusCodes";
+import { ERROR_MESSAGES } from "../../constants/errorMessages";
+
 import request from "supertest";
 
 import app from "../../app";
@@ -111,7 +114,7 @@ describe("Product Endpoints", () => {
       const response = await request(app).get(
         `/api/products/by-brand/${brandId}`
       );
-      expect(response.status).toBe(201);
+      expect(response.status).toBe(STATUS_CODES.CREATED);
       expect(response.body.data).toHaveLength(1);
       expect(response.body.data[0].id).toEqual(
         mockProductByBrand.products[0].id
@@ -131,7 +134,7 @@ describe("Product Endpoints", () => {
         `/api/products/by-category/${categoryId}`
       );
 
-      expect(response.status).toBe(201);
+      expect(response.status).toBe(STATUS_CODES.CREATED);
       expect(response.body.data).toHaveLength(1);
       expect(response.body.data[0].id).toEqual(
         mockProductByCategory.products[0].id
@@ -150,7 +153,7 @@ describe("Product Endpoints", () => {
 
       const response = await request(app).get("/api/products");
 
-      expect(response.status).toBe(201);
+      expect(response.status).toBe(STATUS_CODES.CREATED);
       expect(response.body.data).toHaveLength(2);
       expect(getAllProductsService).toHaveBeenCalledTimes(1);
     });
@@ -164,18 +167,20 @@ describe("Product Endpoints", () => {
         `/api/products/${mockProduct.id}`
       );
 
-      expect(response.status).toBe(201);
+      expect(response.status).toBe(STATUS_CODES.CREATED);
       expect(response.body.name).toBe(mockProduct.name);
       expect(getProductByIdService).toHaveBeenCalledWith(mockProduct.id);
     });
 
-    it("should return 404 if product is not found", async () => {
+    it("should return STATUS_CODES.NOT_FOUND if product is not found", async () => {
       (getProductByIdService as jest.Mock).mockResolvedValue(null);
 
       const response = await request(app).get("/api/products/unknown");
 
-      expect(response.status).toBe(404);
-      expect(response.body).toEqual({ error: "Product not found" });
+      expect(response.status).toBe(STATUS_CODES.NOT_FOUND);
+      expect(response.body).toEqual({
+        error: ERROR_MESSAGES.PRODUCT_NOT_FOUND,
+      });
     });
   });
 
@@ -195,7 +200,7 @@ describe("Product Endpoints", () => {
           updatedAt: mockProduct.updatedAt.toDateString(),
         });
 
-      expect(response.status).toBe(201);
+      expect(response.status).toBe(STATUS_CODES.CREATED);
       expect(response.body.data.name).toBe(mockProduct.name);
       expect(addProductService).toHaveBeenCalledWith({
         ...mockProduct,
@@ -207,20 +212,20 @@ describe("Product Endpoints", () => {
     it("should return 400 for validation errors", async () => {
       const response = await request(app).post("/api/products").send({});
 
-      expect(response.status).toBe(400);
-      expect(response.body).toHaveProperty("error", "Validation error");
+      expect(response.status).toBe(STATUS_CODES.BAD_REQUEST);
+      expect(response.body).toHaveProperty("error", ERROR_MESSAGES.VALIDATION_ERROR);
     });
   });
 
   describe("PUT /products/:id", () => {
-    it("should update a product and return it with status 200", async () => {
+    it("should update a product and return it with status STATUS_CODES.SUCCESS", async () => {
       (updateProductService as jest.Mock).mockResolvedValue(mockProduct);
 
       const response = await request(app)
         .put(`/api/products/${mockProduct.id}`)
         .send({ name: "Updated Product" });
 
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(STATUS_CODES.SUCCESS);
       expect(response.body.data.name).toBe(mockProduct.name);
       expect(updateProductService).toHaveBeenCalledWith(mockProduct.id, {
         name: "Updated Product",
@@ -237,7 +242,7 @@ describe("Product Endpoints", () => {
         "/api/products/new-arrivals?page=1&limit=10"
       );
 
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(STATUS_CODES.SUCCESS);
       expect(response.body.data).toHaveLength(1);
       expect(response.body.pagination.currentPage).toBe(1);
       expect(getNewArrivalsService).toHaveBeenCalledWith(1, 10);
@@ -252,7 +257,7 @@ describe("Product Endpoints", () => {
         `/api/products/${mockProduct.id}/ratings`
       );
 
-      expect(response.status).toBe(201);
+      expect(response.status).toBe(STATUS_CODES.CREATED);
       expect(response.body).toHaveLength(2);
       expect(response.body[1].comment).toEqual(mockRatings[1].comment);
 

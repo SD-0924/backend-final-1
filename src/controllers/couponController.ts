@@ -1,3 +1,4 @@
+import { STATUS_CODES } from "../constants/statusCodes";
 import { Request, Response } from "express";
 import {
   fetchAllCoupons,
@@ -13,7 +14,9 @@ export const getAllCoupons = async (req: Request, res: Response) => {
     const coupons = await fetchAllCoupons();
     res.json(coupons);
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch coupons" });
+    res
+      .status(STATUS_CODES.SERVER_ERROR)
+      .json({ error: "Failed to fetch coupons" });
   }
 };
 
@@ -21,12 +24,14 @@ export const getCouponById = async (req: Request, res: Response) => {
   try {
     const coupon = await fetchCouponById(req.params.id);
     if (!coupon) {
-      res.status(404).json({ error: "Coupon not found" });
+      res.status(STATUS_CODES.NOT_FOUND).json({ error: "Coupon not found" });
     } else {
       res.json(coupon);
     }
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch coupon" });
+    res
+      .status(STATUS_CODES.SERVER_ERROR)
+      .json({ error: "Failed to fetch coupon" });
   }
 };
 
@@ -34,9 +39,11 @@ export const getCouponById = async (req: Request, res: Response) => {
 export const createCoupon = async (req: Request, res: Response) => {
   try {
     const coupon = await addCoupon(req.body);
-    res.status(201).json(coupon);
+    res.status(STATUS_CODES.CREATED).json(coupon);
   } catch (error) {
-    res.status(500).json({ error: "Failed to create coupon" });
+    res
+      .status(STATUS_CODES.SERVER_ERROR)
+      .json({ error: "Failed to create coupon" });
   }
 };
 
@@ -44,12 +51,14 @@ export const updateCoupon = async (req: Request, res: Response) => {
   try {
     const coupon = await modifyCoupon(req.params.id, req.body);
     if (!coupon) {
-      res.status(404).json({ error: "Coupon not found" });
+      res.status(STATUS_CODES.NOT_FOUND).json({ error: "Coupon not found" });
     } else {
-      res.status(201).json(coupon);
+      res.status(STATUS_CODES.CREATED).json(coupon);
     }
   } catch (error) {
-    res.status(500).json({ error: "Failed to update coupon" });
+    res
+      .status(STATUS_CODES.SERVER_ERROR)
+      .json({ error: "Failed to update coupon" });
   }
 };
 
@@ -57,20 +66,24 @@ export const deleteCoupon = async (req: Request, res: Response) => {
   try {
     const success = await removeCoupon(req.params.id);
     if (!success) {
-      res.status(404).json({ error: "Coupon not found" });
+      res.status(STATUS_CODES.NOT_FOUND).json({ error: "Coupon not found" });
     } else {
       res.status(204).send();
     }
   } catch (error) {
-    res.status(500).json({ error: "Failed to delete coupon" });
+    res
+      .status(STATUS_CODES.SERVER_ERROR)
+      .json({ error: "Failed to delete coupon" });
   }
 };
 
 export const getCouponOrders = async (req: Request, res: Response) => {
   try {
     const orders = await fetchCouponOrders(req.params.id);
-    res.status(201).json(orders);
+    res.status(STATUS_CODES.CREATED).json(orders);
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch orders for the coupon" });
+    res
+      .status(STATUS_CODES.SERVER_ERROR)
+      .json({ error: "Failed to fetch orders for the coupon" });
   }
 };
