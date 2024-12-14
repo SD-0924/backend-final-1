@@ -3,6 +3,7 @@ import { FileFilterCallback } from 'multer';
 import { AllowedImageTypes } from '../utils/enums';
 import path from 'path';
 import fs from 'fs';
+import logger from '../logger';
 
 // defining the temporary upload directory to store the images inside it before uploading it to the firebase
 const tempDir = './tmp_uploads/';
@@ -31,7 +32,7 @@ const fileFilter = (req: any, file: Express.Multer.File, cb: FileFilterCallback)
     if (isAllowedType) {
         cb(null, true); // accept the file
     } else {
-        console.log(`Invalid file type: ${file.mimetype}. Only JPEG, PNG, and GIF images are allowed.`);
+        logger.error(`Invalid file type: ${file.mimetype}. Only JPEG, PNG, and GIF images are allowed.`);
         cb(null, false); // reject the file
     }
 };

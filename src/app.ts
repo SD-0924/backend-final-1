@@ -1,4 +1,5 @@
-import express, { Application } from "express";
+import express, { Application, NextFunction } from "express";
+import logger from "./logger";
 import authRoutes from "./routes/userRoutes";
 import productRouts from "./routes/productRoutes";
 import cartRouts from "./routes/cartItemRoutes";
@@ -38,6 +39,12 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+// Middleware to log all requests
+app.use((req, res, next: NextFunction) => {
+  logger.info(`HTTP ${req.method} ${req.url}`);
+  next();
+});
 
 app.use(authRoutes);
 app.use(productRouts);

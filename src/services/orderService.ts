@@ -1,10 +1,26 @@
-import { findOrdersByStatus,createOrder, findCartItemsByUserId, clearCartForUser } from "../reposetories/orderRepository";
-import { createOrderItems } from '../reposetories/orderItemRepository';
-import { getDiscountById } from '../reposetories/discountRepository';
-import { getProductByIdRepository, updateProductRepository } from '../reposetories/productRepository';
-import { deleteCartItemsByUserId, getCartItemsWithProductDetails } from '../reposetories/cartItemReposirtory';
+import {
+  findOrdersByStatus,
+  createOrder,
+  findCartItemsByUserId,
+  clearCartForUser,
+} from "../reposetories/orderRepository";
+import { createOrderItems } from "../reposetories/orderItemRepository";
+import { getDiscountById } from "../reposetories/discountRepository";
+import {
+  getProductByIdRepository,
+  updateProductRepository,
+} from "../reposetories/productRepository";
+import {
+  deleteCartItemsByUserId,
+  getCartItemsWithProductDetails,
+} from "../reposetories/cartItemReposirtory";
 import { getOrderItemsService } from "../services/orderItemService";
-export const placeOrderService = async (userId: string, couponId: string, status: string) => {
+import logger from "../logger";
+export const placeOrderService = async (
+  userId: string,
+  couponId: string,
+  status: string
+) => {
   try {
     // Step 1: Fetch cart items
     const cartItems = await getCartItemsWithProductDetails(userId);
@@ -30,7 +46,7 @@ export const placeOrderService = async (userId: string, couponId: string, status
 
           return product;
         } catch (error) {
-          console.error("Error validating stock:", error);
+          logger.error("Error validating stock:", error);
           throw error;
         }
       })
@@ -61,12 +77,17 @@ export const placeOrderService = async (userId: string, couponId: string, status
               price = price - (price * discountValue) / 100; // Apply the discount
             }
           } catch (error) {
-            console.warn(`No valid discount for product ${cartItem.productId}:`, error);
+            console.warn(
+              `No valid discount for product ${cartItem.productId}:`,
+              error
+            );
           }
 
           // Reduce stock quantity for the product using updateProductRepository
           const newStockQuantity = product.stockQuantity - cartItem.quantity;
-          await updateProductRepository(cartItem.productId, { stockQuantity: newStockQuantity });
+          await updateProductRepository(cartItem.productId, {
+            stockQuantity: newStockQuantity,
+          });
 
           return {
             orderId: order.id,
@@ -75,7 +96,7 @@ export const placeOrderService = async (userId: string, couponId: string, status
             quantity: cartItem.quantity,
           };
         } catch (error) {
-          console.error("Error processing order items:", error);
+          logger.error("Error processing order items:", error);
           throw error;
         }
       })
@@ -92,7 +113,7 @@ export const placeOrderService = async (userId: string, couponId: string, status
       order,
     };
   } catch (error) {
-    console.error("Error in placeOrderService:", error);
+    logger.error("Error in placeOrderService:", error);
     throw error;
   }
 };
@@ -107,7 +128,8 @@ export const getUserOrdersService = async (userId: string) => {
     const completedOrdersWithTotalPrice = await Promise.all(
       completedOrders.map(async (order) => {
         try {
-          const { totalPrice, orderDate, totalPriceafterdiscount } = await getOrderItemsService(order.id); // Only get total price and order date
+          const { totalPrice, orderDate, totalPriceafterdiscount } =
+            await getOrderItemsService(order.id); // Only get total price and order date
           return {
             id: order.id,
             orderDate,
@@ -115,7 +137,7 @@ export const getUserOrdersService = async (userId: string) => {
             totalPriceafterdiscount,
           };
         } catch (error) {
-          console.error("Error processing completed orders:", error);
+          logger.error("Error processing completed orders:", error);
           throw error;
         }
       })
@@ -124,7 +146,8 @@ export const getUserOrdersService = async (userId: string) => {
     const processingOrdersWithTotalPrice = await Promise.all(
       processingOrders.map(async (order) => {
         try {
-          const { totalPrice, orderDate, totalPriceafterdiscount } = await getOrderItemsService(order.id); // Only get total price and order date
+          const { totalPrice, orderDate, totalPriceafterdiscount } =
+            await getOrderItemsService(order.id); // Only get total price and order date
           return {
             id: order.id,
             orderDate,
@@ -132,7 +155,7 @@ export const getUserOrdersService = async (userId: string) => {
             totalPriceafterdiscount,
           };
         } catch (error) {
-          console.error("Error processing processing orders:", error);
+          logger.error("Error processing processing orders:", error);
           throw error;
         }
       })
@@ -141,7 +164,8 @@ export const getUserOrdersService = async (userId: string) => {
     const canceledOrdersWithTotalPrice = await Promise.all(
       canceledOrders.map(async (order) => {
         try {
-          const { totalPrice, orderDate, totalPriceafterdiscount } = await getOrderItemsService(order.id); // Only get total price and order date
+          const { totalPrice, orderDate, totalPriceafterdiscount } =
+            await getOrderItemsService(order.id); // Only get total price and order date
           return {
             id: order.id,
             orderDate,
@@ -149,7 +173,7 @@ export const getUserOrdersService = async (userId: string) => {
             totalPriceafterdiscount,
           };
         } catch (error) {
-          console.error("Error processing canceled orders:", error);
+          logger.error("Error processing canceled orders:", error);
           throw error;
         }
       })
@@ -161,7 +185,7 @@ export const getUserOrdersService = async (userId: string) => {
       canceledOrders: canceledOrdersWithTotalPrice,
     };
   } catch (error) {
-    console.error("Error in getUserOrdersService:", error);
+    logger.error("Error in getUserOrdersService:", error);
     throw error;
   }
 };
