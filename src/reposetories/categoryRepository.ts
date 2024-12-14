@@ -20,19 +20,19 @@ export const createCategory = async (categoryData: any) => {
 };
 
 export const updateCategoryById = async (id: string, updatedData: any) => {
-  const category = await Category.findByPk(id);
+  const category = await Category.update(updatedData,  {where: { id }});
   if (!category) {
     throw new Error("Category not found");
   }
-  return await category.update(updatedData);
+  return category;
 };
 
 export const deleteCategoryById = async (id: string) => {
-  const category = await Category.findByPk(id);
+  const category =await Category.destroy({ where: { id } })
   if (!category) {
     throw new Error("Category not found");
   }
-  return await category.destroy();
+  return category;
 };
 
 export const findProductsByCategoryId = async (categoryId: string) => {

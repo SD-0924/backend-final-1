@@ -10,22 +10,20 @@ export const findBrandByName = async (name: string) => {
 };
 
 export const updateLogoURL = async (id: string, logoUrl: string) => {
-  const brand = await Brand.findByPk(id);
-  if (brand) {
-    brand.logo = logoUrl;
-    await brand.save();
+  const [updatedRows] = await Brand.update(
+    { logo: logoUrl },
+    { where: { id } }
+  );
+  if (updatedRows === 0) {
+    throw new Error("Brand not found");
   }
 };
 
 export const getBrandById = async (id: string) => {
   try {
-    const brand = await Brand.findOne({
-      where: { id }, // match the UUID
-    });
-
-    return brand;
+    return await Brand.findByPk(id);
   } catch (error) {
-    logger.error("Error fetching brand by ID:", error);
+    console.error("Error fetching brand by ID:", error);
     throw new Error("Failed to fetch brand by ID");
   }
 };
@@ -42,20 +40,15 @@ export const getAllBrandsRepo = async () => {
 };
 
 export const deleteBrandByIdRepo = async (id: string) => {
-  const brand = await Brand.findByPk(id);
-  if (!brand) {
+  const deletedRows = await Brand.destroy({ where: { id } });
+  if (deletedRows === 0) {
     throw new Error("Brand not found");
   }
-  return await brand.destroy();
 };
 
 export const updateBrandRepository = async (
-  brandId: string,
-  updatedData: { name?: string; logo?: string }
+  updatedData: { name?: string; logo?: string },
+  brand: Brand
 ) => {
-  const brand = await Brand.findByPk(brandId);
-  if (!brand) {
-    throw new Error("Brand not found");
-  }
   return await brand.update(updatedData);
 };

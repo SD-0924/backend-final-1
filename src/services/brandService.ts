@@ -174,7 +174,7 @@ export const updateBrandService = async (
         }
       }
     }
-    const updatedBrand = await updateBrandRepository(id, updatedData);
+    const updatedBrand = await updateBrandRepository(updatedData, brand);
     let logoUrl = await getBrandImageUrlFromFirebase(updatedBrand.logo);
     return {
       id: updatedBrand.id,
@@ -182,7 +182,7 @@ export const updateBrandService = async (
       logo: logoUrl,
     };
   } catch (error: any) {
-    logger.error("Error updating brand service:", error.message);
+    console.error("Error updating brand service:", error.message);
     throw new Error("Service Error: " + error.message);
   }
 };
