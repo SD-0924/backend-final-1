@@ -55,7 +55,7 @@ export const deleteCartItemController = async (req: Request, res: Response) => {
     await deleteCartItemService(cartId);
     res
       .status(STATUS_CODES.SUCCESS)
-      .json({ message: `cart item with id ${cartId} deleted successfully.` });
+      .json({ message: `Cart item with ID ${cartId} deleted successfully.` });
   } catch (error: any) {
     if (error.message === "cartId not found") {
       res
