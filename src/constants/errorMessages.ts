@@ -4,4 +4,8 @@ export const ERROR_MESSAGES = {
   INVALID_CREDENTIALS: "Invalid credentials provided.",
   SERVER_ERROR: "Internal server error.",
   VALIDATION_ERROR: "Validation error.",
+  DISCOUNT_ALREADY_EXISTS: "Discount already exists.",
+  DISCOUNT_UPDATE_FAILED: "Failed to update discount.",
+  DISCOUNT_DELETE_FAILED: "Failed to delete discount.",
+  DISCOUNT_NOT_FOUND: "Discount not found",
 };
