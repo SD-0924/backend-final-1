@@ -95,6 +95,7 @@ This backend system is designed for an e-commerce platform and provides a RESTfu
 
 ## 🗂️ Database Schema
 
+![ERD](https://github.com/user-attachments/assets/5346ba61-e2ba-4d47-a36a-99979ea6d429)
 
 ---
 
