@@ -1,7 +1,7 @@
 import request from "supertest";
 import app from "../../app"; // Adjust the path to your app file
 import { getOrderItemsService } from "../../services/orderItemService";
-
+import { STATUS_CODES } from "../../constants/statusCodes";
 // Mock the service
 jest.mock("../../services/orderItemService");
 
@@ -38,7 +38,7 @@ describe("Order Items Controller", () => {
       const orderId = "order123";
       const response = await request(app).get(`/order-items/${orderId}`);
 
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(STATUS_CODES.SUCCESS);
       expect(response.body.orderItems).toHaveLength(2);
       expect(response.body.orderItems[0].id).toBe(mockOrderItems[0].id);
       expect(getOrderItemsService).toHaveBeenCalledWith(orderId);
@@ -58,7 +58,7 @@ describe("Order Items Controller", () => {
       const orderId = "order123";
       const response = await request(app).get(`/order-items/${orderId}`);
 
-      expect(response.status).toBe(500);
+      expect(response.status).toBe(STATUS_CODES.SERVER_ERROR);
       expect(response.body).toHaveProperty("error", "Database error");
       expect(getOrderItemsService).toHaveBeenCalledWith(orderId);
     });

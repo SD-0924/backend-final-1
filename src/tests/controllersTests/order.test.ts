@@ -1,7 +1,7 @@
 import request from "supertest";
 import app from "../../app"; // Adjust to your app's location
 import * as orderService from "../../services/orderService"; // Mock service
-
+import { STATUS_CODES } from "../../constants/statusCodes";
 jest.mock("../../services/orderService"); // Mock the order service
 
 describe("Order Controller", () => {
@@ -32,7 +32,7 @@ describe("Order Controller", () => {
       console.log("Response status:", response.status);
       console.log("Response body:", response.body);
 
-      expect(response.status).toBe(200);
+      expect(response.status).toBe(STATUS_CODES.SUCCESS);
       expect(response.body).toEqual({
         message: "Orders fetched successfully",
         data: mockOrders,
@@ -47,7 +47,7 @@ describe("Order Controller", () => {
       const response = await request(app)
         .get(`/${testUser.id}/orders`);
 
-      expect(response.status).toBe(500);
+      expect(response.status).toBe(STATUS_CODES.SERVER_ERROR);
       expect(response.body).toEqual({
         message: "Error fetching user orders",
         error: errorMessage,
@@ -90,7 +90,7 @@ describe("Order Controller", () => {
         .post("/place-order")
         .send({ userId: testUser.id });
 
-      expect(response.status).toBe(500);
+      expect(response.status).toBe(STATUS_CODES.SERVER_ERROR);
 
     });
   });
