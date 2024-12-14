@@ -2,6 +2,7 @@ import { STATUS_CODES } from "../constants/statusCodes";
 import { ERROR_MESSAGES } from "../constants/errorMessages";
 import { Request, RequestHandler, Response } from "express";
 import { getNewArrivalsService } from "../services/productService";
+import logger from "../logger";
 import {
   getAllProductsService,
   getProductByIdService,
@@ -59,13 +60,13 @@ export const getAllProducts = async (req: Request, res: Response) => {
             const updatedImageUrl = await getProductImageUrlFromFirebase(
               product.imageUrl
             );
-            console.log(
+            logger.info(
               `Updated image URL for product ${product.id}:`,
               updatedImageUrl
             );
             return { ...product, imageUrl: updatedImageUrl };
           } catch (error) {
-            console.error(
+            logger.error(
               `Error fetching image for product ${product.id}:`,
               error
             );
@@ -112,7 +113,7 @@ export const getProductById = async (
         );
         product.imageUrl = updatedImageUrl;
       } catch (error) {
-        console.error(`Error fetching image for product ${productId}:`, error);
+        logger.error(`Error fetching image for product ${productId}:`, error);
       }
     } else {
       product.imageUrl = defaultImageURL;
@@ -120,7 +121,7 @@ export const getProductById = async (
 
     res.status(STATUS_CODES.CREATED).json(product);
   } catch (error) {
-    console.error("Failed to fetch product:", error);
+    logger.error("Failed to fetch product:", error);
     res
       .status(STATUS_CODES.SERVER_ERROR)
       .json({ error: "Failed to fetch product" });
@@ -149,7 +150,7 @@ export const addProduct = async (req: Request, res: Response) => {
       data: newProduct,
     });
   } catch (error) {
-    console.error("Error adding product:", error);
+    logger.error("Error adding product:", error);
     res.status(STATUS_CODES.SERVER_ERROR).json({
       success: false,
       message: "Failed to add product. Please try again later.",
@@ -180,7 +181,7 @@ export const updateProduct = async (req: Request, res: Response) => {
       data: updatedProduct,
     });
   } catch (error: any) {
-    console.error("Error updating product:", error);
+    logger.error("Error updating product:", error);
     if (error.message === ERROR_MESSAGES.PRODUCT_NOT_FOUND) {
       res
         .status(STATUS_CODES.NOT_FOUND)
@@ -210,7 +211,7 @@ export const deleteProduct = async (req: Request, res: Response) => {
       message: "Product deleted successfully!",
     });
   } catch (error) {
-    console.error("Error deleting product:", error);
+    logger.error("Error deleting product:", error);
     res.status(STATUS_CODES.SERVER_ERROR).json({
       success: false,
       message: "Failed to delete product. Please try again later.",
@@ -249,13 +250,13 @@ export const getLimitedEdition = async (req: Request, res: Response) => {
             const updatedImageUrl = await getProductImageUrlFromFirebase(
               product.imageUrl
             );
-            console.log(
+            logger.info(
               `Updated image URL for product ${product.id}:`,
               updatedImageUrl
             );
             return { ...product, imageUrl: updatedImageUrl };
           } catch (error) {
-            console.error(
+            logger.error(
               `Error fetching image for product ${product.id}:`,
               error
             );
@@ -296,13 +297,13 @@ export const getDiscountedProducts = async (req: Request, res: Response) => {
             const updatedImageUrl = await getProductImageUrlFromFirebase(
               product.imageUrl
             );
-            console.log(
+            logger.info(
               `Updated image URL for product ${product.id}:`,
               updatedImageUrl
             );
             return { ...product, imageUrl: updatedImageUrl };
           } catch (error) {
-            console.error(
+            logger.error(
               `Error fetching image for product ${product.id}:`,
               error
             );
@@ -343,13 +344,13 @@ export const getPopularProducts = async (req: Request, res: Response) => {
             const updatedImageUrl = await getProductImageUrlFromFirebase(
               product.imageUrl
             );
-            console.log(
+            logger.info(
               `Updated image URL for product ${product.id}:`,
               updatedImageUrl
             );
             return { ...product, imageUrl: updatedImageUrl };
           } catch (error) {
-            console.error(
+            logger.error(
               `Error fetching image for product ${product.id}:`,
               error
             );
@@ -388,13 +389,13 @@ export const getNewArrivals = async (
             const updatedImageUrl = await getProductImageUrlFromFirebase(
               product.imageUrl
             );
-            console.log(
+            logger.info(
               `Updated image URL for product ${product.id}:`,
               updatedImageUrl
             );
             return { ...product, imageUrl: updatedImageUrl };
           } catch (error) {
-            console.error(
+            logger.error(
               `Error fetching image for product ${product.id}:`,
               error
             );
@@ -413,7 +414,7 @@ export const getNewArrivals = async (
       pagination,
     });
   } catch (error) {
-    console.error("Error fetching new arrivals:", error);
+    logger.error("Error fetching new arrivals:", error);
     res.status(STATUS_CODES.SERVER_ERROR).json({
       success: false,
       message: "Failed to fetch new arrivals. Please try again later.",
@@ -440,13 +441,13 @@ export const getHandpicked = async (req: Request, res: Response) => {
             const updatedImageUrl = await getProductImageUrlFromFirebase(
               product.imageUrl
             );
-            console.log(
+            logger.info(
               `Updated image URL for product ${product.id}:`,
               updatedImageUrl
             );
             return { ...product, imageUrl: updatedImageUrl };
           } catch (error) {
-            console.error(
+            logger.error(
               `Error fetching image for product ${product.id}:`,
               error
             );
@@ -494,13 +495,13 @@ export const getProductsByBrand = async (
             const updatedImageUrl = await getProductImageUrlFromFirebase(
               product.imageUrl
             );
-            console.log(
+            logger.info(
               `Updated image URL for product ${product.id}:`,
               updatedImageUrl
             );
             return { ...product, imageUrl: updatedImageUrl };
           } catch (error) {
-            console.error(
+            logger.error(
               `Error fetching image for product ${product.id}:`,
               error
             );
@@ -551,13 +552,13 @@ export const getProductsByCategory = async (
             const updatedImageUrl = await getProductImageUrlFromFirebase(
               product.imageUrl
             );
-            console.log(
+            logger.info(
               `Updated image URL for product ${product.id}:`,
               updatedImageUrl
             );
             return { ...product, imageUrl: updatedImageUrl };
           } catch (error) {
-            console.error(
+            logger.error(
               `Error fetching image for product ${product.id}:`,
               error
             );
@@ -575,7 +576,7 @@ export const getProductsByCategory = async (
       pagination,
     });
   } catch (error: any) {
-    console.error("Error fetching products by category:", error.message);
+    logger.error("Error fetching products by category:", error.message);
     if (error.message === "Category not found") {
       res
         .status(STATUS_CODES.NOT_FOUND)
@@ -640,7 +641,7 @@ export const getProductPriceAfterDiscount = async (
       return;
     }
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res
       .status(STATUS_CODES.SERVER_ERROR)
       .json({ message: ERROR_MESSAGES.SERVER_ERROR });

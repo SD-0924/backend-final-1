@@ -3,7 +3,6 @@ import Order from "../models/Order"; // Assuming `Order` is your order model
 
 export const getOrderItemsService = async (orderId: string) => {
     const orderItems = await findOrderItemsByOrderId(orderId);
-    console.log(orderItems);
     if (!orderItems.length) {
         throw new Error("No order items found for the given order ID");
       }

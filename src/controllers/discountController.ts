@@ -2,6 +2,7 @@ import { STATUS_CODES } from "../constants/statusCodes";
 import { ERROR_MESSAGES } from "../constants/errorMessages";
 import { Request, Response } from "express";
 import * as discountService from "../services/discountService";
+import logger from "../logger";
 
 export const getAllDiscounts = async (req: Request, res: Response) => {
   try {
@@ -145,7 +146,7 @@ export const getDiscountTimeRemainingById = async (
     });
     return;
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res
       .status(STATUS_CODES.SERVER_ERROR)
       .json({ message: ERROR_MESSAGES.SERVER_ERROR });

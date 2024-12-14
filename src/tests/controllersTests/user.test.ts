@@ -68,10 +68,7 @@ describe("User Controller", () => {
 
       const response = await request(app)
         .post("/login")
-        .send({ email: testUser.email, password: testUser.password });
-
-      console.log("Response status:", response.status);
-      console.log("Response body:", response.body);
+        .send({ email: testUser.email, password: testUser.password })
 
       expect(response.status).toBe(STATUS_CODES.SUCCESS);
       expect(response.body).toEqual({

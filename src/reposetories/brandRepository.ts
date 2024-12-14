@@ -1,11 +1,12 @@
-import Brand from '../models/Brand';
+import logger from "../logger";
+import Brand from "../models/Brand";
 
-export const createBrand = async(brandData: any)=>{
-    return await Brand.create(brandData);
+export const createBrand = async (brandData: any) => {
+  return await Brand.create(brandData);
 };
 
-export const findBrandByName = async(name: string)=>{
-    return Brand.findOne({ where: { name } });
+export const findBrandByName = async (name: string) => {
+  return Brand.findOne({ where: { name } });
 };
 
 export const updateLogoURL = async (id: string, logoUrl: string) => {
@@ -28,14 +29,14 @@ export const getBrandById = async (id: string) => {
 };
 
 export const getAllBrandsRepo = async () => {
-    try {
-        return await Brand.findAll({
-            attributes: ['id', 'name', 'logo'],
-        });
-    } catch (error) {
-        console.error('Error fetching brands from the repository:', error);
-        throw new Error('Database error');
-    }
+  try {
+    return await Brand.findAll({
+      attributes: ["id", "name", "logo"],
+    });
+  } catch (error) {
+    logger.error("Error fetching brands from the repository:", error);
+    throw new Error("Database error");
+  }
 };
 
 export const deleteBrandByIdRepo = async (id: string) => {

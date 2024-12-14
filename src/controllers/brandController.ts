@@ -8,6 +8,7 @@ import {
   deleteBrandByIdService,
   updateBrandService,
 } from "../services/brandService";
+import logger from "../logger";
 
 export const createBrand = async (req: Request, res: Response) => {
   try {
@@ -32,7 +33,7 @@ export const createBrand = async (req: Request, res: Response) => {
     });
     return;
   } catch (error) {
-    console.error("Error in Creating Brand.");
+    logger.error("Error in Creating Brand.");
 
     res.status(STATUS_CODES.SERVER_ERROR).json({
       success: false,
