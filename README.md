@@ -27,15 +27,19 @@ This backend system is designed for an e-commerce platform and provides a RESTfu
 
 ## 🌟 Features
 
-- **Authentication**: Secure JWT-based authentication with roles (Admin and User).
+- **Authentication**: Secure JWT-based authentication with roles (Admin and User). 
 - **Product Management**: CRUD operations for products, categories, and brands.
 - **Simulated Payments**: Dummy payment system with transaction history.
 - **Error Handling**: Robust error-handling mechanism with status codes.
 - **Admin Analytics**:
   - Most and least bought products.
   - Products per geographical region.
-- **Security**: Includes HTTPS, input validation, and sanitization.
+- **Security**: Includes HTTPS, input validation, and sanitization using Express Validator. And secure password storage using 'bcrypt' hashing.
+- **Unit Testing**: Implemented with Jest for controllers, models, and middleware. Includes critical tests running for PRs (health and models) and all test running for merge and deployment (controllers and routs), using GitHub Actions workflows.
+- **File Uploads**: Supports product image uploads using Multer. And storage in Firebase.
+- **Dockerization**: Dockerfile and docker-compose for containerized deployment.
 - **Documentation**: API documentation generated using Swagger.
+- **Logging**: Integrated logging for tracking errors, user activities, and system behavior. Using Winston.
 
 ---
 
