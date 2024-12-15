@@ -1,0 +1,24 @@
+# Ignore node_modules
+node_modules/
+
+# Ignore environment files
+.env
+
+# Ignore IDE configurations
+.idea/
+.vscode/
+
+# Ignore log files
+*.log
+
+#Ignore dist folder
+dist/
+
+# temp file to store temporarily the images until we upload it to firebase storage
+tmp_uploads
+
+test-1107b-firebase-adminsdk-wp6zx-7b4c0a3b0d.json
+
+coverage
+
+logs
