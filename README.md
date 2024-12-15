@@ -158,11 +158,17 @@ The `test:all` script runs all tests with coverage, while `test:models`, `test:c
 - **Node.js**: JavaScript runtime.
 - **Express.js**: Web framework.
 - **MySQL**: Database.
+- **Sequelize**: ORM.
 - **Stripe**: Payment processing.
 - **JWT**: Authentication.
+- **Express Validator**: Validation.
 - **Swagger**: API documentation.
 - **Jest**: Testing.
+- **Multer**: File Uploads.
+- **Firebase**: Files sorage.
 - **Grafana**: Monitoring and visualization.
+- **Winston**: Logging.
+- **Docker**: Containerization. 
 
 ---
 
