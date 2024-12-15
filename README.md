@@ -177,4 +177,5 @@ The `test:all` script runs all tests with coverage, while `test:models`, `test:c
 - Integration of real-time chat support for customers.
 - Advanced analytics features, such as customer behavior tracking.
 - Implement machine learning for product recommendations.
+- Real payment system integration.
 
