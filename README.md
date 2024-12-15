@@ -122,7 +122,6 @@ The deployed backend system is accessible via:
 
 ![ERD](https://github.com/user-attachments/assets/26638920-e3d7-4fb4-a116-813df7b22686)
 
-
 ---
 
 ## 🧪 Testing
