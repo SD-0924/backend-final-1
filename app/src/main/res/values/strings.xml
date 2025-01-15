@@ -1,0 +1,204 @@
+<resources>
+       <string name="app_name" translatable="false">iLearn</string>
+        <!-- General -->
+        <string name="general_verified_title">Verified</string>
+
+        <!-- Landing View -->
+        <string name="landing_view_no_internet_message">No internet connection, try to reconnect please!</string>
+
+        <!-- New Reservation View -->
+        <string name="new_reservation_view_title">Select a teacher</string>
+        <string name="new_reservation_view_teacher_title">Teacher: %1$s</string>
+        <string name="new_reservation_view_teacher_specialization_title">Specialization: %1$s</string>
+        <string name="new_reservation_view_close_button_title">Close</string>
+        <string name="new_reservation_view_teachers_empty_title">There are no teachers yet</string>
+        <string name="new_reservation_view_teachers_search_empty_title">There are no teachers or specialties contains \'%1$s\' </string>
+        <string name="new_reservation_view_teachers_search_placeholder">Search for teacher or specialty</string>
+
+        <!-- New Reservation Card View -->
+        <string name="new_reservation_card_view_title">New reservation</string>
+
+        <!-- New Reservation Details View -->
+        <string name="new_reservation_details_view_title">New reservation</string>
+        <string name="new_reservation_details_view_teacher_title">Teacher: %1$s</string>
+        <string name="new_reservation_details_view_teacher_specialization_title">Specialization: %1$s</string>
+        <string name="new_reservation_details_view_notes_title">Notes:</string>
+        <string name="new_reservation_details_view_reservation_button_title">Send reservation request</string>
+        <string name="new_reservation_details_view_alert_successfully_reserved_message">Your request has been successfully sent to the teacher</string>
+        <string name="new_reservation_details_view_alert_successfully_reserved_action_ok_title">OK!</string>
+        <string name="new_reservation_details_view_editing_done_button_title">Done</string>
+        <string name="new_reservation_details_view_alert_error_action_ok_title">OK!</string>
+        <string name="new_reservation_details_view_error_has_active_reservation_message">You already have an active reservation with the same teacher, finish that reservation first</string>
+
+        <!-- Reservation Details View -->
+        <string name="reservation_details_view_title">Reservation Details</string>
+        <string name="reservation_details_view_close_button_title">Close</string>
+        <string name="reservation_details_view_reservation_date_edit_button_title">Request a new date</string>
+        <string name="reservation_details_view_teacher_title">Teacher: %1$s</string>
+        <string name="reservation_details_view_teacher_specialization_title">Specialization: %1$s</string>
+        <string name="reservation_details_view_reservation_date_title">Reservation date: %1$s</string>
+        <string name="reservation_details_view_notes_title">Notes:</string>
+        <string name="reservation_details_view_teacher_is_waiting_title">The teacher is waiting, click to enter the meeting</string>
+        <string name="reservation_details_view_payment_method_title">Payment method:</string>
+        <string name="reservation_details_view_payment_method_later_title">Pay later</string>
+        <string name="reservation_details_view_payment_method_credit_card_title">Credit card</string>
+        <string name="reservation_details_view_payment_button_title">Pay now</string>
+        <string name="reservation_details_view_delete_reservation_button_title">Cancel reservation</string>
+        <string name="reservation_details_view_alert_successfully_deleted_message">Your reservation has been successfully canceled</string>
+        <string name="reservation_details_view_alert_action_ok_title">OK!</string>
+        <string name="reservation_details_view_alert_new_date_confirmation_message">Are you sure you want request a new date?</string>
+        <string name="reservation_details_view_alert_action_no_title">No</string>
+        <string name="reservation_details_view_alert_action_yes_title">Yes</string>
+        <string name="reservation_details_view_alert_cancel_reservation_confirmation_message">Are you sure you want to cancel the reservation?</string>
+        <string name="reservation_details_view_button_save_title">Save</string>
+        <string name="reservation_details_view_editing_done_button_title">Done</string>
+        <string name="reservation_details_view_add_to_apple_calendar_title">Add event to Google calendar</string>
+
+        <!-- Teacher Dashboard View -->
+        <string name="teacher_dashboard_view_section_upcoming_reservations_title">Upcoming reservations</string>
+        <string name="teacher_dashboard_view_section_pending_approval_reservations_title">Pending your approval reservations</string>
+        <string name="teacher_dashboard_view_section_pending_approval_reservations_empty_message">There are no pending approval reservations</string>
+        <string name="teacher_dashboard_view_section_upcoming_reservations_empty_message">There are no upcoming reservations</string>
+
+        <!-- Teacher Reservation Details View -->
+        <string name="teacher_reservation_details_view_reservation_date_title">Reservation date: %1$s</string>
+        <string name="teacher_reservation_details_view_reservation_date_edit_title">Change the date</string>
+        <string name="teacher_reservation_details_view_reservation_date_new_title">Select a date</string>
+        <string name="teacher_reservation_details_view_notes_title">Notes:</string>
+        <string name="teacher_reservation_details_view_open_meeting_button_title">Allow student to enter the meeting</string>
+        <string name="teacher_reservation_details_view_close_meeting_button_title">Prevent student from entering the meeting</string>
+        <string name="teacher_reservation_details_view_enter_meeting_button_title">Enter the meeting</string>
+        <string name="teacher_reservation_details_view_reservation_done_button_title">Reservation is done</string>
+        <string name="teacher_reservation_details_view_title">Reservation Details</string>
+        <string name="teacher_reservation_details_view_close_button_title">Close</string>
+        <string name="teacher_reservation_details_view_reservation_approve_button_title">Approve</string>
+        <string name="teacher_reservation_details_view_alert_successfully_approved_message">Reservation request has been successfully approved</string>
+        <string name="teacher_reservation_details_view_alert_action_ok_title">OK!</string>
+        <string name="teacher_reservation_details_view_alert_reservation_done_confirmation_message">Are you sure you want that the reservation is done?</string>
+        <string name="teacher_reservation_details_view_alert_reservation_done_confirmation_action_yes_title">Yes</string>
+        <string name="teacher_reservation_details_view_alert_reservation_done_confirmation_action_no_title">No</string>
+        <string name="teacher_reservation_details_view_payment_gateway_title">Payment gateway</string>
+        <string name="teacher_reservation_details_view_previous_modified_dates_title">Dates that student requested to be changed:</string>
+        <string name="teacher_reservation_details_view_add_to_apple_calendar_title">Add event to Google calendar</string>
+
+        <!--Reservation Card View-->
+        <string name="reservation_card_view_teacher_is_waiting_title">The teacher is waiting, click to enter the meeting</string>
+
+        <!-- Student Dashboard View -->
+        <string name="student_dashboard_view_upcoming_reservations_title">Upcoming reservations</string>
+        <string name="student_dashboard_view_pending_approval_reservations_title">Pending teacher approval reservations</string>
+    <string name="student_dashboard_view_pending_approval_reservations_empty_message">You don\'t have any pending approval reservations</string>
+    <string name="student_dashboard_view_upcoming_reservations_empty_message">You don\'t have any upcoming reservations</string>
+
+
+    <!-- Phone Number View -->
+        <string name="phone_number_view_message">Confirm country code and enter phone number</string>
+        <string name="phone_number_view_number_text_field_placeholder">Phone number</string>
+        <string name="phone_number_view_next_button_title">Next</string>
+        <string name="phone_number_view_countries_sheet_search_placeholder">Your country</string>
+        <string name="phone_number_view_close_button_title">Close</string>
+        <string name="phone_number_view_done_button_title">Done</string>
+        <string name="phone_number_view_alert_error_message">Error occurred while sending code, please try again!</string>
+        <string name="phone_number_view_alert_error_action_ok_title">OK!</string>
+
+        <!-- Workflow View -->
+        <string name="workflow_view_login_button_title">Log in</string>
+        <string name="workflow_view_tab_meeting_title">Talk to any teacher worldwide using a private and secure in-app meeting room</string>
+        <string name="workflow_view_tab_scheduling_title">Request an appointment easily, and add the date to your calendar to organize your time</string>
+        <string name="workflow_view_tab_payment_title">Pay the appointment price using your credit card</string>
+
+        <!-- Verification Code View -->
+        <string name="verification_code_view_title">Verify your phone number</string>
+        <string name="verification_code_view_message">Enter the code sent to your phone</string>
+        <string name="verification_code_view_verify_button_title">Verify</string>
+        <string name="verification_code_view_done_button_title">Done</string>
+        <string name="verification_code_view_alert_error_message">Ensure the code is correct, then try again please!</string>
+        <string name="verification_code_view_alert_error_action_ok_title">OK!</string>
+
+        <!-- Edit Profile View -->
+        <string name="edit_profile_view_title">Personal information</string>
+        <string name="edit_profile_view_change_photo_title">Change photo</string>
+        <string name="edit_profile_view_text_field_first_name_placeholder">Enter the first name</string>
+        <string name="edit_profile_view_text_field_last_name_placeholder">Enter the last name</string>
+        <string name="edit_profile_view_picker_birth_date_title">Enter your birthdate</string>
+        <string name="edit_profile_view_toggle_is_teacher_title">Are you a teacher?</string>
+        <string name="edit_profile_view_text_field_address_placeholder">Enter the address</string>
+        <string name="edit_profile_view_specialty_placeholder">Select a specialty</string>
+        <string name="edit_profile_view_button_enter_title">Enter</string>
+        <string name="edit_profile_view_alert_error_action_ok_title">OK!</string>
+        <string name="edit_profile_view_button_save_title">Save</string>
+
+        <!-- Specialties View -->
+        <string name="specialties_view_title">Select a specialty</string>
+
+        <!-- Email Login View -->
+        <string name="email_login_view_text_field_email_placeholder">Email</string>
+        <string name="email_login_view_text_field_password_placeholder">Password</string>
+        <string name="email_login_view_buttons_sign_in_title">Sign In</string>
+        <string name="email_login_view_buttons_new_account_title">Create new account</string>
+        <string name="email_login_view_buttons_forget_password_title">Did you forget your password?</string>
+        <string name="email_login_view_alert_error_action_ok_title">OK!</string>
+
+        <!-- Forget Password View -->
+        <string name="forget_password_view_text_field_email_placeholder">Email</string>
+        <string name="forget_password_view_buttons_reset_title">Reset password</string>
+        <string name="forget_password_view_close_button_title">Close</string>
+        <string name="forget_password_view_alert_error_action_ok_title">OK!</string>
+        <string name="forget_password_view_instructions_message">We will send you the instructions on your email address, please follow them to reset your password</string>
+
+        <!-- Email Sign Up View -->
+        <string name="email_sign_up_view_text_field_email_placeholder">Email</string>
+        <string name="email_sign_up_view_text_field_password_placeholder">Password</string>
+        <string name="email_sign_up_view_buttons_new_account_title">Create new account</string>
+        <string name="email_sign_up_view_alert_password_length_validation_message">Password must be at least 6 characters</string>
+        <string name="email_sign_up_view_alert_error_action_ok_title">OK!</string>
+
+        <!-- More View -->
+        <string name="more_view_edit_profile_title">Edit your personal information</string>
+        <string name="more_view_sign_out_title">Sign out</string>
+        <string name="more_view_error_sign_out_failure_message">Failed to sign out!</string>
+        <string name="more_view_alert_error_action_ok_title">OK!</string>
+        <string name="more_view_preferred_language_title">Preferred language</string>
+        <string name="more_view_feedback_title">Send us feedback</string>
+        <string name="more_view_verify_account_title">Verify your account</string>
+
+        <!-- Storage Manager -->
+        <string name="storage_manager_failed_to_upload_image_message">Error happened when using this image</string>
+
+        <!-- New Update Alert Modifier -->
+        <string name="new_update_alert_modifier_title">New update available!</string>
+        <string name="new_update_alert_modifier_action_later">Later</string>
+        <string name="new_update_alert_modifier_action_now">Update now</string>
+
+        <!-- Payment Gateway Picker -->
+        <string name="payment_gateway_picker_title">Payment gateway</string>
+        <string name="payment_gateway_picker_section_payment_link_title">Payment link</string>
+        <string name="payment_gateway_picker_button_done_title">Done</string>
+
+        <!-- Feedback View -->
+        <string name="feedback_view_message_placeholder">Your notes:</string>
+        <string name="feedback_view_info">This is a private place where you can share your thoughts and suggestions with us. We will not collect your name or any information about you. We are here to improve the app to suit everyone. Thank you!</string>
+        <string name="feedback_view_editing_done_button_title">Done</string>
+        <string name="feedback_view_send_button_title">Send</string>
+        <string name="feedback_view_alert_action_ok_title">OK!</string>
+
+        <!-- Events Manager -->
+        <string name="events_manager_alert_failed_to_save_error_message">Failed to save event, try again please!</string>
+        <string name="events_manager_alert_button_settings_title">Settings</string>
+        <string name="events_manager_alert_disabled_settings_title">Enable the settings</string>
+        <string name="events_manager_alert_disabled_settings_message">Enable full access to calendar, in order to let us add/modify the \'iLearn\' events</string>
+        <string name="events_manager_alert_added_successfully_message">Event added successfully to your calendar</string>
+        <string name="events_manager_alert_action_ok_title">OK!</string>
+
+        <!-- Account Verification View -->
+        <string name="account_verification_view_title">Verify your account</string>
+        <string name="account_verification_view_message">Account verification helps the students to ensure you are a real teacher. It is recommended for all teachers to verify their accounts.</string>
+        <string name="account_verification_view_informative_step">To verify your account, send the below documents to ilearn.education.time@gmail.com</string>
+        <string name="account_verification_view_informative_warning">Make sure to send the information using the email you used to sign in to this app. Otherwise, we will not verify your account.</string>
+        <string name="account_verification_view_steps_title">Needed information:</string>
+        <string name="account_verification_view_steps_first">1. ID card or valid passport</string>
+        <string name="account_verification_view_steps_second">2. If you are a member of Teachers Syndicate, please include the member ID</string>
+        <string name="account_verification_view_steps_third">3. University certificate</string>
+        <string name="account_verification_view_actions_copy_email_title">Copy email address</string>
+
+</resources>

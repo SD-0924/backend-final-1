@@ -1,0 +1,202 @@
+<resources>
+    <!-- General -->
+    <string name="general_verified_title">تم التحقق منه</string>
+
+    <!-- Landing View -->
+    <string name="landing_view_no_internet_message">لا يوجد إتصال بالإنترنت، حاول معاودة الإتصال من فضلك!</string>
+
+    <!-- New Reservation View -->
+    <string name="new_reservation_view_title">اختر المعلم</string>
+    <string name="new_reservation_view_teacher_title">المعلم: %1$s</string>
+    <string name="new_reservation_view_teacher_specialization_title">الاختصاص: %1$s</string>
+    <string name="new_reservation_view_close_button_title">إغلاق</string>
+    <string name="new_reservation_view_teachers_empty_title">لا يوجد معلمين بعد</string>
+    <string name="new_reservation_view_teachers_search_empty_title">لا يوجد معلمين او اختصاص يحتوي اسمهم على \'%1$s\'</string>
+    <string name="new_reservation_view_teachers_search_placeholder">ابحث عن معلم او اختصاص</string>
+
+    <!-- New Reservation Card View -->
+    <string name="new_reservation_card_view_title">حجز جديد</string>
+
+    <!-- New Reservation Details View -->
+    <string name="new_reservation_details_view_title">حجز جديد</string>
+    <string name="new_reservation_details_view_teacher_title">المعلم: %1$s</string>
+    <string name="new_reservation_details_view_teacher_specialization_title">الاختصاص: %1$s</string>
+    <string name="new_reservation_details_view_notes_title">الملاحظات:</string>
+    <string name="new_reservation_details_view_reservation_button_title">ارسل طلب الحجز</string>
+    <string name="new_reservation_details_view_alert_successfully_reserved_message">لقد تم ارسال طلبك الى المعلم بنجاح</string>
+    <string name="new_reservation_details_view_alert_successfully_reserved_action_ok_title">حسنا!</string>
+    <string name="new_reservation_details_view_editing_done_button_title">تم</string>
+    <string name="new_reservation_details_view_alert_error_action_ok_title">حسنا!</string>
+    <string name="new_reservation_details_view_error_has_active_reservation_message">لديك حجز جاري مع هذا المعلم بالفعل، أنهي ذلك الحجز اولا</string>
+
+    <!-- Reservation Details View -->
+    <string name="reservation_details_view_title">تفاصيل الحجز</string>
+    <string name="reservation_details_view_close_button_title">إغلاق</string>
+    <string name="reservation_details_view_reservation_date_edit_button_title">طلب تاريخ جديد</string>
+    <string name="reservation_details_view_teacher_title">المعلم: %1$s</string>
+    <string name="reservation_details_view_teacher_specialization_title">الاختصاص: %1$s</string>
+    <string name="reservation_details_view_reservation_date_title"> تاريخ الحجز: %1$s</string>
+    <string name="reservation_details_view_notes_title">الملاحظات:</string>
+    <string name="reservation_details_view_teacher_is_waiting_title">المعلم في انتظارك، انقر لدخول الاجتماع</string>
+    <string name="reservation_details_view_payment_method_title">طريقة الدفع:</string>
+    <string name="reservation_details_view_payment_method_later_title">ادفع لاحقا</string>
+    <string name="reservation_details_view_payment_method_credit_card_title">بطاقة ائتمانية</string>
+    <string name="reservation_details_view_payment_button_title">ادفع الان</string>
+    <string name="reservation_details_view_delete_reservation_button_title">الغاء الحجز</string>
+    <string name="reservation_details_view_alert_successfully_deleted_message">لقد تم الغاء حجزك بنجاح</string>
+    <string name="reservation_details_view_alert_action_ok_title">حسنا!</string>
+    <string name="reservation_details_view_alert_new_date_confirmation_message">هل انت متأكد انك تريد طلب تاريخ جديد؟</string>
+    <string name="reservation_details_view_alert_action_no_title">لا</string>
+    <string name="reservation_details_view_alert_action_yes_title">نعم</string>
+    <string name="reservation_details_view_alert_cancel_reservation_confirmation_message">هل انت متأكد انك تريد الغاء الحجز؟</string>
+    <string name="reservation_details_view_button_save_title">حفظ</string>
+    <string name="reservation_details_view_editing_done_button_title">تم</string>
+    <string name="reservation_details_view_add_to_apple_calendar_title">أضف حدث الى تقويم  Google</string>
+
+    <!-- Teacher Dashboard View -->
+    <string name="teacher_dashboard_view_section_upcoming_reservations_title">الحجوزات القادمة</string>
+    <string name="teacher_dashboard_view_section_pending_approval_reservations_title">الحجوزات التي بحاجة لموافقتك</string>
+    <string name="teacher_dashboard_view_section_pending_approval_reservations_empty_message">لا يوجد هنالك اي حجوزات بحاجة لموافقتك</string>
+    <string name="teacher_dashboard_view_section_upcoming_reservations_empty_message"> لا يوجد هنالك اي حجوزات قادمة </string>
+
+    <!-- Teacher Reservation Details View -->
+    <string name="teacher_reservation_details_view_reservation_date_title">تاريخ الحجز: %1$s</string>
+    <string name="teacher_reservation_details_view_reservation_date_edit_title">تغيير التاريخ</string>
+    <string name="teacher_reservation_details_view_reservation_date_new_title">اختر تاريخ</string>
+    <string name="teacher_reservation_details_view_notes_title">الملاحظات:</string>
+    <string name="teacher_reservation_details_view_open_meeting_button_title">السماح للطالب بدخول الاجتماع</string>
+    <string name="teacher_reservation_details_view_close_meeting_button_title">إمنع الطالب من دخول الاجتماع</string>
+    <string name="teacher_reservation_details_view_enter_meeting_button_title">ادخل الى الاجتماع</string>
+    <string name="teacher_reservation_details_view_reservation_done_button_title">الحجز قد تم</string>
+    <string name="teacher_reservation_details_view_title">تفاصيل الحجز</string>
+    <string name="teacher_reservation_details_view_close_button_title">إغلاق</string>
+    <string name="teacher_reservation_details_view_reservation_approve_button_title">اوافق</string>
+    <string name="teacher_reservation_details_view_alert_successfully_approved_message">لقد تمت الموافقة على طلب الحجز بنجاح</string>
+    <string name="teacher_reservation_details_view_alert_action_ok_title">حسنا!</string>
+    <string name="teacher_reservation_details_view_alert_reservation_done_confirmation_message">هل انت متأكد من انتهاء الحجز؟</string>
+    <string name="teacher_reservation_details_view_alert_reservation_done_confirmation_action_yes_title">نعم</string>
+    <string name="teacher_reservation_details_view_alert_reservation_done_confirmation_action_no_title">لا</string>
+    <string name="teacher_reservation_details_view_payment_gateway_title">بوابة الدفع</string>
+    <string name="teacher_reservation_details_view_previous_modified_dates_title">تواريخ طلب الطالب تغييرها:</string>
+    <string name="teacher_reservation_details_view_add_to_apple_calendar_title">أضف حدث الى تقويم Google</string>
+
+    <!--Reservation Card View-->
+    <string name="reservation_card_view_teacher_is_waiting_title">المعلم في انتظارك، انقر لدخول الاجتماع</string>
+
+    <!-- Student Dashboard View -->
+    <string name="student_dashboard_view_upcoming_reservations_title">حجوزاتك القادمة</string>
+    <string name="student_dashboard_view_pending_approval_reservations_title">الحجوزات التي بحاجة لموافقةالمعلم</string>
+    <string name="student_dashboard_view_pending_approval_reservations_empty_message">لا يوجد لديك حجوزات بحاجة لموافقة</string>
+    <string name="student_dashboard_view_upcoming_reservations_empty_message">لا يوجد لديك حجوزات قادمة</string>
+
+    <!-- Phone Number View -->
+    <string name="phone_number_view_message">تأكد من رمز الدولة، و ادخل رقم الهاتف</string>
+    <string name="phone_number_view_number_text_field_placeholder">رقم الهاتف</string>
+    <string name="phone_number_view_next_button_title">التالي</string>
+    <string name="phone_number_view_countries_sheet_search_placeholder">دولتك</string>
+    <string name="phone_number_view_close_button_title">إغلاق</string>
+    <string name="phone_number_view_done_button_title">تم</string>
+    <string name="phone_number_view_alert_error_message">لقد حدث خطأ أثناء ارسال الرمز، حاول مرة اخرى من فضلك!</string>
+    <string name="phone_number_view_alert_error_action_ok_title">حسنا!</string>
+
+    <!-- Workflow View -->
+    <string name="workflow_view_login_button_title">تسجيل الدخول</string>
+    <string name="workflow_view_tab_meeting_title">تحدث الى أي معلم حول العالم بإستخدام غرفة إجتماع خاصة و محمية داخلالتطبيق</string>
+    <string name="workflow_view_tab_scheduling_title">أطلب إستشارة بسهولة، و قم بإضافة التاريخ الى التقويم الخاص بك لترتيب وقتك</string>
+    <string name="workflow_view_tab_payment_title">إدفع رسوم الإستشارة بإستخدام بطاقتك الإئتمانية</string>
+
+    <!-- Verification Code View -->
+    <string name="verification_code_view_title">تأكيد رقم الهاتف</string>
+    <string name="verification_code_view_message">ادخل الرمز المرسل الى رقم هاتفك</string>
+    <string name="verification_code_view_verify_button_title">تأكيد</string>
+    <string name="verification_code_view_done_button_title">تم</string>
+    <string name="verification_code_view_alert_error_message">تأكد من الرمز ثم حاول مرة اخرى من فضلك!</string>
+    <string name="verification_code_view_alert_error_action_ok_title">حسنا!</string>
+
+    <!-- Edit Profile View -->
+    <string name="edit_profile_view_title">معلوماتك الشخصية</string>
+    <string name="edit_profile_view_change_photo_title">تغيير الصورة</string>
+    <string name="edit_profile_view_text_field_first_name_placeholder">ادخل اسمك الاول</string>
+    <string name="edit_profile_view_text_field_last_name_placeholder">ادخل اسم العائلة</string>
+    <string name="edit_profile_view_picker_birth_date_title">ادخل تاريخ ميلادك</string>
+    <string name="edit_profile_view_toggle_is_teacher_title">هل انت معلم؟</string>
+    <string name="edit_profile_view_text_field_address_placeholder">ادخل العنوان</string>
+    <string name="edit_profile_view_specialty_placeholder">اختر تخصص</string>
+    <string name="edit_profile_view_button_enter_title">دخول</string>
+    <string name="edit_profile_view_alert_error_action_ok_title">حسنا!</string>
+    <string name="edit_profile_view_button_save_title">حفظ</string>
+
+    <!-- Specialties View -->
+    <string name="specialties_view_title">اختر تخصص</string>
+
+    <!-- Email Login View -->
+    <string name="email_login_view_text_field_email_placeholder">البريد الالكتروني</string>
+    <string name="email_login_view_text_field_password_placeholder">كلمة المرور</string>
+    <string name="email_login_view_buttons_sign_in_title">تسجيل الدخول</string>
+    <string name="email_login_view_buttons_new_account_title">أنشئ حساب جديد</string>
+    <string name="email_login_view_buttons_forget_password_title">هل نسيت كلمة المرور؟</string>
+    <string name="email_login_view_alert_error_action_ok_title">حسنا!</string>
+
+    <!-- Forget Password View -->
+    <string name="forget_password_view_text_field_email_placeholder">البريد الالكتروني</string>
+    <string name="forget_password_view_buttons_reset_title">إعادة تعريف كلمة المرور</string>
+    <string name="forget_password_view_close_button_title">إغلاق</string>
+    <string name="forget_password_view_alert_error_action_ok_title">حسنا!</string>
+    <string name="forget_password_view_instructions_message">سنرسل لك التعليمات الى البريد الالكتروني الخاص بك، يرجى اتباع التعليمات لإعادة تعريف كلمة المرور</string>
+
+    <!-- Email Sign Up View -->
+    <string name="email_sign_up_view_text_field_email_placeholder">البريد الالكتروني</string>
+    <string name="email_sign_up_view_text_field_password_placeholder">كلمة المرور</string>
+    <string name="email_sign_up_view_buttons_new_account_title">أنشئ حساب جديد</string>
+    <string name="email_sign_up_view_alert_password_length_validation_message">كلمة المرور يجب ان تكون ستة احرف على الاقل</string>
+    <string name="email_sign_up_view_alert_error_action_ok_title">حسنا!</string>
+
+    <!-- More View -->
+    <string name="more_view_edit_profile_title">تعديل معلوماتك الشخصية</string>
+    <string name="more_view_sign_out_title">تسجيل الخروج</string>
+    <string name="more_view_error_sign_out_failure_message">حدث خطأ اثناء تسجيل الخروج!</string>
+    <string name="more_view_alert_error_action_ok_title">حسنا!</string>
+    <string name="more_view_preferred_language_title">اللغة المفضلة</string>
+    <string name="more_view_feedback_title">ارسل لنا تعليق</string>
+    <string name="more_view_verify_account_title">قم بتوثيق حسابك</string>
+
+    <!-- Storage Manager -->
+    <string name="storage_manager_failed_to_upload_image_message">حدث خطأ اثناء استخدام هذه الصورة</string>
+
+    <!-- New Update Alert Modifier -->
+    <string name="new_update_alert_modifier_title">يوجد تحديث جديد!</string>
+    <string name="new_update_alert_modifier_action_later">لاحقا</string>
+    <string name="new_update_alert_modifier_action_now">تحديث الان</string>
+
+    <!-- Payment Gateway Picker -->
+    <string name="payment_gateway_picker_title">بوابة الدفع</string>
+    <string name="payment_gateway_picker_section_payment_link_title">رابط الدفع</string>
+    <string name="payment_gateway_picker_button_done_title">تم</string>
+
+    <!-- Feedback View -->
+    <string name="feedback_view_message_placeholder">ملاحظاتك :</string>
+    <string name="feedback_view_info">هذا مكان خاص يتيح لك مشاركة افكارك و اقتراحاتك معنا، نحن لن نجمع اسمك او اي معلومة عنك، نحن هنا لتطوير التطبيق ليناسب الجميع، شكرا لك!</string>
+    <string name="feedback_view_editing_done_button_title">تم</string>
+    <string name="feedback_view_send_button_title">إرسال</string>
+    <string name="feedback_view_alert_action_ok_title">حسنا!</string>
+
+    <!-- Events Manager -->
+    <string name="events_manager_alert_failed_to_save_error_message">حدث خطأ اثناء إضافة الحدث، حاول مرة أخرى!</string>
+    <string name="events_manager_alert_button_settings_title">الإعدادات</string>
+    <string name="events_manager_alert_disabled_settings_title">قم بتفعيل الإعدادات</string>
+    <string name="events_manager_alert_disabled_settings_message">قم بتفعيل الوصول الكامل للتقويم، لنتمكن من إضافة/تعديل الأحداث الخاصة ب \'iLearn\'</string>
+    <string name="events_manager_alert_added_successfully_message">تم إضافة الحدث الى التقويم الخاص بك بنجاح</string>
+    <string name="events_manager_alert_action_ok_title">حسنا!</string>
+
+    <!-- Account Verification View -->
+    <string name="account_verification_view_title">قم بتوثيق حسابك</string>
+    <string name="account_verification_view_message">توثيق الحساب يساعد الطلاب على التأكد من أنك معلم حقيقي، لذلك ننصح جميع المعلمين من توثيق حساباتهم.</string>
+    <string name="account_verification_view_informative_step">لتوثيق حسابك أرسل الملفات المذكورة في الأسفل الى ilearn.education.time@gmail.com</string>
+    <string name="account_verification_view_informative_warning">تأكد من إرسال المعلومات بإستخدام البريد الإلكتروني الذي قمت بإستخدامه للدخول الى هذا التطبيق و إلا لن يتم توثيق حسابك</string>
+    <string name="account_verification_view_steps_title">المعلومات المطلوبة:</string>
+    <string name="account_verification_view_steps_first">١. بطاقة تعريف(هوية) أو جواز سفر</string>
+    <string name="account_verification_view_steps_second">٢. اذا كنت عضو في نقابة المعلمين أرسل رقم عضويتك</string>
+    <string name="account_verification_view_steps_third">٣. شهادة جامعية</string>
+    <string name="account_verification_view_actions_copy_email_title">إنسخ البريد الإلكتروني</string>
+
+</resources>
